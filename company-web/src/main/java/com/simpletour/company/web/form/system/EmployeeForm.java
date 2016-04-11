@@ -3,7 +3,6 @@ package com.simpletour.company.web.form.system;
 import com.simpletour.company.web.annotation.Mobile;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
-import com.simpletour.company.web.util.PasswordUtil;
 import com.simpletour.domain.system.Company;
 import com.simpletour.domain.system.Employee;
 import com.simpletour.domain.system.Role;
@@ -20,6 +19,7 @@ public class EmployeeForm extends BaseForm {
      * 工号
      */
     @NotNull(message = "{admin.employee.jobno.notnull}")
+    @Length(min = 0, max = 32, message = "{admin.employee.jobno.length}")
     private Integer jobno;
     /**
      * 姓名
@@ -27,16 +27,7 @@ public class EmployeeForm extends BaseForm {
     @NotBlank(message = "{admin.employee.name.notnull}")
     @Length(min = 2, max = 20, message = "{admin.employee.name.length}")
     private String name;
-    /**
-     * 密码
-     */
-    @NotBlank(message = "{admin.employee.password.notnull}")
-    @Length(min = 6, message = "{admin.employee.password.length}")
-    private String password;
-    /**
-     * 原始密码,用于更新密码时比较,如果不同，则重新进行加密
-     */
-    private String originalPwd;
+
     /**
      * 手机号
      */
@@ -54,30 +45,14 @@ public class EmployeeForm extends BaseForm {
     @NotNull(message = "{admin.employee.company.notnull}")
     private Long companyId;
     private String companyName;
-    /**
-     * 类型
-     */
-    @NotBlank(message = "{admin.employee.status.notnull}")
-    private String status;
-    private String salt;
+
+    @NotNull(message = "{admin.employee.remark.notnull}")
+    @Length(min = 0, max = 10000, message = "{admin.employee.remark.length}")
+    private String remark;
+
     private Integer version;
 
     public EmployeeForm() {
-    }
-
-    public EmployeeForm(Employee employee) {
-        this.id = employee.getId();
-        this.jobno = employee.getJobNo();
-        this.name = employee.getName();
-        this.password = employee.getPasswd();
-        this.salt = employee.getSalt();
-        this.originalPwd = employee.getPasswd();
-        this.mobile = employee.getMobile();
-        this.roleId = employee.getRole().getId();
-        this.roleName = employee.getRole().getName();
-        this.companyId = employee.getCompany().getId();
-        this.companyName = employee.getCompany().getName();
-        this.version = employee.getVersion();
     }
 
     public Integer getJobno() {
@@ -94,22 +69,6 @@ public class EmployeeForm extends BaseForm {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getOriginalPwd() {
-        return originalPwd;
-    }
-
-    public void setOriginalPwd(String originalPwd) {
-        this.originalPwd = originalPwd;
     }
 
     public String getMobile() {
@@ -154,20 +113,12 @@ public class EmployeeForm extends BaseForm {
         this.roleName = roleName;
     }
 
-    public String getStatus() {
-        return status;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Integer getVersion() {
@@ -182,21 +133,12 @@ public class EmployeeForm extends BaseForm {
         Employee employee = new Employee();
         if (this.getMode().equals(FormModeType.UPDATE.getValue())) {
             employee.setId(this.getId());
-            if (!this.getOriginalPwd().equals(this.getPassword())) {
-                this.setSalt(PasswordUtil.generateSalt());
-                employee.setSalt(this.getSalt());
-                employee.setPasswd(PasswordUtil.getMd5Password(this.getPassword(), this.getSalt()));
-            } else {
-                employee.setSalt(this.getSalt());
-                employee.setPasswd(this.getPassword());
-            }
+            employee.setJobNo(this.getJobno());
+            //TODO...设置头像地址
         }
         if (this.getMode().equals(FormModeType.ADD.getValue())) {
-            this.setSalt(PasswordUtil.generateSalt());
-            employee.setSalt(this.getSalt());
-            employee.setPasswd(PasswordUtil.getMd5Password(this.getPassword(), this.getSalt()));
+            //TODO...设置默认头像地址
         }
-        employee.setJobNo(this.getJobno());
         employee.setName(this.getName());
         employee.setMobile(this.getMobile());
         Company company = new Company();
@@ -206,6 +148,8 @@ public class EmployeeForm extends BaseForm {
         role.setId(this.getRoleId());
         employee.setRole(role);
         employee.setVersion(this.getVersion());
+        employee.setAdmin(Boolean.FALSE);
+        employee.setRemark(this.getRemark());
         return employee;
     }
 
