@@ -93,6 +93,4 @@
             <value>192.168.2.109:6379</value>
         </property>
     </bean>
-
-    <bean id="upYunService" class="com.simpletour.util.utils.upyun.UpYunServiceImpl" init-method="initialize"/>
 </beans>
