@@ -14,15 +14,13 @@ import com.simpletour.service.system.ICompanyService;
 import com.simpletour.service.system.IEmployeeService;
 import com.simpletour.service.system.IRoleService;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -86,5 +84,19 @@ public class EmployeeController extends BaseController {
     public String list(EmployeeQuery employeeQuery, Model model) {
         this.setPageTitle(model, "人员信息列表");
         return null;
+    }
+
+    @RequiresPermissions(value = {"employee_edit", "employee_detail", "employee_delete"}, logical = Logical.OR)
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable Long id, Model model) {
+        this.setPageTitle(model, "编辑人员信息");
+        this.enableGoBack(model);
+        Optional<Employee> employeeOptional = employeeService.queryEmployeeById(id);
+        if (employeeOptional.isPresent()) {
+            EmployeeForm employeeForm = new EmployeeForm(employeeOptional.get());
+            model.addAttribute("viewForm", employeeForm);
+            return "/system/employee/form";
+        }
+        return this.notFound();
     }
 }

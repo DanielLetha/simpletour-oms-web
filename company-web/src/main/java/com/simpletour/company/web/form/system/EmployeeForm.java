@@ -55,6 +55,18 @@ public class EmployeeForm extends BaseForm {
     public EmployeeForm() {
     }
 
+    public EmployeeForm(Employee employee) {
+        this.id = employee.getId();
+        this.jobno = employee.getJobNo();
+        this.name = employee.getName();
+        this.mobile = employee.getMobile();
+        this.roleId = employee.getRole().getId();
+        this.roleName = employee.getRole().getName();
+        this.companyId = employee.getCompany().getId();
+        this.companyName = employee.getCompany().getName();
+        this.version = employee.getVersion();
+    }
+
     public Integer getJobno() {
         return jobno;
     }
