@@ -1,6 +1,7 @@
 package com.simpletour.company.web.controller.support;
 
 import com.simpletour.common.core.domain.CanLogicDelDomain;
+import com.simpletour.company.web.shiro.ShiroDbRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,22 @@ public class BaseController {
         } catch (NoSuchMessageException e) {
             return "";
         }
+    }
+
+    /**
+     * 获取当前用户信息
+     *
+     * @return
+     */
+    public ShiroDbRealm.ShiroUser getCurrentUser() {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject != null) {
+            Object object = subject.getPrincipal();
+            if (object != null) {
+                return (ShiroDbRealm.ShiroUser) object;
+            }
+        }
+        return null;
     }
 
     /**

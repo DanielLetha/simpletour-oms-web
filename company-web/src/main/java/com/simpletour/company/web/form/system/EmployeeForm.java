@@ -143,13 +143,13 @@ public class EmployeeForm extends BaseForm {
 
     public Employee as() {
         Employee employee = new Employee();
+        if (this.getMode().equals(FormModeType.ADD.getValue())) {
+            //TODO...设置默认头像地址
+        }
         if (this.getMode().equals(FormModeType.UPDATE.getValue())) {
             employee.setId(this.getId());
             employee.setJobNo(this.getJobno());
             //TODO...设置头像地址
-        }
-        if (this.getMode().equals(FormModeType.ADD.getValue())) {
-            //TODO...设置默认头像地址
         }
         employee.setName(this.getName());
         employee.setMobile(this.getMobile());

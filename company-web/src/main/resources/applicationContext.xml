@@ -16,8 +16,18 @@
     <!-- 激活自动代理功能 -->
     <aop:aspectj-autoproxy/>
 
-    <!--加载数据库配置文件-->
-    <context:property-placeholder location="classpath:db.properties,classpath:config.properties,classpath:validationMessage.properties,classpath:hostUrl.properties"/>
+    <!--加载配置文件-->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:db.properties</value>
+                <value>classpath:config.properties</value>
+                <value>classpath:hostUrl.properties</value>
+                <value>classpath:validationMessage.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
 
     <!--配置数据源-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"

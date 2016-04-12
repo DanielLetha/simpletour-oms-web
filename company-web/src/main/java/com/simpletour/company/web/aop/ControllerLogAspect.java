@@ -3,6 +3,7 @@ package com.simpletour.company.web.aop;
 import com.alibaba.fastjson.JSON;
 import com.simpletour.company.web.form.support.BaseForm;
 import com.simpletour.company.web.query.support.Query;
+import com.simpletour.company.web.shiro.ShiroDbRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.JoinPoint;
@@ -31,7 +32,12 @@ public class ControllerLogAspect {
         // 读取登录的用户
         Subject Subject= SecurityUtils.getSubject();
         if (Subject != null) {
-            userStr = "unlogin_user";
+            ShiroDbRealm.ShiroUser user = (ShiroDbRealm.ShiroUser) Subject.getPrincipal();
+            if (user != null ){
+                userStr = user.getName();
+            } else {
+                userStr = "unlogin_user";
+            }
         }
         // 获取传入参数
         Object[] args = joinPoint.getArgs();
