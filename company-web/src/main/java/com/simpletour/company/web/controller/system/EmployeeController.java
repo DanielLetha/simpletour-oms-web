@@ -8,7 +8,9 @@ import com.simpletour.company.web.controller.support.BaseDataResponse;
 import com.simpletour.company.web.controller.support.PageHelper;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.system.EmployeeForm;
+import com.simpletour.company.web.form.system.PasswordForm;
 import com.simpletour.company.web.query.system.EmployeeQuery;
+import com.simpletour.company.web.util.PasswordUtil;
 import com.simpletour.domain.system.Company;
 import com.simpletour.domain.system.Employee;
 import com.simpletour.domain.system.Role;
@@ -16,8 +18,6 @@ import com.simpletour.service.system.ICompanyService;
 import com.simpletour.service.system.IEmployeeService;
 import com.simpletour.service.system.IRoleService;
 import org.apache.log4j.Logger;
-import org.apache.shiro.authz.annotation.Logical;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +37,7 @@ public class EmployeeController extends BaseController {
     private static final Logger logger = Logger.getLogger(EmployeeController.class);
 
     private static final String DOMAIN = "人员";
+    private static final String PASSWORD = "密码";
     private static final String LIST_URL = "/system/employee/list";
 
     @Autowired
@@ -49,7 +50,7 @@ public class EmployeeController extends BaseController {
     private IEmployeeService employeeService;
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
-    @RequiresPermissions(value = {"employee_add"})
+//    @RequiresPermissions(value = {"employee_add"})
     public String add(Model model) {
         this.setPageTitle(model, "添加人员信息");
         this.enableGoBack(model);
@@ -59,7 +60,7 @@ public class EmployeeController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions(value = {"employee_add"})
+//    @RequiresPermissions(value = {"employee_add"})
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public BaseDataResponse add(@RequestBody @Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
         employeeForm.setMode(FormModeType.ADD.getValue());
@@ -81,7 +82,7 @@ public class EmployeeController extends BaseController {
         return BaseDataResponse.ok().action(BaseAction.ADD_SUCCESS(DOMAIN, employeeForm.getName(), LIST_URL), true);
     }
 
-    @RequiresPermissions(value = {"employee_list"})
+//    @RequiresPermissions(value = {"employee_list"})
     @RequestMapping(value = {"", "list"})
     public String list(EmployeeQuery employeeQuery, Model model) {
         this.setPageTitle(model, "人员信息列表");
@@ -93,7 +94,7 @@ public class EmployeeController extends BaseController {
         return "/system/employee/list";
     }
 
-    @RequiresPermissions(value = {"employee_edit", "employee_detail", "employee_delete"}, logical = Logical.OR)
+//    @RequiresPermissions(value = {"employee_edit", "employee_detail", "employee_delete"}, logical = Logical.OR)
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable Long id, Model model) {
         this.setPageTitle(model, "编辑人员信息");
@@ -108,7 +109,7 @@ public class EmployeeController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions("employee_edit")
+//    @RequiresPermissions("employee_edit")
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     public BaseDataResponse edit(@RequestBody @Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
         employeeForm.setMode(FormModeType.UPDATE.getValue());
@@ -131,7 +132,7 @@ public class EmployeeController extends BaseController {
     }
 
     @ResponseBody
-    @RequiresPermissions(value = {"employee_delete"})
+//    @RequiresPermissions(value = {"employee_delete"})
     @RequestMapping(value = "delete/{id}")
     public BaseDataResponse delete(@PathVariable Long id) {
         Optional<Employee> employeeOptional;
@@ -153,15 +154,42 @@ public class EmployeeController extends BaseController {
 
     @RequestMapping(value = "/password", method = RequestMethod.GET)
     public String password(Model model) {
-//        Optional<Employee> employee = employeeService.getEmployeeById(getCurrentUser().id);
-//        if (!employee.isPresent()) {
-//            new BaseSystemException("用户不存在");
-//        }
-//        // 不显示用户信息
-//        model.addAttribute("viewForm", new EmployeeForm());
+        Optional<Employee> employee = employeeService.queryEmployeeById(getCurrentUser().getId());
+        if (!employee.isPresent()) {
+            new BaseSystemException("用户不存在");
+        }
+        // 不显示用户信息
+        model.addAttribute("viewForm", new EmployeeForm());
         return "/password";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/password", method = RequestMethod.POST)
+    public BaseDataResponse password(@RequestBody @Valid PasswordForm passwordForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return BaseDataResponse.validationFail().action(BaseAction.EDIT_FAIL(PASSWORD), false);
+        }
+        //TODO...后面最好修改为用jsr303去校验两次密码不一致
+        //校验新密码和确认密码是否一致
+        if (!passwordForm.getPassword().equals(passwordForm.getConfirmPassword()))
+            return BaseDataResponse.validationFail().action(BaseAction.EDIT_FAIL(PASSWORD), false);
+        Optional<Employee> employeeOptionalBefore = employeeService.queryEmployeeById(getCurrentUser().getId());
+        if (!employeeOptionalBefore.isPresent())
+            return BaseDataResponse.fail().msg("用户不存在").detail("请重新登录");
+        //验证旧密码是否为正确的密码
+        String oldpwd = PasswordUtil.getMd5Password(passwordForm.getOldPassword(), employeeOptionalBefore.get().getSalt());
+        if (!employeeOptionalBefore.get().getPasswd().equals(oldpwd)) {
+            return BaseDataResponse.fail().msg("修改用户密码失败").detail("'" + employeeOptionalBefore.get().getName() + "'用户密码验证出错");
+        }
+        String newSalt = PasswordUtil.generateSalt();
+        String newPassword = PasswordUtil.getMd5Password(passwordForm.getPassword(), newSalt);
+        try {
+            employeeService.changePwdForEmployee(getCurrentUser().getId(), newPassword, newSalt);
+        } catch (BaseSystemException e) {
+            return BaseDataResponse.fail().msg("修改用户密码失败").detail(e.getMessage());
+        }
+        return BaseDataResponse.ok().msg("修改用户密码成功").detail("修改'" + employeeOptionalBefore.get().getName() + "'用户密码成功");
+    }
 
     @ResponseBody
     @RequestMapping(value = "/test", method = RequestMethod.GET)

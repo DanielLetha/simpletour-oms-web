@@ -18,36 +18,36 @@ public class EmployeeForm extends BaseForm {
     /**
      * 工号
      */
-    @NotNull(message = "{admin.employee.jobno.notnull}")
-    @Length(min = 0, max = 32, message = "{admin.employee.jobno.length}")
+    @NotNull(message = "{oms.employee.jobNo.notNull}")
+    @Length(min = 0, max = 32, message = "{oms.employee.jobNo.length}")
     private Integer jobno;
     /**
      * 姓名
      */
-    @NotBlank(message = "{admin.employee.name.notnull}")
-    @Length(min = 2, max = 20, message = "{admin.employee.name.length}")
+    @NotBlank(message = "{oms.employee.name.notNull}")
+    @Length(min = 2, max = 20, message = "{oms.employee.name.length}")
     private String name;
 
     /**
      * 手机号
      */
-    @Mobile(message = "{admin.employee.mobile.notnull}")
+    @NotBlank(message = "{oms.common.mobile.notNull}")
+    @Mobile(message = "{oms.common.mobile.length}")
     private String mobile;
     /**
      * 角色
      */
-    @NotNull(message = "{admin.employee.role.notnull}")
+    @NotNull(message = "{oms.employee.role.notNull}")
     private Long roleId;
     private String roleName;
     /**
      * 公司
      */
-    @NotNull(message = "{admin.employee.company.notnull}")
+    @NotNull(message = "{oms.employee.company.notNull}")
     private Long companyId;
     private String companyName;
 
-    @NotNull(message = "{admin.employee.remark.notnull}")
-    @Length(min = 0, max = 10000, message = "{admin.employee.remark.length}")
+    @Length(min = 0, max = 10000, message = "{oms.employee.remark.length}")
     private String remark;
 
     private Integer version;

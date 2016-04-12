@@ -94,6 +94,7 @@
                 <!--/static/** = anon-->
                 <!--/config_* = anon-->
                 <!--/** = user-->
+                /** = anon
             </value>
         </property>
     </bean>
