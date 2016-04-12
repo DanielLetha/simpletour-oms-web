@@ -17,7 +17,7 @@ public class EmployeeQuery extends Query {
     /**
      * jobno账号
      */
-    private Integer jobno;
+    private Integer jobNo;
     /**
      * 姓名
      */
@@ -34,12 +34,12 @@ public class EmployeeQuery extends Query {
     public EmployeeQuery() {
     }
 
-    public Integer getJobno() {
-        return jobno;
+    public Integer getJobNo() {
+        return jobNo;
     }
 
-    public void setJobno(Integer jobno) {
-        this.jobno = jobno;
+    public void setJobNo(Integer jobNo) {
+        this.jobNo = jobNo;
     }
 
     public String getName() {
@@ -66,28 +66,11 @@ public class EmployeeQuery extends Query {
         this.roleId = roleId;
     }
 
-    public Map<String, Object> asMap() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        //fixed by XuHui: jobno为Integer，不用判断空字符串
-        if (this.jobno != null) {
-            map.put("jobNo", this.jobno);
-        }
-        if (this.name != null && !"".equals(this.name)) {
-            map.put("name", getSearchStr(name));
-        }
-        //roleId == -1 时表示查询所有角色下的人员
-        if (this.roleId != null && this.roleId != -1) {
-            map.put("role.id", roleId);
-        }
-        map.put("del", false);
-        return map;
-    }
-
     public ConditionOrderByQuery asConditionQuery() {
         ConditionOrderByQuery conditionOrderByQuery = new ConditionOrderByQuery();
         AndConditionSet andConditionSet = new AndConditionSet();
-        if (this.jobno != null)
-            andConditionSet.addCondition("c.jobNo", jobno, Condition.MatchType.eq);
+        if (this.jobNo != null)
+            andConditionSet.addCondition("c.jobNo", jobNo, Condition.MatchType.eq);
         if (!(this.name == null || this.name.isEmpty()))
             andConditionSet.addCondition("c.name", name, Condition.MatchType.like);
         if (!(this.roleId == null || this.roleId <= 0))

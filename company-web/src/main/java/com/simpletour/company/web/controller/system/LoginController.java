@@ -9,7 +9,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,16 +25,17 @@ public class LoginController {
     private static final Logger logger = Logger.getLogger(LoginController.class);
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
+    public String login(Model model) {
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated() && currentUser.isRemembered()) {
             return "redirect:/home";
         }
+        model.addAttribute("loginForm", new LoginForm());
         return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestBody @Valid LoginForm loginForm, BindingResult bindingResult, Model model) {
+    public String authenticate(@Valid LoginForm loginForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("loginError", bindingResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage()).collect(Collectors.toList()));
             return "login";
@@ -47,6 +47,7 @@ public class LoginController {
             currentUser.login(token);
         } catch (AuthenticationException e) {
             model.addAttribute("errorInfo", "用户名或密码错误");
+            return "login";
         }
         return "redirect:/home";
     }

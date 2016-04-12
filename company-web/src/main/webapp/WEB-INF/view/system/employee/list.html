@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/main.css}"/>
+</head>
+<body ng-controller="employeeController">
+<!--<div class="header" th:replace="fragments :: iframe_header"></div>-->
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/system/employee/list}" method="post"
+          style="width: 100%;box-sizing: border-box;padding-right:70px; ">
+        <div class="search_group">
+            <div class="input_group">
+                <input type="text" name="jobNo" placeholder="工号" th:value="${query.jobNo}"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="name" placeholder="姓名" th:value="${query.name}"/>
+            </div>
+        </div>
+        <button type="submit" ng-click="search($event)" class="search">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style='width:5%'>人员账号</th>
+            <th style='width:15%'>人员名称</th>
+            <th style='width:15%'>联系电话</th>
+            <th shiro:hasAnyPermissions="employee_detail,employee_edit,employee_delete" style='width:15%'>操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+            <tr th:each="employee:${page.domains}">
+                <td th:text="${employee.jobNo}"></td>
+                <td th:text="${employee.name}"></td>
+                <td th:text="${employee.mobile}"></td>
+                <td shiro:hasAnyPermissions="employee_detail,employee_edit,employee_delete">
+                    <a class="decoration" th:href="@{/system/employee/edit/}+${employee.id}">查看|编辑</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table_footer">
+    <!--<a shiro:hasPermission="employee_add" th:href="@{/system/employee/add}">添加人员</a>-->
+    <a th:href="@{/system/employee/add}">添加人员</a>
+    <!--<div class='pager-page' th:include="fragments :: iframe_pager"/>-->
+</div>
+<script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/tooltip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootpopover.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/date.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/sendMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    window.onload = function () {
+        pagination([[${query}]], '/system/employee/list');
+    };
+    $(document).ready(function () {
+//        $('.sContainer select[name=status]').dropdown({width: 150, n: 3});
+//        $('.sContainer select[name=roleId]').dropdown({width: 150, n: 5});
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height() - 212 - $('table thead').height()).getNiceScroll().resize();
+        })
+    });
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller('employeeController', ['$scope', 'alert', function ($scope, alert) {
+        $scope.search = function (event) {
+            event.preventDefault();
+            if (!isNaN($('input[name=jobNo]').val())) {
+                angular.element(event.target).parents("form").submit();
+            } else {
+                alert.alert({
+                    reason: '此提示3秒后关闭',
+                    message: '工号必须为数字',
+                    type: 'fail',
+                    delay: '3'
+                });
+            }
+        }
+    }]);
+</script>
+</body>
+</html>
