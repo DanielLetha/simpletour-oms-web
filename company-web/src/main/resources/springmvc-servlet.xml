@@ -11,8 +11,7 @@
     <!--配置扫描的controller-->
     <context:component-scan base-package="com.simpletour.company.web.controller">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:include-filter type="annotation"
-                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <!--shiro注解aop配置-->
@@ -47,14 +46,16 @@
         <property name="templateMode" value="HTML5"/>
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
+
     <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
         <property name="templateResolver" ref="templateResolver"/>
-        <property name="additionalDialects">
-            <set>
-                <bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>
-            </set>
-        </property>
+        <!--<property name="additionalDialects">-->
+            <!--<set>-->
+                <!--<bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>-->
+            <!--</set>-->
+        <!--</property>-->
     </bean>
+
     <bean class="com.simpletour.util.framework.init.ThymeleafInitializer">
         <property name="contentType" value="text/html;charset=UTF-8"/>
         <property name="templateEngine" ref="templateEngine"/>
@@ -72,7 +73,7 @@
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basenames" value="classpath:validationMessage"/>
+        <property name="basenames" value="classpath:validationMessage.properties"/>
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
@@ -81,7 +82,7 @@
     <mvc:resources mapping="/static/css/**" location="/static/css/" cache-period="1"/>
     <mvc:resources mapping="/static/js/**" location="/static/js/" cache-period="1"/>
     <mvc:resources mapping="/static/images/**" location="/static/images/" cache-period="1"/>
-    <mvc:resources mapping="/robots.txt" location="/robots.txt" order="0"/>
+    <!--<mvc:resources mapping="/robots.txt" location="/robots.txt" order="0"/>-->
     <mvc:resources mapping="/static/**" location="/static/"/>
 
     <!--配置异常处理机制-->

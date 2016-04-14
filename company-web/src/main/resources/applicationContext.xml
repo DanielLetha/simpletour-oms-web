@@ -17,7 +17,7 @@
             <list>
                 <value>classpath:db.properties</value>
                 <value>classpath:config.properties</value>
-                <value>classpath:hostUrl.properties</value>
+                <!--<value>classpath:hostUrl.properties</value>-->
                 <value>classpath:validationMessage.properties</value>
             </list>
         </property>
@@ -25,8 +25,7 @@
     </bean>
 
     <!--配置数据源-->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
-          destroy-method="close" scope="singleton">
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" scope="singleton">
         <property name="driverClassName" value="${db.driver}"/>
         <property name="url" value="${db.jdbcURL}"/>
         <property name="username" value="${db.username}"/>

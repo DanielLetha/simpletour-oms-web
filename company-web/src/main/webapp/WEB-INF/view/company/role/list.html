@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/company/role/list}" method="post" style="width: 100%;box-sizing: border-box;padding-right:70px; ">
+        <div class="search_group">
+            <div class="input_group">
+                <input type="text" name="name" placeholder="名称" th:value="${query.name}"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="module" placeholder="功能模块" th:value="${query.module}"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="permission" placeholder="功能" th:value="${query.permission}"/>
+            </div>
+        </div>
+        <button class="search" type="submit" ng-click="search($event)">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style='width:10%'>序号</th>
+                <th style='width:15%'>名称</th>
+                <th style='width:30%'>功能模块</th>
+                <th style='width:30%'>功能</th>
+                <th style='width:15%'>操作</th>
+            </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+                <tr th:each="role : ${page.getDomains()}">
+                    <td th:text="${role.id}"></td>
+                    <td th:text="${role.name}"></td>
+                    <td th:text="${role.modules}"></td>
+                    <td th:utext="${role.permissions}"></td>
+                    <td>
+                        <a class="decoration" th:href="@{'/company/role/edit/'+${role.id}}">编辑</a>
+                        <a class="decoration del" th:href="@{'/company/role/delete/'+${role.id}}">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="table_footer">
+    <a th:href="@{/company/role/add}">添加角色</a>
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
+</div>
+
+<script type="text/javascript" th:src="@{/static/lib/tooltip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootpopover.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/date.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/sendMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    // 调用分页函数
+    window.onload = function() {
+        pagination([[${query}]], '/company/role/list');
+    };
+
+    $(document).ready(function () {
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height() - 212 - $('table thead').height()).getNiceScroll().resize();
+        });
+        $('.decoration.del').on('click',function(event){
+            event.preventDefault();
+            var url = $(this).attr('href');
+            $.alertMsg.confirm({
+                confirm: function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        success: function (data) {
+                            if (data.code == 0) {
+                                setTimeout(function () {
+                                    location.href = data.jumpUrl;
+                                }, 3000);
+                                $.alertMsg.alert({
+                                    title: data.msg,
+                                    detailed: '此提示3秒后关闭',
+                                    type: 'success'
+                                })
+                            }
+                        },
+                        error: function(data){
+                            $.alertMsg.alert({
+                                title: data.msg,
+                                detailed: '此提示3秒后关闭'
+                            });
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

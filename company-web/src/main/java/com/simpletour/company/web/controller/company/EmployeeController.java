@@ -1,15 +1,12 @@
-package com.simpletour.company.web.controller.system;
+package com.simpletour.company.web.controller.company;
 
 import com.simpletour.common.core.domain.DomainPage;
 import com.simpletour.common.core.exception.BaseSystemException;
-import com.simpletour.company.web.controller.support.BaseAction;
-import com.simpletour.company.web.controller.support.BaseController;
-import com.simpletour.company.web.controller.support.BaseDataResponse;
-import com.simpletour.company.web.controller.support.PageHelper;
+import com.simpletour.company.web.controller.support.*;
 import com.simpletour.company.web.enums.FormModeType;
-import com.simpletour.company.web.form.system.EmployeeForm;
+import com.simpletour.company.web.form.company.EmployeeForm;
 import com.simpletour.company.web.form.system.PasswordForm;
-import com.simpletour.company.web.query.system.EmployeeQuery;
+import com.simpletour.company.web.query.company.EmployeeQuery;
 import com.simpletour.company.web.util.PasswordUtil;
 import com.simpletour.domain.system.Company;
 import com.simpletour.domain.system.Employee;
@@ -31,14 +28,14 @@ import java.util.Optional;
  * Created by Mario on 2016/4/11.
  */
 @Controller
-@RequestMapping("/system/employee/")
+@RequestMapping("/company/employee/")
 public class EmployeeController extends BaseController {
 
     private static final Logger logger = Logger.getLogger(EmployeeController.class);
 
     private static final String DOMAIN = "人员";
     private static final String PASSWORD = "密码";
-    private static final String LIST_URL = "/system/employee/list";
+    private static final String LIST_URL = "/company/employee/list";
 
     @Autowired
     private ICompanyService companyService;
@@ -56,7 +53,7 @@ public class EmployeeController extends BaseController {
         this.enableGoBack(model);
         EmployeeForm employeeForm = new EmployeeForm();
         model.addAttribute("viewForm", employeeForm);
-        return "/system/employee/form";
+        return "/company/employee/form";
     }
 
     @ResponseBody
@@ -69,6 +66,11 @@ public class EmployeeController extends BaseController {
         if (bindingResult.hasErrors()) {
             return BaseDataResponse.validationFail().action(BaseAction.ADD_FAIL(DOMAIN, employeeForm.getName()), false);
         }
+
+        // TODO: 暂时先将租户ID写死
+        TokenStorage.setLocalTokenWithCompanyId(0L);
+        employeeForm.setCompanyId(TokenStorage.COMPANY_ID);
+
         try {
             Employee employee = employeeForm.as();
             Optional<Company> companyOptional = companyService.getCompanyById(employeeForm.getCompanyId());
@@ -87,11 +89,14 @@ public class EmployeeController extends BaseController {
     public String list(EmployeeQuery employeeQuery, Model model) {
         this.setPageTitle(model, "人员信息列表");
 
+        TokenStorage.setLocalTokenWithCompanyId(0L);
+        employeeQuery.setTenantId(TokenStorage.COMPANY_ID);
+
         DomainPage<Employee> domainPage = employeeService.queryEmployeesPagesByConditions(employeeQuery.asConditionQuery());
         model.addAttribute("query", employeeQuery);
         model.addAttribute("page", domainPage);
         model.addAttribute("pageHelper", new PageHelper(domainPage));
-        return "/system/employee/list";
+        return "/company/employee/list";
     }
 
 //    @RequiresPermissions(value = {"employee_edit", "employee_detail", "employee_delete"}, logical = Logical.OR)
@@ -99,11 +104,15 @@ public class EmployeeController extends BaseController {
     public String edit(@PathVariable Long id, Model model) {
         this.setPageTitle(model, "编辑人员信息");
         this.enableGoBack(model);
+
+        // TODO: 暂时先将租户ID写死
+        TokenStorage.setLocalTokenWithCompanyId(0L);
+
         Optional<Employee> employeeOptional = employeeService.queryEmployeeById(id);
         if (employeeOptional.isPresent()) {
             EmployeeForm employeeForm = new EmployeeForm(employeeOptional.get());
             model.addAttribute("viewForm", employeeForm);
-            return "/system/employee/form";
+            return "/company/employee/form";
         }
         return this.notFound();
     }
@@ -118,6 +127,11 @@ public class EmployeeController extends BaseController {
         if (bindingResult.hasErrors()) {
             return BaseDataResponse.validationFail().action(BaseAction.ADD_FAIL(DOMAIN, employeeForm.getName()), false);
         }
+
+        // TODO: 暂时先将租户ID写死
+        TokenStorage.setLocalTokenWithCompanyId(0L);
+        employeeForm.setCompanyId(TokenStorage.COMPANY_ID);
+
         try {
             Employee employee = employeeForm.as();
             Optional<Company> companyOptional = companyService.getCompanyById(employeeForm.getCompanyId());
@@ -136,6 +150,10 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "delete/{id}")
     public BaseDataResponse delete(@PathVariable Long id) {
         Optional<Employee> employeeOptional;
+
+        // TODO: 暂时先将租户ID写死
+        TokenStorage.setLocalTokenWithCompanyId(0L);
+
         try {
             employeeOptional = employeeService.queryEmployeeById(id);
             if (!employeeOptional.isPresent()) {
@@ -154,13 +172,26 @@ public class EmployeeController extends BaseController {
 
     @RequestMapping(value = "/password", method = RequestMethod.GET)
     public String password(Model model) {
-        Optional<Employee> employee = employeeService.queryEmployeeById(getCurrentUser().getId());
-        if (!employee.isPresent()) {
+        //Optional<Employee> employee = employeeService.queryEmployeeById(getCurrentUser().getId());
+//        if (!employee.isPresent()) {
+//            new BaseSystemException("用户不存在");
+//        }
+
+        // 不显示用户信息
+//        model.addAttribute("viewForm", new EmployeeForm());
+
+
+        EmployeeQuery employeeQuery = new EmployeeQuery();
+        employeeQuery.setTenantId(TokenStorage.COMPANY_ID);
+        DomainPage<Employee> domainPage = employeeService.queryEmployeesPagesByConditions(employeeQuery.asConditionQuery());
+        if (null == domainPage || 0 == domainPage.getDomainTotalCount()) {
             new BaseSystemException("用户不存在");
         }
-        // 不显示用户信息
-        model.addAttribute("viewForm", new EmployeeForm());
-        return "/password";
+
+        model.addAttribute("viewForm", new EmployeeForm(domainPage.getDomains().get(0)));
+        //model.addAttribute("viewForm", new EmployeeForm());
+
+        return "/company/employee/password";
     }
 
     @ResponseBody
@@ -169,13 +200,23 @@ public class EmployeeController extends BaseController {
         if (bindingResult.hasErrors()) {
             return BaseDataResponse.validationFail().action(BaseAction.EDIT_FAIL(PASSWORD), false);
         }
+
         //TODO...后面最好修改为用jsr303去校验两次密码不一致
         //校验新密码和确认密码是否一致
-        if (!passwordForm.getPassword().equals(passwordForm.getConfirmPassword()))
+        if (!passwordForm.getPassword().equals(passwordForm.getRepeatPassword()))
             return BaseDataResponse.validationFail().action(BaseAction.EDIT_FAIL(PASSWORD), false);
-        Optional<Employee> employeeOptionalBefore = employeeService.queryEmployeeById(getCurrentUser().getId());
-        if (!employeeOptionalBefore.isPresent())
+
+//        Optional<Employee> employeeOptionalBefore = employeeService.queryEmployeeById(getCurrentUser().getId());
+//        if (!employeeOptionalBefore.isPresent())
+//            return BaseDataResponse.fail().msg("用户不存在").detail("请重新登录");
+
+        // TODO: 暂时先将租户ID写死
+        TokenStorage.setLocalTokenWithCompanyId(0L);
+
+        Optional<Employee> employeeOptionalBefore = employeeService.queryEmployeeById(passwordForm.getId());
+        if (!employeeOptionalBefore.isPresent() || !employeeOptionalBefore.get().getCompany().getId().equals(TokenStorage.COMPANY_ID))
             return BaseDataResponse.fail().msg("用户不存在").detail("请重新登录");
+
         //验证旧密码是否为正确的密码
         String oldpwd = PasswordUtil.getMd5Password(passwordForm.getOldPassword(), employeeOptionalBefore.get().getSalt());
         if (!employeeOptionalBefore.get().getPasswd().equals(oldpwd)) {

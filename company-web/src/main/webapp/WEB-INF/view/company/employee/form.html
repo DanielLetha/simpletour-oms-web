@@ -13,7 +13,7 @@
 <!--<div class="header" th:include="fragments :: iframe_header"/>-->
 <div class="iframe_content" ng-controller="employeeController">
     <h2>人员信息</h2>
-    <form th:action="@{/system/employee/add}" name="form" novalidate="novalidate" method="POST">
+    <form th:action="@{/company/employee/add}" name="form" novalidate="novalidate" method="POST">
         <div class="offset">
             <!--<div class="input_group">-->
                 <!--<label>工&nbsp;&nbsp;号</label>-->
@@ -73,10 +73,10 @@
         </div>
 
     </form>
-    <button shiro:hasPermission="employee_add" th:if="${viewForm.id} == null" th:attr="url=@{/system/employee/add}"  type="button" class="red" style='margin:20px 10px 20px 675px'  ng-click="submit($event)">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
+    <button shiro:hasPermission="employee_add" th:if="${viewForm.id} == null" th:attr="url=@{/company/employee/add}"  type="button" class="red" style='margin:20px 10px 20px 675px'  ng-click="submit($event)">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
     <div th:if="${viewForm.id} != null">
         <button shiro:hasPermission="employee_delete" type="button" ng-click="delete($event)" class="gray delButton" style='margin:20px 10px 20px 575px'>删&nbsp;&nbsp;&nbsp;&nbsp;除</button>
-        <button shiro:hasPermission="employee_edit" type="button" th:attr="url=@{/system/employee/edit}" ng-click="submit($event)" class="red" style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新</button>
+        <button shiro:hasPermission="employee_edit" type="button" th:attr="url=@{/company/employee/edit}" ng-click="submit($event)" class="red" style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新</button>
     </div>
 </div>
 <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
@@ -91,6 +91,7 @@
 <script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
 <script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+
 <script type="text/ng-template" id="roleModalContent.html">
     <div class="dialog_header">
         <form>
@@ -101,7 +102,7 @@
         </form>
     </div>
     <div class="dialog_content">
-        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/system/role/select" tabindex="5000" style="overflow: hidden; outline: none;">
+        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/company/role/select" tabindex="5000" style="overflow: hidden; outline: none;">
             <table>
                 <tbody>
                 <tr ng-repeat = 'item in items'>
@@ -109,7 +110,7 @@
                         <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item" ng-value="item" class="stRadio" type="radio" />
                     </td>
                     <td style="width:60%;">
-                        <div ng-bind="item.code"></div>
+                        <div ng-bind="item.id"></div>
                         <div ng-bind="item.name"></div>
                     </td>
                 </tr>
@@ -125,6 +126,7 @@
         </div>
     </div>
 </script>
+
 <script type="text/ng-template" id="companyModalContent.html">
     <div class="dialog_header">
         <form>
@@ -135,7 +137,7 @@
         </form>
     </div>
     <div class="dialog_content">
-        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/system/company/select" tabindex="5000" style="overflow: hidden; outline: none;">
+        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/company/role/select" tabindex="5000" style="overflow: hidden; outline: none;">
             <table>
                 <tbody>
                 <tr ng-repeat = 'item in items'>
@@ -143,7 +145,7 @@
                         <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item" ng-value="item" class="stRadio" type="radio" />
                     </td>
                     <td style="width:60%;">
-                        <div ng-bind="item.name"></div>
+                        <div ng-bind="item.id"></div>
                         <div ng-bind="item.address"></div>
                     </td>
                 </tr>
@@ -159,6 +161,7 @@
         </div>
     </div>
 </script>
+
 <script type="text/javascript" th:inline="javascript">
     var app = angular.module('employee',['ngPlugin']);
     app.controller('employeeController',['$scope','$http','ngSubmit','stModal','gpsLocation', 'alert',function($scope,$http,ngSubmit,stModal,gpsLocation,alert) {
@@ -232,7 +235,7 @@
                 yes : '确认删除',
                 delay : '3',
                 confirm : function(){
-                    $http.post('/system/employee/delete/'+$scope.postData.id).success(function(data){
+                    $http.post('/company/employee/delete/'+$scope.postData.id).success(function(data){
                         if(data.code == 0){
                             setTimeout(function(){
                                 location.href = data.jumpUrl;
@@ -288,10 +291,10 @@
             $scope.empty = false;
             angular.element('.dialog_content .grid').niceScroll({cursorborder:'',cursorcolor:'#000',cursoropacitymax:'0.5'});
             var $this = angular.element(event.target).attr('disabled','disabeld');
-            $http.post('/system/role/select',$scope.postData).success(function(data){
+            $http.post('/company/role/select',$scope.postData).success(function(data){
                 $this.attr('disabled',false);
                 if(data.code==0){
-                    $scope.items = data.data;
+                    $scope.items = data.data.domains;
                     $scope.postData.index += 1;
                     $scope.index = 'false';
                     angular.element('.dialog_content .grid').getNiceScroll().resize();
@@ -333,7 +336,7 @@
             $scope.empty = false;
             angular.element('.dialog_content .grid').niceScroll({cursorborder:'',cursorcolor:'#000',cursoropacitymax:'0.5'});
             var $this = angular.element(event.target).attr('disabled','disabeld');
-            $http.post('/system/company/select',$scope.postData).success(function(data){
+            $http.post('/select/company/select',$scope.postData).success(function(data){
                 $this.attr('disabled',false);
                 if(data.code==0){
                     $scope.items = data.data;

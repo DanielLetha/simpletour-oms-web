@@ -1,4 +1,4 @@
-package com.simpletour.company.web.form.system;
+package com.simpletour.company.web.form.company;
 
 import com.simpletour.company.web.annotation.Mobile;
 import com.simpletour.company.web.enums.FormModeType;
@@ -17,9 +17,10 @@ import javax.validation.constraints.NotNull;
 public class EmployeeForm extends BaseForm {
     /**
      * 工号
+     * Remark: Modified by shiguanglu@simpletour.com at 2016-4-14
      */
-    @NotNull(message = "{oms.employee.jobNo.notNull}")
-    @Length(min = 0, max = 32, message = "{oms.employee.jobNo.length}")
+    //@NotNull(message = "{oms.employee.jobNo.notNull}")
+    //@Length(min = 0, max = 32, message = "{oms.employee.jobNo.length}")
     private Integer jobno;
     /**
      * 姓名
@@ -42,12 +43,16 @@ public class EmployeeForm extends BaseForm {
     private String roleName;
     /**
      * 公司
+     * Remark: Modified by shiguanglu@simpletour.com at 2016-4-14
      */
-    @NotNull(message = "{oms.employee.company.notNull}")
+    //@NotNull(message = "{oms.employee.company.notNull}")
     private Long companyId;
     private String companyName;
 
-    @Length(min = 0, max = 10000, message = "{oms.employee.remark.length}")
+    /**
+     * Remark: Modified by shiguanglu@simpletour.com at 2016-4-14
+     */
+    //@Length(min = 0, max = 10000, message = "{oms.employee.remark.length}")
     private String remark;
 
     private Integer version;
@@ -151,6 +156,8 @@ public class EmployeeForm extends BaseForm {
             employee.setJobNo(this.getJobno());
             //TODO...设置头像地址
         }
+
+        employee.setAvater("images/member.jpg");
         employee.setName(this.getName());
         employee.setMobile(this.getMobile());
         Company company = new Company();

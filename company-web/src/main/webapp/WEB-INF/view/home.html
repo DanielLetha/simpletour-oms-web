@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+      <!--xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">-->
 <head>
     <title>
         简途旅行核心管理系统
@@ -9,7 +9,7 @@
     <link th:href="@{/static/images/logo.ico}" mce_href="/static/images/tab_icon.ico" rel="icon" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" th:href="@{/static/css/main_a340c41.css}" />
 </head>
-<body style="overflow:hidden" >
+<body style="overflow:hidden">
 <div class="firstNav">
     <div>
         <div class="logo">
@@ -20,485 +20,42 @@
             </a>
         </div>
         <ul class="menu">
-            <li shiro:hasAnyPermissions="tourism_list,product_list" class="active">
-                <div>
-                    <img th:src="@{/static/images/nav_product.png}"/>
-                </div>
-                <div class="describe">产品</div>
-            </li>
-            <li shiro:hasAnyPermissions="bus_list,busno_list,layout_list,line_list">
-                <div>
-                    <img th:src="@{/static/images/nav_bus.png}"/>
-                </div>
-                <div class="describe">车辆</div>
-            </li>
-            <li shiro:hasAnyPermissions="scenic_list,catering_list,destination_list,entertainment_list,hotel_list,procurement_list,osp_list">
+            <li class="active">
                 <div>
                     <img th:src="@{/static/images/nav_resource.png}"/>
                 </div>
-                <div class="describe">资源</div>
-            </li>
-            <li shiro:hasAnyPermissions="order_list,stock_list,source_list">
-                <div>
-                    <img th:src="@{/static/images/nav_order.png}"/>
-                </div>
-                <div class="describe">订单</div>
-            </li>
-            <li shiro:hasAnyPermissions="web_tourism_list,web_firstlabel_list,first_page_manager,game_play_list">
-                <div>
-                    <img th:src="@{/static/images/nav_cms.png}"/>
-                </div>
-                <div class="describe">网站</div>
-            </li>
-            <li shiro:hasAnyPermissions="wechat_tourism_list,wechat_product_list,wechat_activity_list,wechat_location_list,wechat_home_list,wechat_category_list">
-                <div>
-                    <img th:src="@{/static/images/nav_wechat.png}"/>
-                </div>
-                <div class="describe">微信</div>
-            </li>
-            <li shiro:hasAnyPermissions="stpass_batch_list,stpass_batch_add,stpass_batch_query">
-                <div>
-                    <img th:src="@{/static/images/nav_card.png}"/>
-                </div>
-                <div class="describe">通票</div>
-            </li>
-            <li shiro:hasAnyPermissions="coupon_batch_list,coupon_usage_list,coupon_coupon_add">
-                <div>
-                    <img th:src="@{/static/images/nav_coupon.png}"/>
-                </div>
-                <div class="describe">优惠券</div>
-            </li>
-            <li shiro:hasAnyPermissions="insurance_export,report_export">
-                <div>
-                    <img th:src="@{/static/images/nav_tools.png}"/>
-                </div>
-                <div class="describe">工具</div>
-            </li>
-            <li shiro:hasAnyPermissions="assistant_list,signlog_list,pushlog_list,operatelog_list">
-                <div>
-                    <img th:src="@{/static/images/nav_guide.png}"/>
-                </div>
-                <div class="describe">行车助理</div>
-            </li>
-            <li>
-                <div>
-                    <img th:src="@{/static/images/nav_app.png}"/>
-                </div>
-                <div class="describe">系统</div>
+                <div class="describe">公司</div>
             </li>
         </ul>
     </div>
     <div class="close"></div>
 </div>
 <div class="wrap">
-    <div shiro:hasAnyPermissions="tourism_list,product_list" tabindex="5001" style="overflow: hidden; display: block;" class="secondNav">
+    <div tabindex="5000" style="overflow: hidden; display: none;" class="secondNav">
         <div class="category">
-            <a shiro:hasPermission="tourism_list" th:href="@{/product/product/list}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_product.png}"/>
-                </div>
-                <div>产品</div>
-            </span>
+            <a th:href="@{/company/role/}">
+                <span class="hotel">
+                    <div class="category_img">
+                        <img th:src="@{/static/images/icon_role.png}"/>
+                    </div>
+                    <div>角色</div>
+                </span>
             </a>
-<!--            <a shiro:hasPermission="product_list" th:href="@{/product/product/list}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_product.png}"/>
-                </div>
-                <div>产品</div>
-            </span>
-            </a>-->
-            <div class="clear"></div>
-        </div>
-    </div>
-    <div shiro:hasAnyPermissions="bus_list,busno_list,layout_list,line_list" tabindex="5002" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="bus_list" th:href="@{/transport/bus/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_bus.png}"/>
-                </div>
-                <div>车辆</div>
-            </span>
+            <a th:href="@{/company/employee/}">
+                <span class="hotel">
+                    <div class="category_img">
+                        <img th:src="@{/static/images/icon_employee.png}"/>
+                    </div>
+                    <div>人员</div>
+                </span>
             </a>
-            <a shiro:hasPermission="busno_list" th:href="@{/transport/busno/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_busno.png}"/>
-                </div>
-                <div>车次</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="layout_list" th:href="@{/transport/layout/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_layout.png}"/>
-                </div>
-                <div>车辆布局</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="line_list" th:href="@{/transport/line/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_osp.png}"/>
-                </div>
-                <div>线路</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <div shiro:hasAnyPermissions="scenic_list,catering_list,destination_list,entertainment_list,hotel_list,procurement_list,osp_list" tabindex="5003" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="scenic_list" th:href="@{/resource/scenic/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_scenic.png}"/>
-                </div>
-                <div>景点</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="catering_list" th:href="@{/resource/catering/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_catering.png}"/>
-                </div>
-                <div>餐饮点</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="destination_list" th:href="@{/resource/destination/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_destination.png}"/>
-                </div>
-                <div>目的地</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="entertainment_list" th:href="@{/resource/entertainment/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_entertainment.png}"/>
-                </div>
-                <div>娱乐</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="hotel_list" th:href="@{/resource/hotel/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_hotel.png}"/>
-                </div>
-                <div>住宿点</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="procurement_list" th:href="@{/resource/procurement/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_procurement.png}"/>
-                </div>
-                <div>元素</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="osp_list" th:href="@{/resource/osp/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_osp.png}"/>
-                </div>
-                <div>供应商</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <div shiro:hasAnyPermissions="order_list,stock_list,source_list" tabindex="5004" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a th:href="@{/order/order/}" shiro:hasPermission="order_list">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_order.png}"/>
-                </div>
-                <div>订单</div>
-            </span>
-            </a>
-            <a th:href="@{/stock/index/}" shiro:hasPermission="stock_list">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_stock.png}"/>
-                </div>
-                <div>库存查询</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="source_list" th:href="@{/order/source/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_order_source.png}"/>
-                </div>
-                <div>渠道</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-
-    <div shiro:hasAnyPermissions="web_tourism_list,web_firstlabel_list,first_page_manager,game_play_list" tabindex="5004" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="web_tourism_list" th:href="@{/web/tourism/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_tourism.png}"/>
-                </div>
-                <div>web行程</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="web_firstlabel_list" th:href="@{/web/firstlabel/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_search.png}"/>
-                </div>
-                <div>标签</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="first_page_manager" th:href="@{/web/home/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_layout.png}"/>
-                </div>
-                <div>首页管理</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="game_play_list" th:href="@{/web/gamePlay/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_batch.png}"/>
-                </div>
-                <div>玩法</div>
-            </span>
-            </a>
-        </div>
-    </div>
-    <div shiro:hasAnyPermissions="wechat_product_list,wechat_tourism_list,wechat_location_list,wechat_activity_list,wechat_home_list,wechat_category_list" tabindex="5005" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="wechat_product_list" href="/mobile/admin/wechat/product/products">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_way.png}"/>
-                </div>
-                <div>自由购商品</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="wechat_tourism_list" href="/mobile/admin/wechat/tourism/tourisms">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_wechattourism.png}"/>
-                </div>
-                <div>微信行程产品</div>
-            </span>
-            </a>
-            <!--<a shiro:hasPermission="wechat_location_list" href="/mobile/admin/wechat/tag/location/locations">-->
-            <!--<span class="hotel">-->
-                <!--<div class="category_img">-->
-                    <!--<img th:src="@{/static/images/icon_wechatlocation.png}"/>-->
-                <!--</div>-->
-                <!--<div>微信目的地标签</div>-->
-            <!--</span>-->
-            <!--</a>-->
-            <a shiro:hasPermission="wechat_activity_list" href="/mobile/admin/wechat/tag/activity/activities">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_wechatactivity.png}"/>
-                </div>
-                <div>微信活动标签</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="wechat_home_list" href="/mobile/admin/wechat/home/homes">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_wechathome.png}"/>
-                </div>
-                <div>微信首页图片</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="wechat_category_list" href="/mobile/admin/wechat/category/categories">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_category.png}"/>
-                </div>
-                <div>微信栏目管理</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="wechat_location_list" href="/mobile/admin/wechat/location/classifications">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_location.png}"/>
-                </div>
-                <div>微信地点管理</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <div shiro:hasAnyPermissions="stpass_batch_list,stpass_batch_query,stpass_batch_add" tabindex="5006" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="stpass_batch_list" href="/card/batch/batches">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_batch.png}"/>
-                </div>
-                <div>通票批次</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="stpass_batch_query" href="/card/card/query">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_cardquery.png}"/>
-                </div>
-                <div>简途通查询</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="stpass_batch_add" href="/card/batch/add">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_cardadd.png}"/>
-                </div>
-                <div>添加通票批次</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <div shiro:hasAnyPermissions="coupon_batch_list,coupon_usage_list,coupon_coupon_add" tabindex="5006" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="coupon_usage_list" href="/coupon/usage/list">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_fetch.png}"/>
-                </div>
-                <div>使用情况</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="coupon_batch_list" href="/coupon/coupon/list">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_coupon_batch.png}"/>
-                </div>
-                <div>优惠券列表</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="coupon_coupon_add" href="/coupon/coupon/add">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_coupon_add.png}"/>
-                </div>
-                <div>优惠券添加</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-
-    <div shiro:hasAnyPermissions="insurance_export,report_export" tabindex="5006" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="insurance_export" href="/tool/insurance/export">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_insurance.png}"/>
-                </div>
-                <div>保险</div>
-            </span>
-            </a>
-
-            <a shiro:hasPermission="report_export" href="/tool/report/list">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_excel.png}"/>
-                </div>
-                <div>报表</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-
-    <div shiro:hasAnyPermissions="assistant_list,signlog_list,pushlog_list,operatelog_list" tabindex="5008" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <a shiro:hasPermission="assistant_list" th:href="@{/guide/assistant/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_assistant.png}"/>
-                </div>
-                <div>行车助理</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="pushlog_list" th:href="@{/guide/pushlog/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_pushlog.png}"/>
-                </div>
-                <div>助理推送</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="signlog_list" th:href="@{/guide/signlog/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_signlog.png}"/>
-                </div>
-                <div>扫描记录</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="operatelog_list" th:href="@{/guide/operatelog/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_bus.png}"/>
-                </div>
-                <div>选座记录</div>
-            </span>
-            </a>
-            <div class="clear"></div>
-        </div>
-    </div>
-
-    <div tabindex="5013" style="overflow: hidden; display: none;" class="secondNav">
-        <div class="category">
-            <!--<a shiro:hasPermission="employee_list" th:href="@{/system/employee/}">-->
-            <a th:href="@{/system/employee/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_employee.png}"/>
-                </div>
-                <div>人员</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="company_list" th:href="@{/system/company/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_osp.png}"/>
-                </div>
-                <div>公司</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="role_list" th:href="@{/system/role/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_role.png}"/>
-                </div>
-                <div>角色</div>
-            </span>
-            </a>
-            <a shiro:hasPermission="permission_list" th:href="@{/system/permission/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_permission.png}"/>
-                </div>
-                <div>权限</div>
-            </span>
-            </a>
-            <a  th:href="@{/system/employee/password/}">
-            <span class="hotel">
-                <div class="category_img">
-                    <img th:src="@{/static/images/icon_application.png}"/>
-                </div>
-                <div>修改密码</div>
-            </span>
+            <a  th:href="@{/company/employee/password/}">
+                <span class="hotel">
+                    <div class="category_img">
+                        <img th:src="@{/static/images/icon_application.png}"/>
+                    </div>
+                    <div>修改密码</div>
+                </span>
             </a>
             <div class="clear"></div>
         </div>
@@ -515,19 +72,18 @@
             if(event.keyCode==8){
                 var elem = event.srcElement;
                 var name = elem.nodeName;
-
                 if(name!='INPUT' && name!='TEXTAREA'){
-                    event.returnValue = false ;
-                    return ;
+                    event.returnValue = false;
+                    return;
                 }
                 var type_e = elem.type.toUpperCase();
                 if(name=='INPUT' && (type_e!='TEXT' && type_e!='TEXTAREA' && type_e!='PASSWORD' && type_e!='FILE')){
-                    event.returnValue = false ;
-                    return ;
+                    event.returnValue = false;
+                    return;
                 }
                 if(name=='INPUT' && (elem.readOnly==true || elem.disabled ==true)){
-                    event.returnValue = false ;
-                    return ;
+                    event.returnValue = false;
+                    return;
                 }
             }
         }

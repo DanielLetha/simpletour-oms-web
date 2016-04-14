@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * Created by zt on 2016/1/26.
  */
 public class PasswordForm {
+    private Long id;
 
     /**
      * 旧密码
@@ -23,10 +24,17 @@ public class PasswordForm {
      * 确认密码
      */
     @NotBlank(message = "{oms.employee.password.notNull}")
-    private String confirmPassword;
-
+    private String repeatPassword;
 
     public PasswordForm() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getOldPassword() {
@@ -45,11 +53,11 @@ public class PasswordForm {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
+    public String getRepeatPassword() {
+        return repeatPassword;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+    public void setRepeatPassword(String confirmPassword) {
+        this.repeatPassword = confirmPassword;
     }
 }

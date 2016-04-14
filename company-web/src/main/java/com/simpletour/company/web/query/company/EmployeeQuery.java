@@ -1,4 +1,4 @@
-package com.simpletour.company.web.query.system;
+package com.simpletour.company.web.query.company;
 
 
 import com.simpletour.common.core.dao.IBaseDao;
@@ -6,9 +6,6 @@ import com.simpletour.common.core.dao.query.ConditionOrderByQuery;
 import com.simpletour.common.core.dao.query.condition.AndConditionSet;
 import com.simpletour.common.core.dao.query.condition.Condition;
 import com.simpletour.company.web.query.support.Query;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by mario on 16-4-12.
@@ -30,6 +27,11 @@ public class EmployeeQuery extends Query {
      * 角色id
      */
     private Long roleId;
+
+    /**
+     * 租户id
+     */
+    private Long tenantId;
 
     public EmployeeQuery() {
     }
@@ -66,6 +68,14 @@ public class EmployeeQuery extends Query {
         this.roleId = roleId;
     }
 
+    public Long getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
+    }
+
     public ConditionOrderByQuery asConditionQuery() {
         ConditionOrderByQuery conditionOrderByQuery = new ConditionOrderByQuery();
         AndConditionSet andConditionSet = new AndConditionSet();
@@ -77,11 +87,13 @@ public class EmployeeQuery extends Query {
             andConditionSet.addCondition("c.role.id", this.roleId, Condition.MatchType.eq);
         if (!(this.mobile == null || this.mobile.isEmpty()))
             andConditionSet.addCondition("c.mobile", this.mobile, Condition.MatchType.like);
+
+        andConditionSet.addCondition("c.company.id", tenantId);
+
         conditionOrderByQuery.setCondition(andConditionSet);
         conditionOrderByQuery.addSortByField("c.id", IBaseDao.SortBy.ASC);
         conditionOrderByQuery.setPageIndex(this.getIndex());
         conditionOrderByQuery.setPageSize(this.getSize());
         return conditionOrderByQuery;
     }
-
 }

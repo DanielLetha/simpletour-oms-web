@@ -12,7 +12,7 @@
 <body ng-controller="employeeController">
 <!--<div class="header" th:replace="fragments :: iframe_header"></div>-->
 <div class="sContainer search" style="position: relative">
-    <form th:action="@{/system/employee/list}" method="post"
+    <form th:action="@{/company/employee/list}" method="post"
           style="width: 100%;box-sizing: border-box;padding-right:70px; ">
         <div class="search_group">
             <div class="input_group">
@@ -44,7 +44,7 @@
                 <td th:text="${employee.name}"></td>
                 <td th:text="${employee.mobile}"></td>
                 <td shiro:hasAnyPermissions="employee_detail,employee_edit,employee_delete">
-                    <a class="decoration" th:href="@{/system/employee/edit/}+${employee.id}">查看|编辑</a>
+                    <a class="decoration" th:href="@{/company/employee/edit/}+${employee.id}">编辑</a>
                 </td>
             </tr>
             </tbody>
@@ -53,8 +53,8 @@
 </div>
 <div class="table_footer">
     <!--<a shiro:hasPermission="employee_add" th:href="@{/system/employee/add}">添加人员</a>-->
-    <a th:href="@{/system/employee/add}">添加人员</a>
-    <!--<div class='pager-page' th:include="fragments :: iframe_pager"/>-->
+    <a th:href="@{/company/employee/add}">添加人员</a>
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
 </div>
 <script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
