@@ -21,7 +21,6 @@
         <shiro.version>1.2.4</shiro.version>
         <thymeleaf-spring4>2.1.4.RELEASE</thymeleaf-spring4>
         <servlet.version>3.1.0</servlet.version>
-        <!--<system.version>2.0-SNAPSHOT</system.version>-->
         <company.version>2.0-SNAPSHOT</company.version>
         <simpletour.version>1.0</simpletour.version>
         <jackson.version>2.6.3</jackson.version>
@@ -49,16 +48,16 @@
             </dependency>
 
             <!--增加simpletour util,使用文件上传下载功能-->
-            <!--<dependency>-->
-                <!--<groupId>com.simpletour</groupId>-->
-                <!--<artifactId>simpletour-util-utils</artifactId>-->
-                <!--<version>${simpletour.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>com.simpletour</groupId>-->
-                <!--<artifactId>simpletour-util-framework</artifactId>-->
-                <!--<version>${simpletour.version}</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>com.simpletour</groupId>
+                <artifactId>simpletour-util-utils</artifactId>
+                <version>${simpletour.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.simpletour</groupId>
+                <artifactId>simpletour-util-framework</artifactId>
+                <version>${simpletour.version}</version>
+            </dependency>
 
             <!-- spring -->
             <dependency>
@@ -146,11 +145,6 @@
                 <artifactId>thymeleaf-spring4</artifactId>
                 <version>${thymeleaf-spring4}</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>org.thymeleaf.extras</groupId>-->
-                <!--<artifactId>thymeleaf-extras-springsecurity4</artifactId>-->
-                <!--<version>2.1.2.RELEASE</version>-->
-            <!--</dependency>-->
 
             <!--other-->
             <dependency>

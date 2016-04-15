@@ -69,7 +69,7 @@ public class EmployeeController extends BaseController {
         }
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L);
+//        TokenStorage.setLocalTokenWithCompanyId(0L);
         employeeForm.setCompanyId(TokenStorage.COMPANY_ID);
 
         try {
@@ -107,7 +107,7 @@ public class EmployeeController extends BaseController {
         this.enableGoBack(model);
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L);
+//        TokenStorage.setLocalTokenWithCompanyId(0L);
 
         Optional<Employee> employeeOptional = employeeService.queryEmployeeById(id);
         if (employeeOptional.isPresent()) {
@@ -130,7 +130,7 @@ public class EmployeeController extends BaseController {
         }
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L);
+//        TokenStorage.setLocalTokenWithCompanyId(0L);
         employeeForm.setCompanyId(TokenStorage.COMPANY_ID);
 
         try {
