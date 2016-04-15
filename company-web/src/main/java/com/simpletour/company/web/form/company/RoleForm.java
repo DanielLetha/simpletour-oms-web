@@ -41,6 +41,10 @@ public class RoleForm extends BaseForm {
     }
 
     public RoleForm(Role role) {
+        convert2RoleForm(role);
+    }
+
+    public RoleForm convert2RoleForm(Role role) {
         this.id = role.getId();
         this.name = role.getName();
         this.remark = role.getRemark();
@@ -50,6 +54,7 @@ public class RoleForm extends BaseForm {
         this.permissionList = role.getPermissionList();
         this.scopes = null == this.company ? Collections.emptyList() : CompanyForm.toCompanyForm(role.getCompany()).getScopes();
         selectPermissions();
+        return this;
     }
 
     public Role convert2Role(IModuleService moduleService) {

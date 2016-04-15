@@ -289,8 +289,21 @@
             name: [[${viewForm.name}]] || "",
             scopes: [[${viewForm.scopes}]] || [],
             remark: [[${viewForm.remark}]] || "",
+            companyId: [[${viewForm.company.id}]] || 0,
             version: [[${viewForm.version}]] || 0
         };
+
+        if (!$scope.postData.companyId) {
+            setTimeout(function(){
+                location.href = '/company/role/list';
+            }, 3000);
+            alert.alert({
+                reason: '公司不存在，无法进行此项操作',
+                message: '此提示3秒后关闭',
+                type: 'fail',
+                delay: '3'
+            });
+        }
 
         $scope.selectAll = function(e, module) {
             module.checked = !module.checked;
@@ -376,10 +389,10 @@
                     angular.element(event.target).attr('disabled', false);
                 },
                 error: function(data){
-                    $scope.errorTips = data.tip;
+                    $scope.errorTips = data.detail;
                     alert.alert({
-                        reason: data.tip,
-                        message: '此提示3秒后关闭',
+                        reason: data.detail,
+                        message: data.msg,
                         type: 'fail',
                         delay: '3'
                     });
@@ -398,19 +411,18 @@
                 delay: '3',
                 confirm: function() {
                     $http.get('/company/role/delete/' + $scope.postData.id).success(function(data) {
-                        if (data && 0 == data.code) {
+                        if (data) {
                             setTimeout(function() {
                                 location.href = data.jumpUrl;
                             }, 3000);
 
-                            if (0 == data.code) {
-                                alert.alert({
-                                    reason: data.msg,
-                                    message: '此提示3秒后关闭',
-                                    type: 'success'
-                                });
-                            }
+                            alert.alert({
+                                reason: data.msg,
+                                message: '此提示3秒后关闭',
+                                type: 0 == data.code ? 'success' : 'fail'
+                            });
                         }
+
                         angular.element(event.target).attr('disabled',false);
                     }).error(function(data,header,config,status){
                         alert.alert({

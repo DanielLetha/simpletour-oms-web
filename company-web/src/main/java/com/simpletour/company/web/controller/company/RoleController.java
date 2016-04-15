@@ -103,7 +103,6 @@ public class RoleController extends BaseController {
 
         Optional<Company> company = companyService.getCompanyById(COMPANY_ID);
         if (!isPresentAndNotDel(company)) {
-            // TODO: 公司不存在时错误信息显示不出来
             model.addAttribute("viewForm", roleForm);
             System.out.println("get list failed by get");
             return MAPPING_URL + "form";
@@ -135,8 +134,7 @@ public class RoleController extends BaseController {
         Optional<Company> company = companyService.getCompanyById(COMPANY_ID);
         if (!isPresentAndNotDel(company)) {
             System.out.println("add role failed by post");
-            // TODO: 公司不存在时错误信息显示不出来
-            return BaseDataResponse.fail().msg(BaseAction.ADD_FAIL(DOMAIN).getTitle()).detail("公司不存在");
+            return BaseDataResponse.fail().msg(BaseAction.ADD_FAIL(DOMAIN).getTitle()).detail("公司不存在，无法进行此项操作");
         }
 
         form.setMode(FormModeType.ADD.getValue());
@@ -162,13 +160,16 @@ public class RoleController extends BaseController {
         // TODO: 暂时先将租户ID写死
         TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
+        RoleForm viewForm = new RoleForm();
+
         Optional<Role> role = roleService.getRoleById(id);
         if (!isPresentAndNotDel(role)) {
-            return notFound();
+            model.addAttribute("viewForm", viewForm);
+            System.out.println("get list failed by get");
+            return MAPPING_URL + "form";
         }
 
-        RoleForm viewForm = new RoleForm(role.get());
-        model.addAttribute("viewForm", viewForm);
+        model.addAttribute("viewForm", viewForm.convert2RoleForm(role.get()));
 
         return MAPPING_URL + "form";
     }
@@ -210,24 +211,26 @@ public class RoleController extends BaseController {
     public String delete(@PathVariable Long id, HttpServletResponse response) {
         System.out.println("enter delete role page by http-get");
 
+        Map<String, String> data = new HashMap<>(3);
+        data.put("jumpUrl", MAPPING_URL + "list");
+
         // TODO: 暂时先将租户ID写死
         TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         Optional<Role> role = roleService.getRoleById(id);
         if (!isPresentAndNotDel(role)) {
-            return notFound();
+            data.put("code", "-1");
+            data.put("msg", "角色不存在");
+        } else {
+            try {
+                roleService.deleteRoleById(id);
+                data.put("code", "0");
+                data.put("msg", "删除角色成功");
+            } catch (BaseSystemException e) {
+                data.put("code", "1");
+                data.put("msg", "删除角色失败");
+            }
         }
-
-        try {
-            roleService.deleteRoleById(id);
-        } catch (BaseSystemException e) {
-            return notFound();
-        }
-
-        Map<String, String> data = new HashMap<>(2);
-        data.put("code", "0");
-        data.put("msg", "删除角色成功");
-        data.put("jumpUrl", MAPPING_URL + "list");
 
         outputResponse(response, JSON.toJSONString(data));
 
