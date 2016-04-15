@@ -30,13 +30,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--simpletour-->
-            <!--<dependency>-->
-                <!--<groupId>com.simpletour</groupId>-->
-                <!--<artifactId>simpletour-system-service</artifactId>-->
-                <!--<version>${system.version}</version>-->
-            <!--</dependency>-->
-
             <dependency>
                 <groupId>com.simpletour.module</groupId>
                 <artifactId>company-service</artifactId>
@@ -54,12 +47,6 @@
                 <artifactId>simpletour-redis</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
-
-            <!--<dependency>-->
-                <!--<groupId>com.simpletour.common</groupId>-->
-                <!--<artifactId>common-core</artifactId>-->
-                <!--<version>${simpletour.common.version}</version>-->
-            <!--</dependency>-->
 
             <!--增加simpletour util,使用文件上传下载功能-->
             <!--<dependency>-->
