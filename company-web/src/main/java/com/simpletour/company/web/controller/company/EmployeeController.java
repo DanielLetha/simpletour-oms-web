@@ -1,19 +1,20 @@
 package com.simpletour.company.web.controller.company;
 
-import com.simpletour.common.core.domain.DomainPage;
-import com.simpletour.common.core.exception.BaseSystemException;
+import com.simpletour.commons.data.domain.DomainPage;
+import com.simpletour.commons.data.exception.BaseSystemException;
 import com.simpletour.company.web.controller.support.*;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.company.EmployeeForm;
 import com.simpletour.company.web.form.system.PasswordForm;
 import com.simpletour.company.web.query.company.EmployeeQuery;
 import com.simpletour.company.web.util.PasswordUtil;
-import com.simpletour.domain.system.Company;
-import com.simpletour.domain.system.Employee;
-import com.simpletour.domain.system.Role;
-import com.simpletour.service.system.ICompanyService;
-import com.simpletour.service.system.IEmployeeService;
-import com.simpletour.service.system.IRoleService;
+
+import com.simpletour.domain.company.Company;
+import com.simpletour.domain.company.Employee;
+import com.simpletour.domain.company.Role;
+import com.simpletour.service.company.ICompanyService;
+import com.simpletour.service.company.IEmployeeService;
+import com.simpletour.service.company.IRoleService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

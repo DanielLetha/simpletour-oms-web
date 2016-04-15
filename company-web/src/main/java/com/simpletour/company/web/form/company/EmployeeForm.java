@@ -3,9 +3,9 @@ package com.simpletour.company.web.form.company;
 import com.simpletour.company.web.annotation.Mobile;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
-import com.simpletour.domain.system.Company;
-import com.simpletour.domain.system.Employee;
-import com.simpletour.domain.system.Role;
+import com.simpletour.domain.company.Company;
+import com.simpletour.domain.company.Employee;
+import com.simpletour.domain.company.Role;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
