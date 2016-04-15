@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
 
     private static final String MAPPING_URL = "/company/role/";
 
-    private static final long COMPANY_ID = 4;
+    //private static final long COMPANY_ID = 4;
 
     @Autowired
     private IRoleService roleService;
@@ -101,7 +101,7 @@ public class RoleController extends BaseController {
 
         RoleForm roleForm = new RoleForm();
 
-        Optional<Company> company = companyService.getCompanyById(COMPANY_ID);
+        Optional<Company> company = companyService.getCompanyById(TokenStorage.COMPANY_ID);
         if (!isPresentAndNotDel(company)) {
             model.addAttribute("viewForm", roleForm);
             System.out.println("get list failed by get");
@@ -131,7 +131,7 @@ public class RoleController extends BaseController {
         // TODO: 暂时先将租户ID写死
         //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
-        Optional<Company> company = companyService.getCompanyById(COMPANY_ID);
+        Optional<Company> company = companyService.getCompanyById(TokenStorage.COMPANY_ID);
         if (!isPresentAndNotDel(company)) {
             System.out.println("add role failed by post");
             return BaseDataResponse.fail().msg(BaseAction.ADD_FAIL(DOMAIN).getTitle()).detail("公司不存在，无法进行此项操作");
