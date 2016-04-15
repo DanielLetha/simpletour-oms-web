@@ -1,6 +1,6 @@
 package com.simpletour.company.web.controller.support;
 
-import com.simpletour.common.core.domain.DomainPage;
+import com.simpletour.commons.data.domain.DomainPage;
 
 /**
  * Brief : 用于处理分页的工具类

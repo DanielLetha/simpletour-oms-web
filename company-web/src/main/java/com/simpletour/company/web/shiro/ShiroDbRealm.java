@@ -1,8 +1,8 @@
 package com.simpletour.company.web.shiro;
 
-import com.simpletour.domain.system.Employee;
-import com.simpletour.service.system.IEmployeeService;
-import com.simpletour.service.system.IRoleService;
+import com.simpletour.domain.company.Employee;
+import com.simpletour.service.company.IEmployeeService;
+import com.simpletour.service.company.IRoleService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -21,7 +21,6 @@ import java.util.Optional;
  */
 @Component
 public class ShiroDbRealm extends AuthorizingRealm {
-
     @Autowired
     protected IEmployeeService employeeService;
     @Autowired

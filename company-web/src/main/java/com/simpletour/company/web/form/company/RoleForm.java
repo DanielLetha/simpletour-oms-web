@@ -1,11 +1,11 @@
 package com.simpletour.company.web.form.company;
 
 import com.simpletour.company.web.form.support.BaseForm;
-import com.simpletour.domain.system.Company;
-import com.simpletour.domain.system.Module;
-import com.simpletour.domain.system.Permission;
-import com.simpletour.domain.system.Role;
-import com.simpletour.service.system.IModuleService;
+import com.simpletour.domain.company.Company;
+import com.simpletour.domain.company.Module;
+import com.simpletour.domain.company.Permission;
+import com.simpletour.domain.company.Role;
+import com.simpletour.service.company.IModuleService;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -173,14 +173,6 @@ public class RoleForm extends BaseForm {
     public void setScopes(List<CompanyScopeForm> scopes) {
         this.scopes = scopes;
     }
-
-//    public List<Permission> getPermissionList() {
-//        return permissionList;
-//    }
-//
-//    public void setPermissionList(List<Permission> permissionList) {
-//        this.permissionList = permissionList;
-//    }
 
     public Integer getVersion() {
         return version;

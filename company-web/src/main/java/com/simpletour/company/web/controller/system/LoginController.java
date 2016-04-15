@@ -1,7 +1,6 @@
 package com.simpletour.company.web.controller.system;
 
 import com.simpletour.company.web.form.system.LoginForm;
-import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -21,9 +20,6 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class LoginController {
-
-    private static final Logger logger = Logger.getLogger(LoginController.class);
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
         Subject currentUser = SecurityUtils.getSubject();

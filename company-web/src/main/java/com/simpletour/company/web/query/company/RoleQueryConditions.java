@@ -1,7 +1,7 @@
 package com.simpletour.company.web.query.company;
 
 import com.simpletour.company.web.query.support.Query;
-import com.simpletour.dao.system.query.RoleQuery;
+import com.simpletour.dao.company.query.RoleQuery;
 
 /**
  * 文件描述：角色查询条件封装类

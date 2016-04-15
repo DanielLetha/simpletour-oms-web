@@ -1,18 +1,18 @@
 package com.simpletour.company.web.controller.company;
 
 import com.alibaba.fastjson.JSON;
-import com.simpletour.common.core.domain.DomainPage;
-import com.simpletour.common.core.exception.BaseSystemException;
+import com.simpletour.commons.data.domain.DomainPage;
+import com.simpletour.commons.data.exception.BaseSystemException;
 import com.simpletour.company.web.controller.support.*;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.company.CompanyForm;
 import com.simpletour.company.web.form.company.RoleForm;
 import com.simpletour.company.web.query.company.RoleQueryConditions;
-import com.simpletour.domain.system.Company;
-import com.simpletour.domain.system.Role;
-import com.simpletour.service.system.ICompanyService;
-import com.simpletour.service.system.IModuleService;
-import com.simpletour.service.system.IRoleService;
+import com.simpletour.domain.company.Company;
+import com.simpletour.domain.company.Role;
+import com.simpletour.service.company.ICompanyService;
+import com.simpletour.service.company.IModuleService;
+import com.simpletour.service.company.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,7 +59,7 @@ public class RoleController extends BaseController {
         System.out.println("enter list");
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
+        //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         setPageTitle(model, "角色列表");
 
@@ -79,7 +79,7 @@ public class RoleController extends BaseController {
         System.out.println("enter select");
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
+        //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         DomainPage<Role> page = roleService.getRolesPages(query.asRoleQuery());
         if (null == page || page.getDomains().isEmpty()) {
@@ -97,7 +97,7 @@ public class RoleController extends BaseController {
         enableGoBack(model);
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
+        //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         RoleForm roleForm = new RoleForm();
 
@@ -129,7 +129,7 @@ public class RoleController extends BaseController {
         }
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
+        //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         Optional<Company> company = companyService.getCompanyById(COMPANY_ID);
         if (!isPresentAndNotDel(company)) {
@@ -158,7 +158,7 @@ public class RoleController extends BaseController {
         enableGoBack(model);
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
+        //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         RoleForm viewForm = new RoleForm();
 
@@ -185,7 +185,7 @@ public class RoleController extends BaseController {
         }
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
+        //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         Optional<Role> optional = roleService.getRoleById(form.getId());
         if (!isPresentAndNotDel(optional)) {
@@ -215,7 +215,7 @@ public class RoleController extends BaseController {
         data.put("jumpUrl", MAPPING_URL + "list");
 
         // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
+        //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
 
         Optional<Role> role = roleService.getRoleById(id);
         if (!isPresentAndNotDel(role)) {

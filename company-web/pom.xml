@@ -15,26 +15,34 @@
     <dependencies>
         <!--simpletour-->
         <dependency>
-            <groupId>com.simpletour</groupId>
-            <artifactId>simpletour-system-service</artifactId>
+            <groupId>com.simpletour.module</groupId>
+            <artifactId>company-service</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.simpletour.commons</groupId>
+            <artifactId>data</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.simpletour</groupId>
             <artifactId>simpletour-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.simpletour.common</groupId>
-            <artifactId>common-core</artifactId>
-        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.simpletour.common</groupId>-->
+            <!--<artifactId>common-core</artifactId>-->
+        <!--</dependency>-->
+
         <!--增加simpletour util,使用文件上传下载功能-->
-        <dependency>
-            <groupId>com.simpletour</groupId>
-            <artifactId>simpletour-util-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.simpletour</groupId>
-            <artifactId>simpletour-util-framework</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.simpletour</groupId>-->
+            <!--<artifactId>simpletour-util-utils</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.simpletour</groupId>-->
+            <!--<artifactId>simpletour-util-framework</artifactId>-->
+        <!--</dependency>-->
 
         <!-- spring -->
         <dependency>
@@ -65,33 +73,34 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.springframework</groupId>-->
+            <!--<artifactId>spring-test</artifactId>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
 
         <!--shiro-->
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-ehcache</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.shiro</groupId>-->
+            <!--<artifactId>shiro-core</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.shiro</groupId>-->
+            <!--<artifactId>shiro-spring</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.shiro</groupId>-->
+            <!--<artifactId>shiro-web</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.shiro</groupId>-->
+            <!--<artifactId>shiro-quartz</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.shiro</groupId>-->
+            <!--<artifactId>shiro-ehcache</artifactId>-->
+        <!--</dependency>-->
 
         <!--thymeleaf-->
         <dependency>
@@ -145,24 +154,24 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.testng</groupId>-->
+            <!--<artifactId>testng</artifactId>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.derby</groupId>-->
+            <!--<artifactId>derby</artifactId>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>commons-fileupload</groupId>-->
+            <!--<artifactId>commons-fileupload</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>commons-collections</groupId>-->
+            <!--<artifactId>commons-collections</artifactId>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>

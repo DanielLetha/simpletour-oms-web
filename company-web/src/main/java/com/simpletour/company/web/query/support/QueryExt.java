@@ -1,11 +1,11 @@
 package com.simpletour.company.web.query.support;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.simpletour.common.core.dao.IBaseDao;
-import com.simpletour.common.core.dao.query.ConditionOrderByQuery;
-import com.simpletour.common.core.dao.query.condition.AndConditionSet;
-import com.simpletour.common.core.dao.query.condition.Condition;
-import com.simpletour.common.core.dao.query.condition.ConditionSet;
+import com.simpletour.commons.data.dao.IBaseDao;
+import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
+import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
+import com.simpletour.commons.data.dao.query.condition.Condition;
+import com.simpletour.commons.data.dao.query.condition.ConditionSet;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

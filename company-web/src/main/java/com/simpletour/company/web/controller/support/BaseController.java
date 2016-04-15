@@ -1,7 +1,6 @@
 package com.simpletour.company.web.controller.support;
 
-import com.simpletour.common.core.domain.CanLogicDelDomain;
-import com.simpletour.company.web.shiro.ShiroDbRealm;
+import com.simpletour.commons.data.domain.LogicalDeletableDomain;
 import com.simpletour.company.web.shiro.ShiroUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -136,7 +135,7 @@ public class BaseController {
         model.addAttribute("pageGoBack", true);
     }
 
-    protected <T extends CanLogicDelDomain> boolean isPresentAndNotDel(Optional<T> delDomain) {
+    protected <T extends LogicalDeletableDomain> boolean isPresentAndNotDel(Optional<T> delDomain) {
         if (delDomain.isPresent() && delDomain.get().getDel() != null && !delDomain.get().getDel()) {
             return true;
         } else {
@@ -144,7 +143,7 @@ public class BaseController {
         }
     }
 
-    protected <T extends CanLogicDelDomain> boolean isPresentAndNotDel(T delDomain) {
+    protected <T extends LogicalDeletableDomain> boolean isPresentAndNotDel(T delDomain) {
         if (delDomain != null && delDomain.getDel() != null && !delDomain.getDel()) {
             return true;
         } else {
