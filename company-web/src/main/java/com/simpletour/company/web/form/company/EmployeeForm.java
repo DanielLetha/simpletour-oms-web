@@ -55,6 +55,8 @@ public class EmployeeForm extends BaseForm {
     //@Length(min = 0, max = 10000, message = "{oms.employee.remark.length}")
     private String remark;
 
+    private String avatar;
+
     private Integer version;
 
     public EmployeeForm() {
@@ -144,6 +146,14 @@ public class EmployeeForm extends BaseForm {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Employee as() {
