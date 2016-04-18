@@ -43,8 +43,6 @@ public class RoleController extends BaseController {
 
     private static final String MAPPING_URL = "/company/role/";
 
-    //private static final long COMPANY_ID = 4;
-
     @Autowired
     private IRoleService roleService;
 

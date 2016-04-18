@@ -100,16 +100,14 @@
                         type: 'GET',
                         url: url,
                         success: function (data) {
-                            if (data.code == 0) {
-                                setTimeout(function () {
-                                    location.href = data.jumpUrl;
-                                }, 3000);
-                                $.alertMsg.alert({
-                                    title: data.msg,
-                                    detailed: '此提示3秒后关闭',
-                                    type: 'success'
-                                })
-                            }
+                            setTimeout(function () {
+                                location.href = data.jumpUrl;
+                            }, 3000);
+                            $.alertMsg.alert({
+                                title: data.msg,
+                                detailed: '此提示3秒后关闭',
+                                type: 0 == data.code ? 'success' : 'fail'
+                            });
                         },
                         error: function(data){
                             $.alertMsg.alert({
