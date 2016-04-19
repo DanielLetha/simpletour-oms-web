@@ -8,7 +8,6 @@ import com.simpletour.company.web.form.company.EmployeeForm;
 import com.simpletour.company.web.form.system.PasswordForm;
 import com.simpletour.company.web.query.company.EmployeeQuery;
 import com.simpletour.company.web.util.PasswordUtil;
-
 import com.simpletour.domain.company.Company;
 import com.simpletour.domain.company.Employee;
 import com.simpletour.domain.company.Role;
@@ -17,6 +16,7 @@ import com.simpletour.service.company.IEmployeeService;
 import com.simpletour.service.company.IRoleService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,8 +47,10 @@ public class EmployeeController extends BaseController {
     @Autowired
     private IEmployeeService employeeService;
 
+    @Value(value = "${oms.company.employee.avatar.url}")
+    private String avatarIndexUrl;
+
     @RequestMapping(value = "add", method = RequestMethod.GET)
-//    @RequiresPermissions(value = {"employee_add"})
     public String add(Model model) {
         this.setPageTitle(model, "添加人员信息");
         this.enableGoBack(model);
@@ -58,7 +60,6 @@ public class EmployeeController extends BaseController {
     }
 
     @ResponseBody
-//    @RequiresPermissions(value = {"employee_add"})
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public BaseDataResponse add(@RequestBody @Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
         employeeForm.setMode(FormModeType.ADD.getValue());
@@ -69,8 +70,11 @@ public class EmployeeController extends BaseController {
         }
 
         // TODO: 暂时先将租户ID写死
-//        TokenStorage.setLocalTokenWithCompanyId(0L);
         employeeForm.setCompanyId(TokenStorage.COMPANY_ID);
+        //添加默认头像地址
+        if (employeeForm.getAvatar() == null || employeeForm.getAvatar().isEmpty()) {
+            employeeForm.setAvatar(this.avatarIndexUrl);
+        }
 
         try {
             Employee employee = employeeForm.as();
@@ -85,7 +89,6 @@ public class EmployeeController extends BaseController {
         return BaseDataResponse.ok().action(BaseAction.ADD_SUCCESS(DOMAIN, employeeForm.getName(), LIST_URL), true);
     }
 
-//    @RequiresPermissions(value = {"employee_list"})
     @RequestMapping(value = {"", "list"})
     public String list(EmployeeQuery employeeQuery, Model model) {
         this.setPageTitle(model, "人员信息列表");
@@ -100,15 +103,11 @@ public class EmployeeController extends BaseController {
         return "/company/employee/list";
     }
 
-//    @RequiresPermissions(value = {"employee_edit", "employee_detail", "employee_delete"}, logical = Logical.OR)
+
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable Long id, Model model) {
         this.setPageTitle(model, "编辑人员信息");
         this.enableGoBack(model);
-
-        // TODO: 暂时先将租户ID写死
-//        TokenStorage.setLocalTokenWithCompanyId(0L);
-
         Optional<Employee> employeeOptional = employeeService.queryEmployeeById(id);
         if (employeeOptional.isPresent()) {
             EmployeeForm employeeForm = new EmployeeForm(employeeOptional.get());
@@ -119,7 +118,6 @@ public class EmployeeController extends BaseController {
     }
 
     @ResponseBody
-//    @RequiresPermissions("employee_edit")
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     public BaseDataResponse edit(@RequestBody @Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
         employeeForm.setMode(FormModeType.UPDATE.getValue());
@@ -128,11 +126,12 @@ public class EmployeeController extends BaseController {
         if (bindingResult.hasErrors()) {
             return BaseDataResponse.validationFail().action(BaseAction.ADD_FAIL(DOMAIN, employeeForm.getName()), false);
         }
-
         // TODO: 暂时先将租户ID写死
-//        TokenStorage.setLocalTokenWithCompanyId(0L);
         employeeForm.setCompanyId(TokenStorage.COMPANY_ID);
-
+        //添加默认头像地址
+        if (employeeForm.getAvatar() == null || employeeForm.getAvatar().isEmpty()) {
+            employeeForm.setAvatar(this.avatarIndexUrl);
+        }
         try {
             Employee employee = employeeForm.as();
             Optional<Company> companyOptional = companyService.getCompanyById(employeeForm.getCompanyId());
@@ -147,7 +146,6 @@ public class EmployeeController extends BaseController {
     }
 
     @ResponseBody
-//    @RequiresPermissions(value = {"employee_delete"})
     @RequestMapping(value = "delete/{id}")
     public BaseDataResponse delete(@PathVariable Long id) {
         Optional<Employee> employeeOptional;
@@ -232,11 +230,4 @@ public class EmployeeController extends BaseController {
         }
         return BaseDataResponse.ok().msg("修改用户密码成功").detail("修改'" + employeeOptionalBefore.get().getName() + "'用户密码成功");
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String test() {
-        return "mario is good";
-    }
-
 }

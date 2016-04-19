@@ -8,17 +8,14 @@
     <!--配置扫描类包-->
     <context:component-scan base-package="com.simpletour">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <!--加载配置文件-->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreResourceNotFound" value="false"/>
         <property name="locations">
             <list>
                 <value>classpath:db.properties</value>
-                <value>classpath:config.properties</value>
-                <!--<value>classpath:hostUrl.properties</value>-->
-                <value>classpath:validationMessage.properties</value>
             </list>
         </property>
         <property name="fileEncoding" value="utf-8"/>
@@ -43,7 +40,6 @@
         <property name="packagesToScan">
             <array>
                 <value>com.simpletour.domain</value>
-                <!--<value>com.simpletour.common.core.domain</value>-->
                 <value>com.simpletour.commons.data.domain</value>
             </array>
         </property>

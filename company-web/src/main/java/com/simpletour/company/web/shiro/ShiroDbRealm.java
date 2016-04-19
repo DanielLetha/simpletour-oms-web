@@ -21,10 +21,11 @@ import java.util.Optional;
  */
 @Component
 public class ShiroDbRealm extends AuthorizingRealm {
+
     @Autowired
-    protected IEmployeeService employeeService;
+    private IEmployeeService employeeService;
     @Autowired
-    protected IRoleService roleService;
+    private IRoleService roleService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {

@@ -9,6 +9,11 @@
     <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/static/lib/main.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/static/lib/webuploader/webuploader.css}"/>
+    <style>
+        .iframe_content .offset .album .img_box_hidden{
+            height: 121px;
+        }
+    </style>
 </head>
 <body>
 <div class="header" th:include="fragments :: iframe_header"></div>
@@ -41,13 +46,13 @@
             </div>
             <h5>头像</h5>
             <div class="album">
-                <div class="img_box" ng-mouseenter="picShow = true" ng-show="postData.avatar" ng-mouseleave="picShow = false">
+                <div class="img_box" ng-mouseenter="picShow = true" ng-cloak="" ng-show="postData.avatar" ng-mouseleave="picShow = false">
                     <div class="img_box_hidden">
                         <img ng-src="{{postData.avatar}}"/>
                     </div>
-                    <div class="del_img" ng-click="delImg($index)" ng-show="picShow"></div>
+                    <div class="del_img" ng-click="delImg($event)" ng-show="picShow"></div>
                 </div>
-                <div ng-show="!postData.avatar" class="img_add"></div>
+                <div ng-show="!postData.avatar" ng-cloak="" class="img_add"></div>
             </div>
         </div>
         <h2>备注</h2>
@@ -166,8 +171,8 @@
             jobno:[[${viewForm.jobno}]] || '',
             name: [[${viewForm.name}]] || '',
             mobile: [[${viewForm.mobile}]] || '',
-            avatar:'',
-            remark: '',
+            avatar:[[${viewForm.avatar}]] || '',
+            remark:[[${viewForm.remark}]] || '',
             roleId: [[${viewForm.roleId}]] || '',
             version: [[${viewForm.version}]] || 0,
             id: [[${viewForm.id}]]
@@ -230,7 +235,7 @@
         var uploader = WebUploader.create({
             auto: true,
             // 文件接收服务端。
-            server: '/simpletour/images/wechat_product',
+            server: '/simpletour/images/company_employee',
             // 选择文件的按钮。可选。
             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
             pick: '.img_add',
@@ -249,14 +254,15 @@
         });
         uploader.on('uploadSuccess', function (file, response) {
             if (response.code == 0) {
-                $scope.postData.pictureForms.push({
-                    url: response.data.saveHost + response.data.savePath + '/' + response.data.saveName,
-                    title: ''
-                });
+                $scope.postData.avatar = response.data.saveHost + response.data.savePath + '/' + response.data.saveName;
                 $scope.$apply();
             }
         });
 
+        $scope.delImg = function(e) {
+            e.preventDefault();
+            $scope.postData.avatar = '';
+        };
 
         $scope.delete = function(event){
             angular.element(event.target).attr('disabled','disabled');
