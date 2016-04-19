@@ -20,9 +20,11 @@ public class RoleQueryConditions extends Query {
     Integer type = 0;
 
     public RoleQueryConditions() {
+        //setIndex(0);
     }
 
     public RoleQueryConditions(String name, String module, String permission, Integer type) {
+        //setIndex(0);
         this.name = name;
         this.module = module;
         this.permission = permission;
@@ -62,6 +64,6 @@ public class RoleQueryConditions extends Query {
     }
 
     public RoleQuery asRoleQuery() {
-        return new RoleQuery(name, module, permission, type);
+        return new RoleQuery("role_id", null, getSize(), getIndex(), name, module, permission, type);
     }
 }
