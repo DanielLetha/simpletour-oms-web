@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" ng-app="loginApp">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/static/images/logo.ico}" th:mce_href="images/tab_icon.ico" rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/static/css/main_a340c41.css}"/>
+</head>
+<body style="display:table;">
+<div class="login" ng-controller="login">
+    <div class="loginimg">
+        <img th:src="@{/static/images/login.png}"/>
+    </div>
+    <div class="login_error" ng-show='msgStatus' th:text="${msg}">
+
+    </div>
+    <div th:if="${errorInfo}!=null" class="login_error" th:text="${errorInfo}">
+
+    </div>
+    <div class="login_content">
+        <form th:action="@{/login}" th:object="${loginForm}" th:method="post">
+            <div>用户名</div>
+            <div><input type="text" th:field="*{userName}" ng-model="usr.jobNO"/></div>
+            <div>密码</div>
+            <div><input type="password" th:field="*{password}" ng-model="usr.password"/></div>
+            <button type="submit">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+            <input type="hidden" name="rememberMe" ng-value="usr.rememberMe"/>
+        </form>
+    </div>
+    <div class="login_footer">
+        <input type="checkbox" ng-click='checkboxClick()' name="rememberMe"/>
+        <span>保持登录状态</span>
+        <a href="#">忘记密码？</a>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/iframe.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/md5.min.js}"></script>
+</body>
+<script type="text/javascript">
+    var loginApp = angular.module('loginApp', []);
+    loginApp.controller('login', ['$scope', '$http', function ($scope, $http) {
+        $scope.usr = {jobNO: '', password: '', rememberMe: false}
+        $scope.msgStatus = false;
+        $scope.msg = '';
+        $scope.disabled = false;
+        $scope.checkboxClick = function () {
+            $scope.usr.rememberMe = !$scope.usr.rememberMe;
+        }
+    }])
+</script>
+</html>

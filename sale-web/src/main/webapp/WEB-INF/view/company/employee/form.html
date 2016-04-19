@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" ng-app="employee">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/webuploader/webuploader.css}"/>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"></div>
+<div class="iframe_content" ng-controller="employeeController">
+    <form th:action="@{/company/employee/add}" name="form" novalidate="novalidate" method="POST">
+        <h2>人员信息</h2>
+        <div class="offset">
+            <div class="input_group">
+                <label>姓&nbsp;&nbsp;名</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="text" name="name" class="stValidate" validate-len-max="20" validate-len-max-msg="不能超过20位" validate-len-min="2" validate-len-min-msg="最小2位" validate-not-blank-msg="名称不能为空" trigger="focus" ng-model="postData.name"/>
+                </span>
+            </div>
+
+            <div class="input_group">
+                <label>电&nbsp;&nbsp;话</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="text" name="mobile" class="stValidate"  validate-mobile-msg="手机号格式不正确"  validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.mobile"/>
+                </span>
+            </div>
+
+            <div class="input_group">
+                <label>所属角色</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="text" name="role" class="stValidate" ng-focus="openRoleModal($event)" validate-not-blank-msg="不能为空" trigger="mouseenter" ng-model="roleName"/>
+                </span>
+            </div>
+            <h5>头像</h5>
+            <div class="album">
+                <div class="img_box" ng-mouseenter="picShow = true" ng-show="postData.avatar" ng-mouseleave="picShow = false">
+                    <div class="img_box_hidden">
+                        <img ng-src="{{postData.avatar}}"/>
+                    </div>
+                    <div class="del_img" ng-click="delImg($index)" ng-show="picShow"></div>
+                </div>
+                <div ng-show="!postData.avatar" class="img_add"></div>
+            </div>
+        </div>
+        <h2>备注</h2>
+        <div class="offset">
+            <div class="editor clear" th:if="${permission} != 'detail'">
+                <textarea class="stUeditor" validate-len-max="1000" validate-len-max-msg="不能超过1000位" config="normal" dy-name="remark" ng-model="postData.remark" style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+            <div class="editor clear" th:if="${permission} == 'detail'">
+                <textarea class="stUeditor" setdisabled="true" validate-len-max="1000" validate-len-max-msg="不能超过1000位" config="normal" dy-name="remark" ng-model="postData.remark" style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+        </div>
+    </form>
+    <button shiro:hasPermission="employee_add" th:if="${viewForm.id} == null" th:attr="url=@{/company/employee/add}"  type="button" class="red" style='margin:20px 10px 20px 675px'  ng-click="submit($event)">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
+    <div th:if="${viewForm.id} != null">
+        <button shiro:hasPermission="employee_delete" type="button" ng-click="delete($event)" class="gray delButton" style='margin:20px 10px 20px 575px'>删&nbsp;&nbsp;&nbsp;&nbsp;除</button>
+        <button shiro:hasPermission="employee_edit" type="button" th:attr="url=@{/company/employee/edit}" ng-click="submit($event)" class="red" style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新</button>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/resources.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/webuploader/webuploader.html5only.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+
+<script type="text/ng-template" id="roleModalContent.html">
+    <div class="dialog_header">
+        <form>
+            <input ng-model="postData.name" name="name" type="text" />
+            <button ng-click="search($event)">搜&nbsp;&nbsp;索</button>
+            <input type="hidden" name="index" />
+            <input type="hidden" name="size"/>
+        </form>
+    </div>
+    <div class="dialog_content">
+        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/company/role/select" tabindex="5000" style="overflow: hidden; outline: none;">
+            <table>
+                <tbody>
+                <tr ng-repeat = 'item in items'>
+                    <td style="width:5%;">
+                        <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item" ng-value="item" class="stRadio" type="radio" />
+                    </td>
+                    <td style="width:60%;">
+                        <div ng-bind="item.id"></div>
+                        <div ng-bind="item.name"></div>
+                    </td>
+                </tr>
+                </tbody>
+                <div ng-if="empty" style="margin: 40px auto;width: 190px;">无数据，请修改搜索条件搜索</div>
+            </table>
+        </div>
+    </div>
+    <div class="dialog_footer">
+        <div class="ops">
+            <a href="#" ng-click="cancel()">取&nbsp;&nbsp;消</a>
+            <button ng-click="ok()">确认添加</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="companyModalContent.html">
+    <div class="dialog_header">
+        <form>
+            <input ng-model="postData.name" name="name" type="text" />
+            <button ng-click="search($event)">搜&nbsp;&nbsp;索</button>
+            <input type="hidden" name="index" />
+            <input type="hidden" name="size"/>
+        </form>
+    </div>
+    <div class="dialog_content">
+        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/company/role/select" tabindex="5000" style="overflow: hidden; outline: none;">
+            <table>
+                <tbody>
+                <tr ng-repeat = 'item in items'>
+                    <td style="width:5%;">
+                        <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item" ng-value="item" class="stRadio" type="radio" />
+                    </td>
+                    <td style="width:60%;">
+                        <div ng-bind="item.id"></div>
+                        <div ng-bind="item.address"></div>
+                    </td>
+                </tr>
+                </tbody>
+                <div ng-if="empty" style="margin: 40px auto;width: 190px;">无数据，请修改搜索条件搜索</div>
+            </table>
+        </div>
+    </div>
+    <div class="dialog_footer">
+        <div class="ops">
+            <a href="#" ng-click="cancel()">取&nbsp;&nbsp;消</a>
+            <button ng-click="ok()">确认添加</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
+
+    var app = angular.module('employee',['ngPlugin']);
+    app.controller('employeeController',['$scope','$http','ngSubmit','stModal','gpsLocation', 'alert',function($scope,$http,ngSubmit,stModal,gpsLocation,alert) {
+        var permission = [[${permission}]];
+        if(permission == 'detail') {
+            setTimeout(function() {
+                $('input[type=text]').attr("readonly",true).unbind('focus').unbind('mouseenter').css('color','#9b9b9b');
+                $('input[type=password]').attr("readonly",true).unbind('focus').unbind('mouseenter').css('color','#9b9b9b');
+                $('select').attr('disabled','disabled').unbind('focus').unbind('mouseenter').css('color','#9b9b9b');
+                $('.input_group').find('ul').css('display','none').parent('div').css({display:'none',opacity: 0});
+            },0);
+        }
+        $scope.postData = {
+            jobno:[[${viewForm.jobno}]] || '',
+            name: [[${viewForm.name}]] || '',
+            mobile: [[${viewForm.mobile}]] || '',
+            avatar:'',
+            remark: '',
+            roleId: [[${viewForm.roleId}]] || '',
+            version: [[${viewForm.version}]] || 0,
+            id: [[${viewForm.id}]]
+        };
+        var temp_password = '';//暂时保存password
+        var temp_repeatPassword = '';//暂存确认密码字段
+        $scope.focus = function($event){
+            temp_repeatPassword = $scope.postData.repeatPassword;
+            $scope.postData.repeatPassword = '';
+            temp_password = $scope.postData.password;
+            $scope.postData.password = '';
+        };
+        $scope.blur = function($event){
+            if($scope.postData.password == ''){
+                $scope.postData.password = temp_password;
+                $scope.postData.repeatPassword = temp_repeatPassword;
+            }
+        };
+        $scope.jobnoEnable=[[${viewForm.jobno!=null}]]//是否禁用工号编辑框的标志
+        $scope.roleName = [[${viewForm.roleName}]] || '';
+        $scope.companyName =[[${viewForm.companyName}]] || '';
+        $scope.openRoleModal = function ($event) {
+            angular.element($event.target).blur();
+            stModal({
+                templateUrl : 'roleModalContent.html',
+                controller: 'roleModalInstanceCtrl',
+                ok: function(selectedItem) {
+                    $scope.roleName = selectedItem.name;
+                    $scope.postData.roleId = selectedItem.id;
+                },
+                cancel: function() {
+                }
+            });
+        };
+        $scope.openCompanyModal = function ($event) {
+            angular.element($event.target).blur();
+            stModal({
+                templateUrl : 'companyModalContent.html',
+                controller: 'companyModalInstanceCtrl',
+                ok: function(selectedItem) {
+                    $scope.companyName = selectedItem.name;
+                    $scope.postData.companyId = selectedItem.id;
+                },
+                cancel: function() {
+                }
+            });
+        };
+
+
+        function generateMixed(n) {
+            var jschars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            var res = "";
+            for (var i = 0; i < n; i++) {
+                var id = Math.ceil(Math.random() * 35);
+                res += jschars[id];
+            }
+            return res;
+        }
+
+        var uploader = WebUploader.create({
+            auto: true,
+            // 文件接收服务端。
+            server: '/simpletour/images/wechat_product',
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '.img_add',
+            duplicate : true,
+            formData: {"randomCode": generateMixed(16)},
+            // 只允许选择图片文件。x`
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/gif,image/jpg,image/jpeg,image/bmp,image/png,'
+            }
+        });
+        uploader.on('uploadStart', function () {
+            $scope.disabled = true;
+            $scope.$apply();
+        });
+        uploader.on('uploadSuccess', function (file, response) {
+            if (response.code == 0) {
+                $scope.postData.pictureForms.push({
+                    url: response.data.saveHost + response.data.savePath + '/' + response.data.saveName,
+                    title: ''
+                });
+                $scope.$apply();
+            }
+        });
+
+
+        $scope.delete = function(event){
+            angular.element(event.target).attr('disabled','disabled');
+            alert.confirm({
+                title : '确认删除？',
+                detailed : '该操作是不可逆的，是否仍然继续？',
+                no : '取  消',
+                yes : '确认删除',
+                delay : '3',
+                confirm : function(){
+                    $http.post('/company/employee/delete/'+$scope.postData.id).success(function(data){
+                        if(data.code == 0){
+                            setTimeout(function(){
+                                location.href = data.jumpUrl;
+                            },3000);
+                            alert.alert({
+                                reason: '此提示3秒后关闭',
+                                message: data.msg,
+                                type: 'success',
+                                delay: '3'
+                            });
+                        }else{
+                            alert.alert({
+                                reason: '此提示3秒后关闭',
+                                message: data.detail,
+                                type: 'fail',
+                                delay: '3'
+                            });
+                            angular.element(event.target).attr('disabled',false);
+                        }
+                    })
+                },
+                cancel : function(){
+                    angular.element(event.target).attr('disabled', false);
+                }
+            });
+        };
+
+        $scope.submit = function(event){
+            ngSubmit({
+                ele: event.target,
+                data: $scope.postData,
+                form:  $scope.form,
+                success : function(data){
+                    setTimeout(function(){
+                        location.href = data.jumpUrl;
+                    },3000);
+                },
+                error: function(data){
+                    $scope.errorTips = data.tip;
+                }
+            });
+        };
+    }]);
+
+    app.controller('roleModalInstanceCtrl', function ($scope, $modalInstance,$http) {
+        $scope.postData = {'name':'','index':1,'size':10};
+        $scope.items = [];
+        $scope.selected = false;
+        $scope.empty = false;
+        $scope.search = function(event){
+            $scope.postData.index = 1;
+            $scope.items = [];
+            $scope.empty = false;
+            angular.element('.dialog_content .grid').niceScroll({cursorborder:'',cursorcolor:'#000',cursoropacitymax:'0.5'});
+            var $this = angular.element(event.target).attr('disabled','disabeld');
+            $http.post('/company/role/select',$scope.postData).success(function(data){
+                $this.attr('disabled',false);
+                if(data.code==0){
+                    $scope.items = data.data.domains;
+                    $scope.postData.index += 1;
+                    $scope.index = 'false';
+                    angular.element('.dialog_content .grid').getNiceScroll().resize();
+                }else if(data.code==2){
+                    $scope.empty =true;
+                }
+            }).error(function(){
+                $this.attr('disabled',false);
+            })
+        };
+        $scope.index = 'false';
+        $scope.checked =function(index){
+            $scope.index = index;
+        };
+        $scope.ok = function () {
+            if($scope.selected == false){
+                $.alertMsg.alert({
+                    title : '请至少选择一项',
+                    detailed : '此提示5秒后关闭'
+                })
+            }else{
+                $modalInstance.close($scope.selected);
+            }
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    });
+
+    app.controller('companyModalInstanceCtrl', function ($scope, $modalInstance,$http) {
+        $scope.postData = {'name':'','index':1,'size':10};
+        $scope.items = [];
+        $scope.selected = false;
+        $scope.empty = false;
+        $scope.search = function(event){
+            $scope.postData.index = 1;
+            $scope.items = [];
+            $scope.empty = false;
+            angular.element('.dialog_content .grid').niceScroll({cursorborder:'',cursorcolor:'#000',cursoropacitymax:'0.5'});
+            var $this = angular.element(event.target).attr('disabled','disabeld');
+            $http.post('/select/company/select',$scope.postData).success(function(data){
+                $this.attr('disabled',false);
+                if(data.code==0){
+                    $scope.items = data.data;
+                    $scope.postData.index += 1;
+                    $scope.index = 'false';
+                    angular.element('.dialog_content .grid').getNiceScroll().resize();
+                }else if(data.code==2){
+                    $scope.empty =true;
+                }
+            }).error(function(){
+                $this.attr('disabled',false);
+            })
+        };
+        $scope.index = 'false';
+        $scope.checked =function(index){
+            $scope.index = index;
+        };
+        $scope.ok = function () {
+            if($scope.selected == false){
+                $.alertMsg.alert({
+                    title : '请至少选择一项',
+                    detailed : '此提示5秒后关闭'
+                })
+            }else{
+                $modalInstance.close($scope.selected);
+            }
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    });
+    //    ]]>
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<!--　用户登录信息　-->
+<div class="header" th:fragment="iframe_header">
+    <span th:text="${pageTitle}"></span>
+    <a th:if="${pageGoBack}" href="javascript:history.go(-1)">返回</a>
+    <ul>
+        <li class="message"></li>
+        <li class="userInfo"><shiro:principal property="name"/></li>
+        <li class="more">
+            <ul>
+                <li class="logout" th:href="@{/logout}">注销</li>
+            </ul>
+        </li>
+    </ul>
+    <script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.header .more').hover(function() {
+                $(this).children('ul').show();
+            }, function() {
+                $(this).children('ul').hide();
+            });
+            $('.logout').click(function(event){
+                top.location.href=$(this).attr("href");
+            })
+        });
+    </script>
+</div>
+<!-- 分页 -->
+<div class='pager-page' th:fragment="iframe_pager">
+    <span th:if="${page.pageIndex &gt; 2}" class='pager-dleft' action-type="page" data-value="1"></span>
+    <span th:if="${page.pageIndex &gt; 1}" class='pager-left' action-type="page"
+        th:attr="data-value=${page.pageIndex-1}"></span>
+    <span th:if="${pageHelper.start &gt; 1}">...</span>
+    <span th:each="item : ${#numbers.sequence(pageHelper.start, pageHelper.end)}" action-type="page"
+        th:text="((${page.getPageCount() eq 1}) or (${page.getPageCount() eq 0}) ? '' : ${item})"
+        th:attr="data-value=((${page.getPageCount() eq 1}) or (${page.getPageCount() eq 0}) ? '' : ${item})"></span>
+    <span th:if="${pageHelper.end &lt; page.pageCount}">...</span>
+    <span th:if="${page.pageIndex &lt; page.pageCount}" class='pager-right' action-type="page"
+        th:attr="data-value=${page.pageIndex+1}"></span>
+    <span th:if="${page.pageIndex &lt; page.pageCount -1}" class='pager-dright' action-type="page"
+        th:attr="data-value=${page.pageCount}"></span>
+</div>
+</body>
+</html>

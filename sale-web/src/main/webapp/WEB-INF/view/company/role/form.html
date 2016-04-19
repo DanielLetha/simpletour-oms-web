@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/main.css}"/>
+    <style>
+        .activeselect {
+            width: 952px;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            box-sizing: border-box;
+        }
+
+        .activeselect .activeselect_header {
+            height: 30px;
+            line-height: 30px;
+            padding: 0 10px;
+            background-color: #efebe9;
+            font-weight: bold;
+        }
+        .activeselect .activeselect_header .selected{
+            padding: 0;
+        }
+        .activeselect .activeselect_header .mcheckbox{
+            margin-right: 8px;
+        }
+
+        .activeselect .activeselect_header .screened {
+            float: right;
+            height: 30px;
+            display: inline-block;
+            margin-left: 600px;
+        }
+
+        .activeselect .activeselect_header .screened input {
+            margin: 3px 35px 4px 0;
+            vertical-align: middle;
+            display: inline-block;
+            width: 100px;
+            height: 14px;
+        }
+
+        .activeselect .activeselect_content {
+            /*width: 278px;*/
+            width: 930px;
+            min-height: 176px;
+            padding: 0 10px;
+            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .activeselect .activeselect_content .titles {
+            border-bottom: 1px solid #e0e0e0;
+            height: 30px;
+            width: 100%;
+            font-size: 0;
+        }
+
+        .activeselect .activeselect_content .titles .unit_title {
+            font-size: 0;
+            display: inline-block;
+            width: 310px;
+            height: 30px;
+        }
+
+        .activeselect .activeselect_content .titles .unit_title span {
+            text-align: center;
+            line-height: 30px;
+            height: 30px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        .activeselect .activeselect_content .activelist {
+            width: 930px;
+            padding-right: 10px;
+            height: 240px;
+            font-size: 0;
+        }
+
+        .activeselect .activeselect_content .unit {
+            display: inline-block;
+            vertical-align: middle;
+            width: 310px;
+            text-align: center;
+            font-size: 0;
+            min-height: 30px;
+            line-height: 30px;
+        }
+
+        .activeselect .activeselect_content .unit:hover {
+            background-color: #45b97c;
+        }
+        .activeselect .activeselect_content .operation {
+            vertical-align: middle;
+            display: inline-block;
+            width: 25%;
+        }
+
+        .activeselect .activeselect_content .operation .mcheckbox {
+            display: inline-block;
+            vertical-align: middle;
+            padding-bottom: 3px;
+        }
+
+        .activeselect .activeselect_content .activename {
+            text-align: left;
+            vertical-align: middle;
+            display: inline-block;
+            width: 75%;
+        }
+
+        .activeselect .activeselect_content .activename.ellipsis {
+            height: 30px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .activeselect .activeselect_footer {
+            padding: 0 10px;
+            height: 30px;
+            background-color: #efebe9;
+        }
+        .activeselect_footer .selects {
+            padding: 0;
+        }
+
+        .activeselect a {
+            display: inline-block;
+            /*padding: 8px 8px;*/
+            /*border: none;*/
+            /*height: 18px;*/
+            /*background-color: #d84527;*/
+            float: right;
+            margin-right: 10px;
+            line-height: 30px;
+            color: #d84527;
+            text-decoration: underline;
+        }
+
+        .selects {
+            width: 300px;
+            display: inline-block;
+            margin-left: 10px;
+            height: 30px;
+            line-height: 30px;
+            padding: 15px 0;
+        }
+
+        .mcheckbox input[type=checkbox] {
+            opacity: 0;
+            position: absolute;
+            left: -20%;
+            top: -20%;
+            width: 140%;
+            height: 140%;
+            display: block;
+            padding: 0;
+            margin: 0;
+            filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+            cursor: pointer;
+        }
+
+        .selects .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+
+        .mcheckbox {
+            position: relative;
+            width: 12px;
+            height: 12px;
+            background: url(/static/images/checkbox.png) no-repeat;
+        }
+    </style>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="iframe_content" ng-controller="roleController">
+    <form th:action="@{/company/role/add}" name="form" novalidate="novalidate"  method="post">
+        <h2>角色信息</h2>
+        <div class="offset">
+            <div class="input_group">
+                <label>角色名称</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="text" dy-name="name" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位" validate-len-max="20" validate-len-max-msg="最大20位" validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.name"/>
+                </span>
+            </div>
+        </div>
+
+        <h2>功能信息</h2>
+        <div class="offset">
+            <div class="activeselect" ng-repeat="module in postData.scopes track by $index">
+                <div class="activeselect_header">
+                    <span class="selected"><span class="moduleName" ng-bind="module.moduleName">产品模块</span></span>
+                </div>
+                <div class="activeselect_content">
+                    <div class="titles">
+                        <div class="unit_title">
+                            <span class="operation">操作</span>
+                            <span class="activename">功能名称</span>
+                        </div>
+                        <div class="unit_title">
+                            <span class="operation">操作</span>
+                            <span class="activename">功能名称</span>
+                        </div>
+                        <div class="unit_title">
+                            <span class="operation">操作</span>
+                            <span class="activename">功能名称</span>
+                        </div>
+                    </div>
+                    <div class="activelist">
+                        <div class="unit" ng-repeat="fn in module.permissions track by $index">
+                            <span class="operation"><input ng-model="fn.checked" class="stCheckbox" type="checkbox" ng-click="selectSingle($event,module,fn)"/>&nbsp;&nbsp;选择</span>
+                            <span class="activename ellipsis" ng-bind="fn.permissionName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="activeselect_footer">
+                    <span class="selects">
+                        <input ng-attr-id="module-{{module.moduleId}}" type="checkbox" class="stCheckbox" ng-model="module.checked" ng-click="selectAll($event,module)"/>&nbsp;&nbsp;全选&nbsp;&nbsp;&nbsp;&nbsp;
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <h2>描&nbsp;&nbsp;述</h2>
+        <div class="offset">
+            <div class="editor clear" th:if="${permission} != 'detail'">
+                <textarea class="stUeditor" config="normal" name="remark" ng-model="postData.remark" style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+            <div class="editor clear" th:if="${permission} == 'detail'">
+                <textarea class="stUeditor" setdisabled="true" config="normal" name="remark" ng-model="postData.remark" style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+        </div>
+
+        <button th:if="${viewForm.id} == null" th:attr="url=@{/company/role/add}" type="button" class="red" style='margin:20px 10px 20px 675px' ng-click="submit($event)">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
+        <div th:if="${viewForm.id} != null">
+            <button type="button" ng-click="delete($event)" class="gray delButton" style='margin:20px 10px 20px 575px'>删&nbsp;&nbsp;&nbsp;&nbsp;除</button>
+            <button type="button" th:attr="url=@{/company/role/edit}" ng-click="submit($event)" class="red" style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/kindeditor/kindeditor.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zh_CN.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/resources.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ngClip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ZeroClipboard.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+//    <![CDATA[
+    var app = angular.module('app',['ngPlugin']);
+    app.controller('roleController',['$scope','$http','ngSubmit','alert',function($scope,$http,ngSubmit,alert){
+        var permission = [[${permission}]];
+        if (permission == 'detail') {
+            setTimeout(function() {
+                $('input[type=text]').attr("readonly",true).unbind('focus').unbind('mouseenter').css('color','#9b9b9b');
+                $('select').attr('disabled','disabled').unbind('focus').unbind('mouseenter').css('color','#9b9b9b');
+                $('.input_group').find('ul').css('display','none').parent('div').css({display:'none',opacity: 0});
+            }, 0);
+        }
+
+        $scope.moduleList = [[${viewForm.scopes}]] || [];
+        $scope.postData = {
+            id: [[${viewForm.id}]],
+            name: [[${viewForm.name}]] || "",
+            scopes: [[${viewForm.scopes}]] || [],
+            remark: [[${viewForm.remark}]] || "",
+            companyId: [[${viewForm.company.id}]] || 0,
+            version: [[${viewForm.version}]] || 0
+        };
+
+        if (!$scope.postData.companyId) {
+            setTimeout(function(){
+                location.href = '/company/role/list';
+            }, 3000);
+            alert.alert({
+                reason: '公司不存在，无法进行此项操作',
+                message: '此提示3秒后关闭',
+                type: 'fail',
+                delay: '3'
+            });
+        }
+
+        $scope.selectAll = function(e, module) {
+            module.checked = !module.checked;
+            angular.forEach(module.permissions, function(item, index) {
+                item.checked = module.checked;
+            });
+        };
+
+        $scope.selectSingle = function($event, module, fn) {
+            var count = 0;
+            var checked = !fn.checked;
+
+            angular.forEach(module.permissions, function(item, index) {
+                if (fn.permissionId == item.permissionId) {
+                    item.checked = checked;
+                }
+                if (item.checked) {
+                    count++;
+                }
+            });
+
+            module.checked = count == module.permissions.length;
+
+            var checkbox = document.getElementById("module-" + module.moduleId);
+            checkbox.indeterminate = (0 < count && count < module.permissions.length);
+        };
+
+        $scope.validateForm = function() {
+            if (2 > $scope.postData.name.length || 20 < $scope.postData.name.length) {
+                alert.alert({
+                    reason: '角色名称长度无效',
+                    message: '此提示3秒后关闭',
+                    type: 'fail',
+                    delay: '3'
+                });
+                return false;
+            }
+
+            var count = 0;
+            angular.forEach($scope.postData.scopes, function(module, index) {
+                angular.forEach(module.permissions, function(item, index) {
+                    if (item.checked) {
+                        count++;
+                    }
+                });
+            });
+
+            if (!count) {
+                alert.alert({
+                    reason: '请至少勾选一项模块功能',
+                    message: '此提示3秒后关闭',
+                    type: 'fail',
+                    delay: '3'
+                });
+                return false;
+            }
+
+            return true;
+        };
+
+        $scope.submit = function(event) {
+            angular.element(event.target).attr('disabled', 'disabled');
+
+            if (!$scope.validateForm()) {
+                angular.element(event.target).attr('disabled', false);
+                return;
+            }
+
+            ngSubmit({
+                ele: event.target,
+                data: $scope.postData,
+                form: $scope.form,
+                success : function(data){
+                    setTimeout(function(){
+                        location.href = data.jumpUrl;
+                    }, 3000);
+                    alert.alert({
+                        reason: data.msg,
+                        message: '此提示3秒后关闭',
+                        type: 'success',
+                        delay: '3'
+                    });
+                    angular.element(event.target).attr('disabled', false);
+                },
+                error: function(data){
+                    $scope.errorTips = data.detail;
+                    alert.alert({
+                        reason: data.detail,
+                        message: data.msg,
+                        type: 'fail',
+                        delay: '3'
+                    });
+                    angular.element(event.target).attr('disabled', false);
+                }
+            });
+        };
+
+        $scope.delete = function(event){
+            angular.element(event.target).attr('disabled','disabled');
+            alert.confirm({
+                title: '确认删除？',
+                detailed: '该操作是不可逆的，是否仍然继续？',
+                no: '取  消',
+                yes: '确认删除',
+                delay: '3',
+                confirm: function() {
+                    $http.get('/company/role/delete/' + $scope.postData.id).success(function(data) {
+                        if (data) {
+                            setTimeout(function() {
+                                location.href = data.jumpUrl;
+                            }, 3000);
+
+                            alert.alert({
+                                reason: data.msg,
+                                message: '此提示3秒后关闭',
+                                type: 0 == data.code ? 'success' : 'fail'
+                            });
+                        }
+
+                        angular.element(event.target).attr('disabled',false);
+                    }).error(function(data,header,config,status){
+                        alert.alert({
+                            reason: '网络错误，请稍后重试！',
+                            message: '此提示3秒后关闭',
+                            type: 'fail'
+                        });
+                    });
+                },
+                cancel: function() {
+                    angular.element(event.target).attr('disabled', false);
+                }
+            })
+        };
+    }]);
+//    ]]>
+</script>
+</body>
+</html>

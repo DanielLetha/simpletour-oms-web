@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+      <!--xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">-->
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/static/images/logo.ico}" mce_href="/static/images/tab_icon.ico" rel="icon" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/main_a340c41.css}" />
+</head>
+<body style="overflow:hidden">
+<div class="firstNav">
+    <div>
+        <div class="logo">
+            <a th:href="@{/welcome}">
+                <img th:src="@{/static/images/logo.png}" alt=""/>
+                <div>Simple</div>
+                <div>tour</div>
+            </a>
+        </div>
+        <ul class="menu">
+            <li class="active">
+                <div>
+                    <img th:src="@{/static/images/nav_resource.png}"/>
+                </div>
+                <div class="describe">公司</div>
+            </li>
+        </ul>
+    </div>
+    <div class="close"></div>
+</div>
+<div class="wrap">
+    <div tabindex="5000" style="overflow: hidden; display: none;" class="secondNav">
+        <div class="category">
+            <a th:href="@{/company/role/}">
+                <span class="hotel">
+                    <div class="category_img">
+                        <img th:src="@{/static/images/icon_role.png}"/>
+                    </div>
+                    <div>角色</div>
+                </span>
+            </a>
+            <a th:href="@{/company/employee/}">
+                <span class="hotel">
+                    <div class="category_img">
+                        <img th:src="@{/static/images/icon_employee.png}"/>
+                    </div>
+                    <div>人员</div>
+                </span>
+            </a>
+            <a  th:href="@{/company/employee/password/}">
+                <span class="hotel">
+                    <div class="category_img">
+                        <img th:src="@{/static/images/icon_application.png}"/>
+                    </div>
+                    <div>修改密码</div>
+                </span>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<iframe th:src="@{/welcome}" style="position: absolute;float:none;" frameborder="0"></iframe>
+<script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/main.js}"></script>
+<script type="text/javascript">
+//    <![CDATA[
+    window.onload=function(){
+        document.getElementsByTagName("body")[0].onkeydown =function(){
+            if(event.keyCode==8){
+                var elem = event.srcElement;
+                var name = elem.nodeName;
+                if(name!='INPUT' && name!='TEXTAREA'){
+                    event.returnValue = false;
+                    return;
+                }
+                var type_e = elem.type.toUpperCase();
+                if(name=='INPUT' && (type_e!='TEXT' && type_e!='TEXTAREA' && type_e!='PASSWORD' && type_e!='FILE')){
+                    event.returnValue = false;
+                    return;
+                }
+                if(name=='INPUT' && (elem.readOnly==true || elem.disabled ==true)){
+                    event.returnValue = false;
+                    return;
+                }
+            }
+        }
+    }
+    $('.menu li').click(function(){
+        $('.secondNav').eq($(this).index()).show().siblings().hide();
+    })
+//    ]]>
+</script>
+</body>
+</html>
