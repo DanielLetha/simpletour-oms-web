@@ -538,7 +538,7 @@
         <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/scope/scopes" tabindex="5000" style="overflow: hidden; outline: none;">
             <table>
                 <tbody>
-                <tr ng-repeat = 'item in items'>
+                <tr ng-repeat = 'item in items track by $index'>
                     <td style="width:5%;">
                         <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item" ng-value="item" class="stRadio" type="radio" />
                     </td>

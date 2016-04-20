@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/scope")
-public class ScopeTemplateController extends BaseController{
+public class ScopeTemplateController extends BaseController {
     @Autowired
     private IScopeTemplateService scopeTemplateService;
 
@@ -41,7 +41,7 @@ public class ScopeTemplateController extends BaseController{
 
     @RequestMapping(value = {"","list"})
     public String list(ScopeTemplateQuery query, Model model){
-        this.setPageTitle(model,"模块列表");
+        this.setPageTitle(model,"权限范围列表");
         DomainPage pages=scopeTemplateService.findScopeTemplatePage((ScopeTemplateDaoQuery) query.asQuery(ScopeTemplateDaoQuery.class));
         BaseListView listView = new BaseListView(pages);
         listView.setSubViews((List) pages.getDomains().stream().map(tmp->new ScopeTemplateForm((ScopeTemplate) tmp)).collect(Collectors.toList()));
@@ -77,7 +77,7 @@ public class ScopeTemplateController extends BaseController{
             return BaseDataResponse.noData();
         } else {
             ScopeTemplateQueryListView templateQueryListView = new ScopeTemplateQueryListView(page.getDomains());
-            return BaseDataResponse.ok().data(templateQueryListView);
+            return BaseDataResponse.ok().data(templateQueryListView.getScopeQueryList());
         }
     }
 
@@ -99,7 +99,7 @@ public class ScopeTemplateController extends BaseController{
         ScopeTemplate scopeTemplate=form.as();
         try {
             scopeTemplateService.addScopeTemplate(scopeTemplate);
-            return BaseDataResponse.ok().action(BaseAction.ADD_SUCCESS("模块",form.getName(),LIST),Boolean.TRUE);
+            return BaseDataResponse.ok().action(BaseAction.ADD_SUCCESS("权限范围",form.getName(),LIST),Boolean.TRUE);
         } catch (BaseSystemException e) {
             return BaseDataResponse.fail().msg(BaseAction.ADD_FAIL("权限范围").getTitle()).detail(e.getMessage());
         }catch (Exception e){
