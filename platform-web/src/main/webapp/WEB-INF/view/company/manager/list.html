@@ -24,10 +24,7 @@
     <form th:action="@{/company/manager/list}" method="GET"
           style="width: 100%;box-sizing: border-box;padding-right:170px; ">
         <div class="input_group">
-            <input type="text" name="name" th:value="${query.jobNo}" placeholder="公司管理员账号"/>
-        </div>
-        <div class="input_group">
-            <input type="text" name="address" th:value="${query.companyName}" placeholder="公司"/>
+            <input type="text" name="companyName" th:value="${query.companyName}" placeholder="所属公司"/>
         </div>
         <button type="submit" class="search">搜索</button>
     </form>

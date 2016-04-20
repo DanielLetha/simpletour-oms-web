@@ -3,8 +3,7 @@ package com.simpletour.platfrom.web.form.company;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +16,7 @@ import java.util.List;
 public class CompanyScopeForm {
 
     //模块的id
-    @Pattern(regexp = "^\\d+$", message ="{pms.company.scope.module.id.notMatch}" )
-    @NotBlank(message = "pms.company.scope.module.id.notBlank")
+    @NotNull(message = "pms.company.scope.module.id.notNull")
     private Long moduleId;
 
 
@@ -27,7 +25,6 @@ public class CompanyScopeForm {
     private String moduleName;
 
     @Valid
-    @Size(min=1,message = "{pms.company.scope.module.permission.size}")
     private List<CompanyPermissionForm> permissions = new ArrayList<>();
 
     public List<CompanyPermissionForm> getPermissions() {

@@ -2,7 +2,6 @@ package com.simpletour.platfrom.web.query.company;
 
 import com.simpletour.commons.data.dao.query.condition.Condition;
 import com.simpletour.platfrom.web.query.support.Query;
-import com.simpletour.platfrom.web.query.support.QueryExt;
 import com.simpletour.platfrom.web.query.support.QueryWord;
 
 /**
@@ -11,7 +10,7 @@ import com.simpletour.platfrom.web.query.support.QueryWord;
  * Date  :  2016/4/5.
  * Remark:
  */
-public class CompanyQuery extends QueryExt {
+public class CompanyQuery extends Query {
 
     //公司名称(全模糊)
     @QueryWord(matchType = Condition.MatchType.like)

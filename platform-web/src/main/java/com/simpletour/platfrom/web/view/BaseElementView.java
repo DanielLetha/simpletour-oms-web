@@ -1,5 +1,6 @@
 package com.simpletour.platfrom.web.view;
 
+
 import com.simpletour.commons.data.domain.BaseDomain;
 
 /**
