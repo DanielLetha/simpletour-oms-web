@@ -1,7 +1,6 @@
 package com.simpletour.platfrom.web.query.support;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.simpletour.commons.data.dao.IBaseDao;
 import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
 import com.simpletour.commons.data.dao.query.condition.Condition;

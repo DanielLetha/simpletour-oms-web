@@ -1,6 +1,6 @@
 package com.simpletour.company.web.controller.system;
 
-import com.simpletour.common.core.exception.BaseSystemException;
+import com.simpletour.commons.data.exception.BaseSystemException;
 import com.simpletour.company.web.controller.support.BaseController;
 import com.simpletour.company.web.controller.support.BaseDataResponse;
 import com.simpletour.company.web.form.system.LoginForm;

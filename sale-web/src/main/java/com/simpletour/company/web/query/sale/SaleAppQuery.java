@@ -4,7 +4,6 @@ import com.simpletour.commons.data.dao.query.condition.Condition;
 import com.simpletour.company.web.query.support.QueryExt;
 import com.simpletour.company.web.query.support.QueryWord;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
