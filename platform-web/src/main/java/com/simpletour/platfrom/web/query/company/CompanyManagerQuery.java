@@ -2,6 +2,7 @@ package com.simpletour.platfrom.web.query.company;
 
 import com.simpletour.commons.data.dao.query.condition.Condition;
 import com.simpletour.platfrom.web.query.support.Query;
+import com.simpletour.platfrom.web.query.support.QueryExt;
 import com.simpletour.platfrom.web.query.support.QueryWord;
 
 /**
@@ -10,7 +11,7 @@ import com.simpletour.platfrom.web.query.support.QueryWord;
  * Date  :  2016/4/11.
  * Remark:
  */
-public class CompanyManagerQuery extends Query {
+public class CompanyManagerQuery extends QueryExt {
 
     //管理员账号
     @QueryWord(matchType = Condition.MatchType.like)

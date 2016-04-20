@@ -16,7 +16,7 @@ import com.simpletour.platfrom.web.query.company.CompanyQuery;
 import com.simpletour.platfrom.web.view.company.CompanyListView;
 import com.simpletour.platfrom.web.view.company.CompanyPermissionView;
 import com.simpletour.service.company.ICompanyService;
-import com.simpletour.service.company.IPermissionService;
+import com.simpletour.service.company.IModuleService;
 import com.simpletour.service.company.IScopeTemplateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +44,7 @@ public class CompanyController extends BaseController {
     private ICompanyService companyService;
 
     @Resource
-    private IPermissionService permissionService;
+    private IModuleService moduleService;
 
     @Resource
     private IScopeTemplateService scopeTemplateService;
@@ -110,7 +110,7 @@ public class CompanyController extends BaseController {
         DomainPage<Company> domainPage = companyService.getCompanyPagesByQuery((CompanyDaoQuery) query.asQuery(CompanyDaoQuery.class));
 
         //得到所有的permissionList,并且包装一下
-        List<Permission> permissionList = permissionService.getAllPermissions();
+        List<Permission> permissionList = moduleService.getAllPermissions();
         List<CompanyPermissionView> companyPermissionViews = new ArrayList<>();
         if (permissionList != null && !permissionList.isEmpty()){
             permissionList.stream().forEach(permission -> companyPermissionViews.add(new CompanyPermissionView(permission.getId(),permission.getName())) );

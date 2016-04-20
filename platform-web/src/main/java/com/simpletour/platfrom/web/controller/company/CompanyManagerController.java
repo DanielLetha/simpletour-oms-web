@@ -1,5 +1,6 @@
 package com.simpletour.platfrom.web.controller.company;
 
+import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.domain.DomainPage;
 import com.simpletour.domain.company.Employee;
 import com.simpletour.platfrom.web.controller.support.BaseController;
@@ -30,7 +31,7 @@ public class CompanyManagerController extends BaseController{
     @RequestMapping(value = {"", "list"})
     public String list(CompanyManagerQuery query, Model model) {
         this.setPageTitle(model, "公司管理员列表");
-        DomainPage<Employee> page = employeeService.queryEmployeesPagesByConditions(query);
+        DomainPage<Employee> page = employeeService.queryEmployeesPagesByConditions(query.asQuery(ConditionOrderByQuery.class));
 
         model.addAttribute("page",page);
         model.addAttribute("query", query);
