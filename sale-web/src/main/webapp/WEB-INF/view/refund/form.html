@@ -7,7 +7,7 @@
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/main_a340c41.css}"/>
     <style>
         .add {
             display: inline-block;
@@ -16,7 +16,13 @@
             text-decoration: underline;
             color: #d84527;
         }
-
+        .iframe_content .offset .dropdown {
+            float: none;
+            border: none;
+            height: 34px;
+            line-height: 34px;
+            color: #4a4a4a;
+        }
         .permission_item {
             position: relative;
             width: 371px;
@@ -31,6 +37,25 @@
             position: absolute;
             top: 84px;
             right: 19px;
+            color: #d84527;
+        }
+        .iframe_content .input_group .refundPolicy input {
+            width: 40px;
+            border: 1px solid #d8d8d8;
+            float: none;
+            padding: 7px;
+            text-align: center;
+        }
+        .iframe_content .input_group .refundPolicy .del_back {
+            margin-left: 20px;
+            text-decoration: underline;
+            color: #d84527;
+        }
+        .add {
+            display: inline-block;
+            margin-left: 58px;
+            margin-top: 0;
+            text-decoration: underline;
             color: #d84527;
         }
     </style>
@@ -51,11 +76,111 @@
         </div>
 
         <h2>下单规则信息</h2>
-
+            <div class="offset">
+                <div class="deadLine" style="margin-top: 20px">
+                    <span for="" style="color: #999">下单截止：</span>
+                    <input type="radio" style="margin-right: 10px" name="radio" value="before" ng-model="preOrNow"/>出行前
+                    <div class="pDeadLineDay" style="display: inline-block;border: 1px solid #ccc;width: 50px">
+                        <select class="form-deadLine stDropdown" n="3" width="50" ng-model="pDeadLineDay">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div> 天
+                    <div class="pDeadLineHour" style="display: inline-block;border: 1px solid #ccc;width: 58px">
+                        <select class="form-deadLine stDropdown" n="5" width="60" ng-model="pDeadLineHour">
+                            <option value="23">23</option>
+                            <option value="22">22</option>
+                            <option value="21">21</option>
+                            <option value="20">20</option>
+                            <option value="19">19</option>
+                            <option value="18">18</option>
+                            <option value="17">17</option>
+                            <option value="16">16</option>
+                            <option value="15">15</option>
+                            <option value="14">14</option>
+                            <option value="13">13</option>
+                            <option value="12">12</option>
+                            <option value="11">11</option>
+                            <option value="10">10</option>
+                            <option value="9">9</option>
+                            <option value="8">8</option>
+                            <option value="7">7</option>
+                            <option value="6">6</option>
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                            <option value="0">0</option>
+                        </select>
+                    </div> 时
+                    <div class="pDeadLineMin" style="display: inline-block;border: 1px solid #ccc;width: 58px">
+                        <select class="form-deadLine stDropdown" n="4" width="60" ng-model="pDeadLineMin" >
+                            <option value="0">0</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div> 分
+                    <input type="radio" name="radio" style="margin-left: 100px;margin-right: 10px" value="today" ng-model="preOrNow"/>出行当天
+                    <div class="nDeadLineHour" style="display: inline-block;border: 1px solid #ccc;width: 58px">
+                        <select class="form-deadLine stDropdown" n="5" width="60"  ng-model="nDeadLineHour">
+                            <option value="23">23</option>
+                            <option value="22">22</option>
+                            <option value="21">21</option>
+                            <option value="20">20</option>
+                            <option value="19">19</option>
+                            <option value="18">18</option>
+                            <option value="17">17</option>
+                            <option value="16">16</option>
+                            <option value="15">15</option>
+                            <option value="14">14</option>
+                            <option value="13">13</option>
+                            <option value="12">12</option>
+                            <option value="11">11</option>
+                            <option value="10">10</option>
+                            <option value="9">9</option>
+                            <option value="8">8</option>
+                            <option value="7">7</option>
+                            <option value="6">6</option>
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                            <option value="0">0</option>
+                        </select>
+                    </div> 时
+                    <div class="nDeadLineMin" style="display: inline-block;border: 1px solid #ccc;width: 58px">
+                        <select class="form-deadLine stDropdown" n="4" width="60"  ng-model="nDeadLineMin">
+                            <option value="0">0</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div> 分
+                </div>
+            </div>
         <h2>退款规则信息</h2>
         <div class="offset">
-
-            <a ng-click="add()" class="add">添加功能</a>
+            <div class="input_group" style="border:0;width: 500px" ng-if="$index != (postData.refundRuleForms.length-1)" ng-repeat=" refundRuleForm in postData.refundRuleForms track by $index">
+                <span class="refundPolicy">
+                    <span for="" style="color: #999">出行前：</span>
+                    <input type="text" style="margin-right: 5px" dy-name="refundPolicy_timing_{{$index}}" class="stValidate"  validate-positive-number-msg="时间范围为正整数" validate-not-blank-msg="不能为空" trigger="focus" ng-model="refundRuleForm.timing"/>——
+                    <input type="text" style="margin-right: 5px" readonly="readonly" ng-value="postData.refundRuleForms[$index+1].timing ? postData.refundRuleForms[$index+1].timing-1 : ''"/>天申请退款，退
+                    <input type="text" style="margin:0 5px" dy-name="refundPolicy_ration_{{$index}}"  trigger="focus" ng-model="refundRuleForm.ration"/>%
+                    <a ng-click="del_back()" class="del_back">删除</a>
+                </span>
+            </div>
+            <div class="input_group" style="border:0;width: 500px" ng-if="$index == (postData.refundRuleForms.length-1)" ng-repeat=" refundRuleForm in postData.refundRuleForms track by $index">
+                <span class="refundPolicy">
+                    <span for="" style="color: #999">出行前：</span>
+                    <input type="text" style="margin-right: 5px" dy-name="refundPolicy_timing_{{$index}}" class="stValidate" validate-positive-number-msg="时间范围为正整数" validate-not-blank-msg="不能为空" trigger="focus" ng-model="refundRuleForm.timing"/>天申请退款，退
+                    <input type="text" style="margin:0 5px" dy-name="refundPolicy_ration_{{$index}}" class="stValidate" validate-not-blank-msg="不能为空" trigger="focus" ng-model="refundRuleForm.ration"/>%
+                    <a ng-click="add()" class="add">之前添加一条</a>
+                </span>
+            </div>
         </div>
 
         <h2>其他信息</h2>
@@ -104,7 +229,7 @@
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
     var app = angular.module('app', ['ngPlugin']);
-    app.controller('refundPolicyController', ['$scope', '$http', 'ngSubmit', '$modal', 'gpsLocation', function ($scope, $http, ngSubmit, $modal, gpsLocation) {
+    app.controller('refundPolicyController', ['$scope', '$http', 'ngSubmit', '$timeout',function ($scope, $http, ngSubmit ,$timeout) {
         var permission = [[${permission}]];
         if (permission == 'detail') {
             setTimeout(function () {
@@ -115,23 +240,101 @@
         }
         $scope.postData = {
             name: [[${viewForm.name}]] || "",
-            deadline: [[${viewForm.deadLine}]] || 0,
+            deadLine: [[${viewForm.deadLine}]] || 0,
             instruction:[[${viewForm.instruction}]]||"",
             remark:[[${remark}]],
             version: [[${viewForm.version}]] || 0,
             id: [[${viewForm.id}]],
             refundRuleForms: [[${viewForm.refundRuleForms}]] || [{timing: 0, ration: 0, version: 0}]
         };
+        // 截止时间转换
+        angular.element('input[value=before]').click(function() {
+            angular.element('input[value=today]').attr("checked",false);
+            angular.element('input[value=before]').attr("checked",true);
+            $scope.preOrNow='before';
+        });
+        angular.element('input[value=today]').click(function() {
+            angular.element('input[value=before]').attr("checked",false);
+            angular.element('input[value=today]').attr("checked",true);
+            $scope.preOrNow='today';
+        });
+        var hours = ($scope.postData.deadLine/3600);
+
+        if($scope.postData.deadLine > 0) {
+            $scope.preOrNow='before';
+            //前一天的预订截止时间
+            $timeout(function() {
+                angular.element('input[value=before]').attr("checked",true);
+            },100);
+            if(hours%24 == 0) {
+                $scope.pDeadLineDay = parseInt(hours/24)
+            } else {
+                $scope.pDeadLineDay = parseInt(hours/24)+1 || 0;
+            }
+            if(hours <= 24) {
+                if(parseInt(24 - hours) == 24) {
+                    $scope.pDeadLineHour =  18; //若果hours为24的整除倍 则pDeadLineHour为0时，但是这里设置默认值为18
+                } else {
+                    $scope.pDeadLineHour = String(parseInt(24 - hours));
+                }
+            }else {
+                if(hours%24 == 0) {
+                    $scope.pDeadLineHour = '0';
+                } else {
+                    $scope.pDeadLineHour = String(parseInt(24 - Math.ceil(hours%24))) || '0';
+                }
+            }
+            //判断分钟
+            if(String(hours).split('.')[1] > 10){
+                $scope.pDeadLineMin = (60-String(hours).split('.')[1] * 0.6) || 0;
+            } else {
+                $scope.pDeadLineMin = String(hours).split('.')[1] * 6 || 0;
+            }
+            $scope.nDeadLineHour = '0';
+            $scope.nDeadLineMin = 0;
+        }else if($scope.postData.deadLine ==0) {
+            $scope.pDeadLineDay = 1;
+            $scope.pDeadLineHour = '0';
+            $scope.pDeadLineMin = 0;
+            $scope.nDeadLineHour = '0';
+            $scope.nDeadLineMin = 0;
+            $scope.preOrNow='today';
+        } else if($scope.postData.deadLine <0){
+            $scope.preOrNow='today';
+            //当前天的预订截止时间
+            $timeout(function() {
+                angular.element('input[value=today]').attr("checked",true);
+            },100);
+            hours = -hours;
+            if(parseInt(24 - hours) == 24) {
+                $scope.nDeadLineHour =  18;
+            } else {
+                $scope.nDeadLineHour = String(parseInt(hours));
+            }
+            if(String(hours).split('.')[1] > 10){
+                $scope.nDeadLineMin = String(hours).split('.')[1] * 0.6 || 0;
+            } else {
+                $scope.nDeadLineMin = String(hours).split('.')[1] * 6 || 0;
+            }
+            $scope.pDeadLineDay = 1;
+            $scope.pDeadLineHour = '0';
+            $scope.pDeadLineMin = 0;
+        }
+
         $scope.add = function () {
             var obj = {name: "", code: "", path: "", version: 0};
             $scope.postData.refundRuleForms.push(obj);
         };
         // 删除
-        $scope.delete_permission = function (e, index) {
-            e.preventDefault();
+        $scope.del_back = function (e, index) {
             $scope.postData.refundRuleForms.splice(index, 1);
         };
         $scope.submit = function (event) {
+            if($scope.preOrNow == 'before') {
+                $scope.postData.deadLine = $scope.pDeadLineDay * 86400 - $scope.pDeadLineHour * 3600 - $scope.pDeadLineMin*60;
+            } else {
+                $scope.postData.deadLine = 0 - $scope.nDeadLineHour * 3600 - $scope.nDeadLineMin*60;
+            }
             ngSubmit({
                 ele: event.target,
                 data: $scope.postData,

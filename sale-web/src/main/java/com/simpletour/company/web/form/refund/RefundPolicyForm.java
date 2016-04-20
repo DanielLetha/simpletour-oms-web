@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
  */
 public class RefundPolicyForm extends BaseForm{
 
-    @NotBlank(message = "{}")
-    @Length(min = 2,max = 20,message = "{}")
+    @NotBlank(message = "{refund.policy.name.null}")
+    @Length(min = 2,max = 20,message = "{refund.policy.name.length}")
     private String name;
 
-    @NotNull(message = "{}")
+    @NotNull(message = "{refund.policy.deadline.null}")
     private Long deadLine;
 
     private String instruction;
@@ -33,7 +33,7 @@ public class RefundPolicyForm extends BaseForm{
     private Integer version;
 
     @Valid
-    @NotNull(message = "{}")
+    @NotNull(message = "{refund.policy.rule.null}")
     private List<RefundRuleForm> refundRuleForms;
 
     public RefundPolicyForm(){}
@@ -56,6 +56,7 @@ public class RefundPolicyForm extends BaseForm{
                     tmp.setMode(mode);
                     return tmp.as();
                 }).collect(Collectors.toList());
+        refundPolicy.setRefundRules(refundRules);
         if(mode.equals(FormModeType.UPDATE.getValue())){
             refundPolicy.setId(id);
             refundPolicy.setVersion(version);

@@ -14,12 +14,12 @@ import javax.validation.constraints.NotNull;
  * Time: 12:30
  */
 public class RefundRuleForm extends BaseForm{
-    @NotNull(message = "{}")
-    @Min(value = 2,message ="{}")
+    @NotNull(message = "{refund.rule.timing.null}")
+    @Min(value = 0,message ="{refund.rule.timing.min}")
     private Integer timing;
 
-    @NotNull(message="{}")
-    @Range(min = 0,max = 100,message = "{}")
+    @NotNull(message="{refund.rule.ration.null}")
+    @Range(min = 0,max = 100,message = "{refund.rule.ration.range}")
     private Integer ration;
 
     private Integer version;
