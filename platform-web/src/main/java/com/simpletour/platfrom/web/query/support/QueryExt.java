@@ -140,7 +140,6 @@ public class QueryExt<T extends Object> implements Serializable {
     }
 
     public void setSortByField(ConditionOrderByQuery res) {
-        res.addSortByField("id", IBaseDao.SortBy.DESC);
     }
 
     private void setKeyValue(ConditionSet conditionSet, QueryWord key, Field value) throws IllegalAccessException, InstantiationException {

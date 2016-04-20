@@ -141,12 +141,12 @@ public class QueryExt<T extends Object> implements Serializable {
         res.setCondition(asConditison());
         res.setPageSize(size);
         res.setPageIndex(index);
-//        setSortByField(res);
+        setSortByField(res);
         return res;
     }
 
     public void setSortByField(ConditionOrderByQuery res) {
-        res.addSortByField("id", IBaseDao.SortBy.DESC);
+//        res.addSortByField("id", IBaseDao.SortBy.DESC);
     }
 
     public Map<String, Object> asMap() {
