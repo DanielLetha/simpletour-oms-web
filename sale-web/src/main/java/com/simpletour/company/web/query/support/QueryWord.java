@@ -1,6 +1,7 @@
 package com.simpletour.company.web.query.support;
 
-import com.simpletour.common.core.dao.query.condition.Condition;
+
+import com.simpletour.commons.data.dao.query.condition.Condition;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

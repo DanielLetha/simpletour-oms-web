@@ -9,9 +9,7 @@ import com.simpletour.commons.data.dao.query.condition.ConditionSet;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * User: XuHui
@@ -99,6 +97,23 @@ public class QueryExt<T extends Object> implements Serializable {
         return sb.toString();
     }
 
+    public Map<String, Object> asMap(boolean canLogic) {
+        Map<String, Object> map = new HashMap<>();
+        Field[] fields = this.getClass().getDeclaredFields();
+        if (fields != null) {
+            for (Field field : fields) {
+                QueryWord queryWord = field.getAnnotation(QueryWord.class);
+                try {
+                    setKeyValue(map, queryWord, field);
+                } catch (IllegalAccessException e) {
+                }
+            }
+        }
+        if (canLogic)
+            map.put("del", false);
+        return map;
+    }
+
     public ConditionSet asConditison() {
         AndConditionSet conditionSet = new AndConditionSet();
         Field[] fields = this.getClass().getDeclaredFields();
@@ -111,16 +126,7 @@ public class QueryExt<T extends Object> implements Serializable {
                 }
             }
         }
-
-        afterAsCondition(conditionSet);
         return conditionSet;
-    }
-
-    /**
-     * 转换为将Query中所有字段转换为ConditionSet之后，如果还需要增加条件，则覆盖此函数
-     * @param conditions
-     */
-    protected void afterAsCondition(AndConditionSet conditions) {
     }
 
 
@@ -135,12 +141,16 @@ public class QueryExt<T extends Object> implements Serializable {
         res.setCondition(asConditison());
         res.setPageSize(size);
         res.setPageIndex(index);
-        setSortByField(res);
+//        setSortByField(res);
         return res;
     }
 
     public void setSortByField(ConditionOrderByQuery res) {
         res.addSortByField("id", IBaseDao.SortBy.DESC);
+    }
+
+    public Map<String, Object> asMap() {
+        return asMap(false);
     }
 
     private void setKeyValue(ConditionSet conditionSet, QueryWord key, Field value) throws IllegalAccessException, InstantiationException {
@@ -156,9 +166,9 @@ public class QueryExt<T extends Object> implements Serializable {
         } else {
             keyStr = key.value();
         }
-        if (key.byLike()) {
+        if (key.matchType().equals(Condition.MatchType.like)) {
             if (!("".equals(value.get(this)))) {
-                conditionSet.addCondition(keyStr, getSearchStr((String) value.get(this)), Condition.MatchType.like);
+                conditionSet.addCondition(keyStr, getSearchStr((String) value.get(this)), key.matchType());
             }
         } else if (key.matchType().equals(Condition.MatchType.lessOrEqual) && value.getType().isAssignableFrom(Date.class)) {
             Date date = (Date) value.get(this);
@@ -167,12 +177,6 @@ public class QueryExt<T extends Object> implements Serializable {
             calendar.add(calendar.DATE, 1);
             date = calendar.getTime();
             conditionSet.addCondition(keyStr, date, key.matchType());
-        } else if (!key.converter().equals(NullConverter.class)) {
-            try {
-                TypeConverter converter = (TypeConverter)key.converter().newInstance();
-                conditionSet.addCondition(keyStr, converter.convert(value.get(this)), key.matchType());
-            } catch (ReflectiveOperationException e) {
-            }
         } else {
             if (key.enumType().equals(Enum.class)) {
                 conditionSet.addCondition(keyStr, value.get(this), key.matchType());
@@ -180,6 +184,27 @@ public class QueryExt<T extends Object> implements Serializable {
                 if (!"".equals(value.get(this)))
                     conditionSet.addCondition(keyStr, Enum.valueOf(key.enumType(), (String) value.get(this)), key.matchType());
             }
+        }
+    }
+
+    private void setKeyValue(Map<String, Object> map, QueryWord key, Field value) throws IllegalAccessException {
+        if (map == null || key == null || value == null)
+            return;
+        value.setAccessible(true);
+        String keyStr;
+        if (key.value() == null || key.value().isEmpty()) {
+            keyStr = value.getName();
+        } else {
+            keyStr = key.value();
+        }
+        if (value.getClass().isAssignableFrom(String.class)) {
+            if (key.matchType().equals(Condition.MatchType.like)) {
+                map.put(keyStr, getSearchStr((String) value.get(this)));
+            } else {
+                map.put(keyStr, (String) value.get(this));
+            }
+        } else {
+            map.put(keyStr, value.get(this));
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.simpletour.company.web.query.sale;
 
-import com.simpletour.common.core.dao.query.condition.Condition;
-import com.simpletour.company.web.query.support.Query;
+import com.simpletour.commons.data.dao.query.condition.Condition;
+import com.simpletour.company.web.query.support.QueryExt;
 import com.simpletour.company.web.query.support.QueryWord;
 
 
@@ -15,7 +15,7 @@ import java.util.Map;
  * @Since ： ${VERSION}
  * @Remark: ${Remark}
  */
-public class SaleAppQuery extends Query {
+public class SaleAppQuery extends QueryExt {
 
 
     @QueryWord(matchType = Condition.MatchType.like)
