@@ -2,7 +2,7 @@ package com.simpletour.platfrom.web.form.company;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 
 /**
  * Author:  wangLin
@@ -13,18 +13,17 @@ import javax.validation.constraints.Pattern;
 public class CompanyPermissionForm {
 
     //权限的id
-    @Pattern(regexp = "^\\d+$", message ="{pms.company.scope.module.permission.id.notMatch}" )
-    @NotBlank(message = "pms.company.scope.module.permission.id.notBlank")
-    private String permissionId;
+    @NotNull(message = "pms.company.scope.module.permission.id.notNull")
+    private Long permissionId;
 
     @NotBlank(message = "pms.company.scope.module.permission.name.notBlank")
     private String permissionName;
 
-    public String getPermissionId() {
+    public Long getPermissionId() {
         return permissionId;
     }
 
-    public void setPermissionId(String permissionId) {
+    public void setPermissionId(Long permissionId) {
         this.permissionId = permissionId;
     }
 

@@ -11,7 +11,7 @@ import com.simpletour.platfrom.web.view.BaseListView;
  * Date  :  2016/4/5.
  * Remark:
  */
-public class CompanyListView extends BaseListView<CompanyElementView>{
+public class CompanyListView extends BaseListView<CompanyElementView> {
 
     public CompanyListView(DomainPage<Company> domainPage, CompanyQuery query){
         super(domainPage,query);

@@ -17,7 +17,8 @@ import com.simpletour.platfrom.web.view.company.CompanyListView;
 import com.simpletour.platfrom.web.view.company.CompanyPermissionView;
 import com.simpletour.service.company.ICompanyService;
 import com.simpletour.service.company.IModuleService;
-import com.simpletour.service.company.IScopeTemplateService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,8 +27,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 /**
  * Author:  wangLin
  * Mail  :  wl@simpletour.com
@@ -43,11 +46,14 @@ public class CompanyController extends BaseController {
     @Resource
     private ICompanyService companyService;
 
-    @Resource
+    @Autowired
     private IModuleService moduleService;
 
-    @Resource
-    private IScopeTemplateService scopeTemplateService;
+    @Value("${company.manager.permissions}")
+    private String permissions;
+
+    @Value("${company.manager.avator.default}")
+    private String defaultAvator;
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String add(Model model) {
@@ -67,13 +73,12 @@ public class CompanyController extends BaseController {
         }
         try {
             Company company = form.as();
-            companyService.addCompany(company);
+            companyService.addCompany(company, Arrays.asList(permissions.split(",")),defaultAvator);
         } catch (BaseSystemException e) {
             return BaseDataResponse.fail().msg(BaseAction.ADD_FAIL(DOMAIN).getTitle()).detail(e.getMessage());
         }
         return BaseDataResponse.ok().action(BaseAction.ADD_SUCCESS(DOMAIN, form.getName(), LIST_URL), true);
     }
-
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable Long id, Model model) {
@@ -93,7 +98,7 @@ public class CompanyController extends BaseController {
     public BaseDataResponse edit(@RequestBody @Valid CompanyForm form, BindingResult bindingResult) {
         form.setMode(FormModeType.UPDATE.getValue());
         if (bindingResult.hasErrors()) {
-            return BaseDataResponse.ok().action(BaseAction.EDIT_FAIL(DOMAIN, form.getName()), false);
+            return BaseDataResponse.validationFail().action(BaseAction.EDIT_FAIL(DOMAIN, form.getName()), false);
         }
         try {
             Company company = form.as();
