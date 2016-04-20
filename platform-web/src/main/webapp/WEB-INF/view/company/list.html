@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+    <style>
+        .dropdown {
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid #ccc;
+        }
+        *{
+            outline: none;
+        }
+        .stAutoComplete{
+            display: inline-block;
+            position: relative;
+        }
+        .stAutoComplete ul{
+            margin: 0;
+            background-color: #fff;
+            list-style: none;
+            position: absolute;
+            border: 1px solid #ccc;
+            border-top: none;
+            overflow: hidden;
+        }
+        .stAutoComplete ul li{
+            list-style: none;
+            min-height: 30px;
+            line-height: 30px;
+            padding: 0 5px;
+            overflow-x:hidden;
+        }
+        .stAutoComplete ul li:hover{
+            cursor: pointer;
+            background-color: #e0e0e0;
+        }
+        .stAutoComplete ul li.hover{
+            cursor: pointer;
+            color: white;
+            background-color: #43a047;
+        }
+    </style>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/company/list}" method="GET"
+          style="width: 100%;box-sizing: border-box;padding-right:170px; ">
+        <div class="search_group" ng-controller="queryController">
+            <div class="input_group">
+                <input type="text" name="name" th:value="${page.searchObj.name}" placeholder="公司名称"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="address" th:value="${page.searchObj.address}" placeholder="公司地址"/>
+            </div>
+            <div class="input_group">
+                <input class="stAutoComplete" id-name="permissionId" id-value="permissionId" type="text" placeholder="功能名称" name="permissionName" ng-model="permissionName" n="5" array="permissionList"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="buttManName" th:value="${page.searchObj.buttManName}" placeholder="对接人"/>
+            </div>
+        </div>
+        <button type="submit" class="search">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style='width:10%'>公司编号</th>
+            <th style='width:20%'>公司名称</th>
+            <th style='width:30%'>公司地址</th>
+            <th style='width:20%'>功能名称</th>
+            <th style='width:10%'>对接人</th>
+            <th style='width:10%'>操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+            <tr th:each="company :${page.getSubViews()}">
+                <td style='width:10%' th:text="${company.no}"></td>
+                <td style='width:20%' th:text="${company.companyName}"></td>
+                <td style='width:30%' th:text="${company.address}"></td>
+                <td style='width:20%' th:text="${company.permissionName}"></td>
+                <td style='width:10%' th:text="${company.buttManName}"></td>
+                <td  style='width:10%'>
+                    <a class="decoration"
+                       th:href="@{'/company/edit/' + ${company.no}}">查看|编辑</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table_footer">
+    <a th:href="@{/company/add}">添加公司</a>
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/adminlist.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
+//     调用分页函数
+    window.onload = function () {
+        pagination([[${page.searchObj}]], '/company/list');
+    };
+
+    $(document).ready(function () {
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height() - 212 - $('table thead').height()).getNiceScroll().resize();
+        });
+
+    });
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller('queryController', ['$scope', '$http', function ($scope, $http) {
+        $('.permissionList ul').dropdown({width: 150, n: 3});
+        $scope.permissionList = [[${companyPermissionList}]] || [];
+        $scope.searchedPermissionList = [];
+        $scope.permissionName = [[${page.searchObj.permissionName}]] || "";
+        $scope.permissionId = [[${page.searchObj.permissionId}]] || '';
+    }]);
+    //    ]]>
+</script>
+</body>
+</html>

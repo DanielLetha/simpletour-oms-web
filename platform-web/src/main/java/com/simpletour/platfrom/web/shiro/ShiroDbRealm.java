@@ -1,53 +1,130 @@
 package com.simpletour.platfrom.web.shiro;
 
-import com.simpletour.domain.company.Employee;
-import com.simpletour.service.company.IEmployeeService;
-import com.simpletour.service.company.IRoleService;
+import com.simpletour.domain.company.Administrator;
+import com.simpletour.service.company.IAdministratorService;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Created by mario on 2016/4/12.
+ * Created by zt on 2015/11/20.
  */
-@Component
 public class ShiroDbRealm extends AuthorizingRealm {
 
     @Resource
-    private IEmployeeService employeeService;
+    private IAdministratorService administratorService;
 
-    @Resource
-    private IRoleService roleService;
-
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
-        Optional<Employee> user = employeeService.queryEmployeeByJobNo(shiroUser.getJobNo());
-        if (!user.isPresent()) throw new AuthorizationException();
-        return new SimpleAuthorizationInfo();
-    }
-
+    /**
+     * —È÷§µ«¬º
+     * @param authcToken
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-        Optional<Employee> employeeOptional = employeeService.queryEmployeeByJobNo(Integer.valueOf(token.getUsername()));
-        if (employeeOptional.isPresent() && !employeeOptional.get().getDel()) {
-            token.setPassword(new Md5Hash(token.getPassword(), employeeOptional.get().getSalt()).toBase64().toCharArray());
-            if (!Arrays.equals(token.getPassword(), employeeOptional.get().getPasswd().toCharArray())) {
-                throw new AuthenticationException("Ë¥¶Êà∑ÂíåÂØÜÁ†ÅÈîôËØØ");
-            }
-            return new SimpleAuthenticationInfo(new ShiroUser(employeeOptional.get().getId(), employeeOptional.get().getJobNo(), employeeOptional.get().getName(),
-                    employeeOptional.get().getCompany() != null ? employeeOptional.get().getCompany().getId() : null), employeeOptional.get().getPasswd(), getName());
+        Optional<Administrator> adminOpt = administratorService.findAdminByJobNo(token.getUsername());
+        if (!adminOpt.isPresent()) {
+            throw new AuthenticationException("’Àªß≤ª¥Ê‘⁄");
         }
-        throw new AuthenticationException("ÁôªÂΩïÂ§±Ë¥•");
+        if (!Administrator.Status.inservice.equals(adminOpt.get().getStatus())) {
+            throw new AuthenticationException("µ±«∞π‹¿Ì‘±“—æ≠¿Î÷∞");
+        }
+        char[] newPassword = new Md5Hash(token.getPassword(), adminOpt.get().getSalt()).toBase64().toCharArray();
+        if (!Arrays.equals(newPassword, adminOpt.get().getPassword().toCharArray())) {
+            throw new AuthenticationException("µ«¬º ß∞‹£¨«ÎºÏ≤È”√ªß√˚”Î√‹¬Î");
+        }
+        token.setPassword(newPassword);
+        Administrator admin = adminOpt.get();
+        return new SimpleAuthenticationInfo(new ShiroUser(admin.getId(), admin.getJobNo(), admin.getName())
+                , admin.getPassword(), admin.getName());
+    }
+
+    /**
+     * »®œﬁ≥ı ºªØ£¨“ÚŒ™µ±«∞œµÕ≥≤ª¥Ê‘⁄»®œﬁ£¨À˘“‘ «»´»®œﬁµƒ
+     * @param principals
+     * @return
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        return new SimpleAuthorizationInfo();
+    }
+
+    /**
+     * ◊‘∂®“ÂAuthentication∂‘œÛ£¨ πµ√Subject≥˝¡À–Ø¥¯”√ªßµƒµ«¬º√˚Õ‚ªπø…“‘–Ø¥¯∏¸∂‡–≈œ¢.
+     */
+    public static class ShiroUser implements Serializable {
+        private static final long serialVersionUID = -1373760761780840081L;
+        private Long id;
+        private String jobNO;
+        private String name;
+
+        public ShiroUser(Long id, String jobNO, String name) {
+            this.id = id;
+            this.jobNO = jobNO;
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getJobNO() {
+            return jobNO;
+        }
+
+        /**
+         * ±æ∫Ø ˝ ‰≥ˆΩ´◊˜Œ™ƒ¨»œµƒ<shiro:principal/> ‰≥ˆ.
+         */
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        /**
+         * ÷ÿ‘ÿhashCode,÷ªº∆À„jobNo;
+         */
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(jobNO);
+        }
+
+        /**
+         * ÷ÿ‘ÿequals,÷ªº∆À„jobNo;
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            ShiroUser other = (ShiroUser) obj;
+            if (jobNO == null) {
+                if (other.jobNO != null) {
+                    return false;
+                }
+            } else if (!jobNO.equals(other.jobNO)) {
+                return false;
+            }
+            return true;
+        }
     }
 }

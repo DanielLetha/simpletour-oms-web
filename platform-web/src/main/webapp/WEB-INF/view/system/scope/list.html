@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/main.css}"/>
+</head>
+<body ng-controller="scopeController">
+<div class="header" th:replace="fragments :: iframe_header"></div>
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/scope/list}" method="post"
+          style="width: 100%;box-sizing: border-box;padding-right:70px; ">
+        <div class="search_group">
+            <div class="input_group">
+                <input type="text" name="name" placeholder="权限范围名称" th:value="${query.name}"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="moduleName" placeholder="模块名称" th:value="${query.moduleName}"/>
+            </div>
+        </div>
+        <button type="submit" ng-click="search($event)" class="search">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style='width:5%'>权限范围编号</th>
+            <th style='width:5%'>权限范围名称</th>
+            <th style='width:15%'>模块名称</th>
+            <th style='width:5%'>操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+          <tr th:each="scope:${page.subViews}">
+                    <td th:text="${scope.id}"></td>
+                    <td th:text="${scope.name}"></td>
+                    <td >
+                        <a th:each="module:${scope.moduleForms}" th:utext="${module.name}"></a>
+                    </td>
+                    <td >
+                        <a class="decoration" th:href="@{/scope/edit/}+${scope.id}">编辑</a>
+                    </td>
+                </tr>
+             </tbody>
+        </table>
+    </div>
+</div>
+<div class="table_footer">
+    <a th:href="@{/scope/add}">添加权限范围</a>
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/tooltip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootpopover.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/date.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/sendMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    window.onload = function () {
+        pagination([[${query}]], '/scope/list');
+    };
+    $(document).ready(function(){
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height()-212-$('table thead').height()).getNiceScroll().resize();
+        })
+    });
+    var app = angular.module('app',['ngPlugin']);
+    app.controller('scopeController',['$scope','alert',function($scope,alert){
+        $scope.search = function(event){
+            event.preventDefault();
+            angular.element(event.target).parents("form").submit();
+//            if(!isNaN($('input[name=jobno]').val())) {
+//            }else{
+//                alert.alert({
+//                    reason: '此提示3秒后关闭',
+//                    message: '工号必须为数字',
+//                    type: 'fail',
+//                    delay: '3'
+//                });
+//            }
+        }
+    }]);
+</script>
+</body>
+</html>

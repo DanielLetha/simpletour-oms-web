@@ -1,7 +1,7 @@
 package com.simpletour.platfrom.web.controller.support;
 
 import com.simpletour.commons.data.domain.LogicalDeletableDomain;
-import com.simpletour.platfrom.web.shiro.ShiroUser;
+import com.simpletour.platfrom.web.shiro.ShiroDbRealm.ShiroUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
