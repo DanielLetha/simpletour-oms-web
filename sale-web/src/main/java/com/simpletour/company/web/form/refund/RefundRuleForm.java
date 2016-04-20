@@ -29,12 +29,12 @@ public class RefundRuleForm extends BaseForm{
     public RefundRuleForm(RefundRule refundRule){
         this.id=refundRule.getId();
         this.version=refundRule.getVersion();
-        this.timing=refundRule.getTiming();
+        this.timing=refundRule.getTiming()/24;
         this.ration=refundRule.getRation();
     }
 
     public RefundRule as(){
-        RefundRule refundRule=new RefundRule(timing,ration);
+        RefundRule refundRule=new RefundRule(timing*24,ration);
         if (mode.equals(FormModeType.UPDATE.getValue())){
             refundRule.setId(id);
             refundRule.setVersion(version);
