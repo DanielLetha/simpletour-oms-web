@@ -36,6 +36,16 @@
 
         <dependency>
             <groupId>com.simpletour</groupId>
+            <artifactId>simpletour-util-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.simpletour</groupId>
+            <artifactId>simpletour-util-framework</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.simpletour</groupId>
             <artifactId>simpletour-redis</artifactId>
         </dependency>
 
