@@ -65,8 +65,8 @@
         <!--</property>-->
     </bean>
 
-    <bean class="com.simpletour.util.framework.init.ThymeleafInitializer">
-        <property name="contentType" value="text/html;charset=UTF-8"/>
+    <bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <!--<property name="contentType" value="text/html;charset=UTF-8"/>-->
         <property name="templateEngine" ref="templateEngine"/>
         <property name="characterEncoding" value="UTF-8"/>
     </bean>

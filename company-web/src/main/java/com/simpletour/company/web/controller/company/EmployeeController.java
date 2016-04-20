@@ -171,24 +171,14 @@ public class EmployeeController extends BaseController {
 
     @RequestMapping(value = "/password", method = RequestMethod.GET)
     public String password(Model model) {
-        //Optional<Employee> employee = employeeService.queryEmployeeById(getCurrentUser().getId());
-//        if (!employee.isPresent()) {
-//            new BaseSystemException("用户不存在");
-//        }
-
-        // 不显示用户信息
-//        model.addAttribute("viewForm", new EmployeeForm());
-
-
         EmployeeQuery employeeQuery = new EmployeeQuery();
         employeeQuery.setTenantId(TokenStorage.COMPANY_ID);
         DomainPage<Employee> domainPage = employeeService.queryEmployeesPagesByConditions(employeeQuery.asConditionQuery());
         if (null == domainPage || 0 == domainPage.getDomainTotalCount()) {
             new BaseSystemException("用户不存在");
         }
-
-        model.addAttribute("viewForm", new EmployeeForm(domainPage.getDomains().get(0)));
-        //model.addAttribute("viewForm", new EmployeeForm());
+//        model.addAttribute("viewForm", new EmployeeForm(domainPage.getDomains().get(0)));
+        model.addAttribute("viewForm", new EmployeeForm());
 
         return "/company/employee/password";
     }
