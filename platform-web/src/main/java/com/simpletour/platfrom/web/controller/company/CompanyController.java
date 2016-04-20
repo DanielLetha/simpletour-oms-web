@@ -85,7 +85,7 @@ public class CompanyController extends BaseController {
             model.addAttribute("viewForm", companyForm);
             return "/company/form";
         }
-        return this.notFound();
+        return this.error();
     }
 
     @ResponseBody

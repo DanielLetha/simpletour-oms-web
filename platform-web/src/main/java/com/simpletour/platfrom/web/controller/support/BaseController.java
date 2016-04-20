@@ -1,14 +1,13 @@
 package com.simpletour.platfrom.web.controller.support;
 
 import com.simpletour.commons.data.domain.LogicalDeletableDomain;
-import com.simpletour.platfrom.web.shiro.ShiroDbRealm.ShiroUser;
+import com.simpletour.platfrom.web.shiro.ShiroDbRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +38,12 @@ public class BaseController {
      *
      * @return
      */
-    public ShiroUser getCurrentUser() {
+    public ShiroDbRealm.ShiroUser getCurrentUser() {
         Subject subject = SecurityUtils.getSubject();
         if (subject != null) {
             Object object = subject.getPrincipal();
             if (object != null) {
-                return (ShiroUser) object;
+                return (ShiroDbRealm.ShiroUser) object;
             }
         }
         return null;
@@ -75,56 +74,8 @@ public class BaseController {
         return permList;
     }
 
-    protected final void reject(Errors errors, String field, String key) {
-        errors.rejectValue(field, key, getMessage(key));
-    }
-
-    protected String success(String title, String content, String jumpUrl, Model model) {
-        model.addAttribute("title", title);
-        model.addAttribute("content", content);
-        if (jumpUrl != null)
-            model.addAttribute("jumpUrl", jumpUrl);
-        return "/admin/adminSuccess";
-    }
-
-    protected String success(String title, String content, List<BaseAction> actions, String jumpUrl, Model model) {
-        model.addAttribute("title", title);
-        model.addAttribute("content", content);
-        if (actions != null && actions.size() > 0)
-            model.addAttribute("actions", actions);
-        if (jumpUrl != null && !jumpUrl.equals(""))
-            model.addAttribute("jumpUrl", jumpUrl);
-        return "/admin/adminSuccess";
-    }
-
-    protected String success(String content, String jumpUrl, Model model) {
-        model.addAttribute("title", "操作成功");
-        model.addAttribute("content", content);
-        if (jumpUrl != null)
-            model.addAttribute("jumpUrl", jumpUrl);
-        return "/admin/adminSuccess";
-    }
-
-    protected int error(String title, Model model) {
-        model.addAttribute("errorTitle", title);
-        model.addAttribute("errorContent", "3秒后将自动关闭");
-        return 0;
-    }
-
-    protected int error(String title, String content, Model model) {
-        model.addAttribute("errorTitle", title);
-        model.addAttribute("errorContent", content);
-        return 0;
-    }
-
-    protected int error(Model model) {
-        model.addAttribute("errorTitle", "操作失败");
-        model.addAttribute("errorContent", "3秒后将自动关闭");
-        return 0;
-    }
-
-    protected String notFound() {
-        return "/adminNotFound";
+    protected String error() {
+        return "/error";
     }
 
     protected void setPageTitle(Model model, String title) {

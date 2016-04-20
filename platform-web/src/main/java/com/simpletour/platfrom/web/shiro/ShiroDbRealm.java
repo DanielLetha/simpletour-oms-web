@@ -24,7 +24,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
     private IAdministratorService administratorService;
 
     /**
-     * ÑéÖ¤µÇÂ¼
+     * éªŒè¯ç™»å½•
      * @param authcToken
      * @return
      * @throws AuthenticationException
@@ -34,14 +34,14 @@ public class ShiroDbRealm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
         Optional<Administrator> adminOpt = administratorService.findAdminByJobNo(token.getUsername());
         if (!adminOpt.isPresent()) {
-            throw new AuthenticationException("ÕË»§²»´æÔÚ");
+            throw new AuthenticationException("è´¦æˆ·ä¸å­˜åœ¨");
         }
         if (!Administrator.Status.inservice.equals(adminOpt.get().getStatus())) {
-            throw new AuthenticationException("µ±Ç°¹ÜÀíÔ±ÒÑ¾­ÀëÖ°");
+            throw new AuthenticationException("å½“å‰ç®¡ç†å‘˜å·²ç»ç¦»èŒ");
         }
         char[] newPassword = new Md5Hash(token.getPassword(), adminOpt.get().getSalt()).toBase64().toCharArray();
         if (!Arrays.equals(newPassword, adminOpt.get().getPassword().toCharArray())) {
-            throw new AuthenticationException("µÇÂ¼Ê§°Ü£¬Çë¼ì²éÓÃ»§ÃûÓëÃÜÂë");
+            throw new AuthenticationException("ç™»å½•å¤±è´¥ï¼Œè¯·æ£€æŸ¥ç”¨æˆ·åä¸å¯†ç ");
         }
         token.setPassword(newPassword);
         Administrator admin = adminOpt.get();
@@ -50,7 +50,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
     }
 
     /**
-     * È¨ÏŞ³õÊ¼»¯£¬ÒòÎªµ±Ç°ÏµÍ³²»´æÔÚÈ¨ÏŞ£¬ËùÒÔÊÇÈ«È¨ÏŞµÄ
+     * æƒé™åˆå§‹åŒ–ï¼Œå› ä¸ºå½“å‰ç³»ç»Ÿä¸å­˜åœ¨æƒé™ï¼Œæ‰€ä»¥æ˜¯å…¨æƒé™çš„
      * @param principals
      * @return
      */
@@ -60,7 +60,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
     }
 
     /**
-     * ×Ô¶¨ÒåAuthentication¶ÔÏó£¬Ê¹µÃSubject³ıÁËĞ¯´øÓÃ»§µÄµÇÂ¼ÃûÍâ»¹¿ÉÒÔĞ¯´ø¸ü¶àĞÅÏ¢.
+     * è‡ªå®šä¹‰Authenticationå¯¹è±¡ï¼Œä½¿å¾—Subjecté™¤äº†æºå¸¦ç”¨æˆ·çš„ç™»å½•åå¤–è¿˜å¯ä»¥æºå¸¦æ›´å¤šä¿¡æ¯.
      */
     public static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
@@ -87,7 +87,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
         }
 
         /**
-         * ±¾º¯ÊıÊä³ö½«×÷ÎªÄ¬ÈÏµÄ<shiro:principal/>Êä³ö.
+         * æœ¬å‡½æ•°è¾“å‡ºå°†ä½œä¸ºé»˜è®¤çš„<shiro:principal/>è¾“å‡º.
          */
         @Override
         public String toString() {
@@ -95,7 +95,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
         }
 
         /**
-         * ÖØÔØhashCode,Ö»¼ÆËãjobNo;
+         * é‡è½½hashCode,åªè®¡ç®—jobNo;
          */
         @Override
         public int hashCode() {
@@ -103,7 +103,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
         }
 
         /**
-         * ÖØÔØequals,Ö»¼ÆËãjobNo;
+         * é‡è½½equals,åªè®¡ç®—jobNo;
          */
         @Override
         public boolean equals(Object obj) {

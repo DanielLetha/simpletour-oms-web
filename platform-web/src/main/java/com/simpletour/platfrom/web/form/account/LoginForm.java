@@ -1,4 +1,4 @@
-package com.simpletour.platfrom.web.form.system;
+package com.simpletour.platfrom.web.form.account;
 
 import org.hibernate.validator.constraints.Length;
 

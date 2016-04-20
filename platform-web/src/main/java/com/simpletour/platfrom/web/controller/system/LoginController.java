@@ -1,7 +1,7 @@
 package com.simpletour.platfrom.web.controller.system;
 
 import com.simpletour.platfrom.web.controller.support.BaseDataResponse;
-import com.simpletour.platfrom.web.form.system.LoginForm;
+import com.simpletour.platfrom.web.form.account.LoginForm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
