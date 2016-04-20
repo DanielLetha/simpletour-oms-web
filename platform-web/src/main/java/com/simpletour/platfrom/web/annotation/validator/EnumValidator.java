@@ -1,7 +1,5 @@
 package com.simpletour.platfrom.web.annotation.validator;
 
-import com.simpletour.platfrom.web.annotation.Enum;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
@@ -12,12 +10,12 @@ import java.util.List;
  * Author: Hawk
  * Date  : 2015/12/4
  */
-public class EnumValidator implements ConstraintValidator<Enum,String> {
+public class EnumValidator implements ConstraintValidator<com.simpletour.platfrom.web.annotation.Enum,String> {
 
     private List<Enum<?>> constants;
 
     @Override
-    public void initialize(Enum enumConstants) {
+    public void initialize(com.simpletour.platfrom.web.annotation.Enum enumConstants) {
         Class<?> enumClass = enumConstants.type();
         if(!enumClass.isEnum()) throw new IllegalArgumentException("not a valid enum class");
         this.constants = Arrays.asList((Enum<?>[])enumClass.getEnumConstants());
