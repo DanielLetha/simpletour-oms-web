@@ -10,10 +10,10 @@ import org.hibernate.validator.constraints.Length;
  */
 public class ModifyPasswordForm extends BaseForm {
 
-    @Length(min = 6, max = 64, message = "{pms.admin.password.length}")
+    @Length(min = 6, max = 64, message = "{oms.login.name.length}")
     private String oldPassword;
 
-    @Length(min = 6, max = 64, message = "{pms.admin.password.length}")
+    @Length(min = 6, max = 64, message = "{oms.login.password.length}")
     private String newPassword;
 
     public String getNewPassword() {
