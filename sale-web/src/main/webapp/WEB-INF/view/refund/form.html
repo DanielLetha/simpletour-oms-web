@@ -58,6 +58,14 @@
             text-decoration: underline;
             color: #d84527;
         }
+
+        .stUeditor {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .editor{
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -181,16 +189,24 @@
                     <a ng-click="add()" class="add">之前添加一条</a>
                 </span>
             </div>
+            <div class="editor clear">
+                <span style="display: inline-block;vertical-align: top;margin-right:15px;font-weight:bold;font-size:14px;">退改说明</span>
+            <textarea class="stUeditor" config="normal" name="instruction" ng-model="postData.instruction"
+           style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+
         </div>
 
         <h2>其他信息</h2>
 
         <div class="offset">
             <div class="editor clear" th:if="${permission} != 'detail'">
+                <span style="display: inline-block;vertical-align: top;margin-right:15px;font-weight:bold;font-size:14px;">备&nbsp;&nbsp;&nbsp;&nbsp;注</span>
                   <textarea class="stUeditor" config="normal" name="remark" ng-model="postData.remark"
                             style="resize:none;width:700px;height: 200px;"></textarea>
             </div>
             <div class="editor clear" th:if="${permission} == 'detail'">
+                <span style="display: inline-block;vertical-align: top;margin-right:15px;font-weight:bold;font-size:14px;">备&nbsp;&nbsp;&nbsp;&nbsp;注</span>
                   <textarea class="stUeditor" setdisabled="true" config="normal" name="remark"
                             ng-model="postData.remark"
                             style="resize:none;width:700px;height: 200px;"></textarea>
