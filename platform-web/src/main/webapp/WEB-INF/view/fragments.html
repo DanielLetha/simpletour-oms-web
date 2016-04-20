@@ -19,7 +19,7 @@
         </li>
     </ul>
     <script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+    <script type="text/javascript" src="/static/lib/jquery.nicescroll.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('.header .more').hover(function() {
@@ -48,5 +48,6 @@
     <span th:if="${page.pageIndex &lt; page.pageCount -1}" class='pager-dright' action-type="page"
         th:attr="data-value=${page.pageCount}"></span>
 </div>
+
 </body>
 </html>

@@ -12,7 +12,7 @@
     <modules>
         <module>company-web</module>
         <module>platform-web</module>
-        <module>sale-web</module>
+        <!--<module>sale-web</module>-->
     </modules>
 
     <properties>
@@ -46,6 +46,12 @@
             <dependency>
                 <groupId>com.simpletour.commons</groupId>
                 <artifactId>data</artifactId>
+                <version>${simpletour.common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.simpletour.commons</groupId>
+                <artifactId>util</artifactId>
                 <version>${simpletour.common.version}</version>
             </dependency>
 

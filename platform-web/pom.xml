@@ -30,18 +30,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.simpletour</groupId>
-            <artifactId>simpletour-redis</artifactId>
+            <groupId>com.simpletour.commons</groupId>
+            <artifactId>util</artifactId>
         </dependency>
 
-        <!--增加simpletour util,使用文件上传下载功能-->
         <dependency>
             <groupId>com.simpletour</groupId>
-            <artifactId>simpletour-util-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.simpletour</groupId>
-            <artifactId>simpletour-util-framework</artifactId>
+            <artifactId>simpletour-redis</artifactId>
         </dependency>
 
         <!-- spring -->
