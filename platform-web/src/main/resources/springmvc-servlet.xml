@@ -17,6 +17,17 @@
     <!--shiro注解aop配置-->
     <aop:config proxy-target-class="true"/>
 
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:validationMessage.properties</value>
+                <value>classpath:config.properties</value>
+                <value>classpath:companyInitPermissions.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
+
     <!--配置spring注解驱动-->
     <mvc:annotation-driven validator="beansValidator" enable-matrix-variables="true">
         <!-- 消息转换器 -->
