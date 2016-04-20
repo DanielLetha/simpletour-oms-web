@@ -1,5 +1,6 @@
 package com.simpletour.platfrom.web.view.permission;
 
+
 import com.simpletour.domain.company.Permission;
 
 /**
@@ -17,8 +18,10 @@ public class PermissionQueryElementView {
     private String permissionName;
 
     public PermissionQueryElementView(Permission permission) {
-        this.permissionId = permission.getId();
-        this.permissionName = permission.getName();
+        if (permission != null){
+            this.permissionId = permission.getId();
+            this.permissionName = permission.getName();
+        }
     }
 
     public Long getPermissionId() {

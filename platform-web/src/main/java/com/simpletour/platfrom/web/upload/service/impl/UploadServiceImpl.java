@@ -1,10 +1,10 @@
 package com.simpletour.platfrom.web.upload.service.impl;
 
+import com.simpletour.commons.util.Hashs;
 import com.simpletour.platfrom.web.upload.config.UpYunConfig;
 import com.simpletour.platfrom.web.upload.domain.UpYun;
 import com.simpletour.platfrom.web.upload.service.IUploadService;
 import com.simpletour.platfrom.web.upload.util.UpYunUtil;
-import com.simpletour.util.utils.hash.HashUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +26,7 @@ public class UploadServiceImpl implements IUploadService {
     public String generateFileName(MultipartFile file) throws IOException {
         if (file.getInputStream() == null)
             throw new IOException("文件不存在");
-        return HashUtils.MD5(file.getOriginalFilename() + System.currentTimeMillis()) + "." + file.getOriginalFilename().substring(file.getOriginalFilename()
+        return Hashs.MD5(file.getOriginalFilename() + System.currentTimeMillis()) + "." + file.getOriginalFilename().substring(file.getOriginalFilename()
                 .lastIndexOf('.') + 1);
     }
 

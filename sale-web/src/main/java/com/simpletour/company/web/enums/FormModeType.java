@@ -7,7 +7,7 @@ import java.util.List;
  * Created by sczly on 2015/6/3.
  */
 public enum FormModeType implements Options {
-    ADD("添加","add"),UPDATE("更新","update"),DEL("删除","del");
+    ADD("添加","add"),UPDATE("更新","update"),DEL("删除","del"), ;
 
     private String name, value;
 

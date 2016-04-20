@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  */
 @Controller
 @RequestMapping("/company/manager")
-public class CompanyManagerController extends BaseController{
+public class CompanyManagerController extends BaseController {
 
     private static final String DOMAIN = "公司管理员";
 

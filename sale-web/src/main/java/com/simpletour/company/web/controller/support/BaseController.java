@@ -123,6 +123,10 @@ public class BaseController {
         return 0;
     }
 
+    protected String error(){
+        return "/error";
+    }
+
     protected String notFound() {
         return "/adminNotFound";
     }

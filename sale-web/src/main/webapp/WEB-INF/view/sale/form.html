@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <style>
+        .iframe_content .input_group label {
+            width: 72px;
+        }
+
+        .iframe_content .input_group input {
+            width: 245px;
+        }
+
+        .iframe_content .input_group {
+            width: 320px;
+        }
+    </style>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="iframe_content" ng-controller="companyController">
+
+
+    <form th:action="@{/sale/add}" name="form" novalidate="novalidate" method="POST">
+        <h2>基础信息</h2>
+
+        <div class="offset">
+            <div class="input_group">
+                <label>销售端名称</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="name" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位"
+                         validate-len-max="20" validate-len-max-msg="最大20位"
+                         validate-not-blank-msg="不能为空" trigger="focus"
+                         ng-model="postData.name"/>
+                </span>
+            </div>
+            <div class="input_group">
+                <label>订单失效时间</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="reserveTime" class="stValidate"
+                         validate-not-blank-msg="不能为空" trigger="focus"
+                         ng-model="postData.reserveTime"/>
+                </span>
+            </div>
+        </div>
+
+        <h2>对接人信息</h2>
+
+        <div class="offset">
+            <div class="input_group">
+                <label>对接人姓名</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="contact" class="stValidate" validate-len-min="2"
+                         validate-len-min-msg="最小2位"
+                         validate-len-max="20" validate-len-max-msg="最大20位"
+                         validate-not-blank-msg="不能为空" trigger="focus"
+                         ng-model="postData.contact"/>
+                </span>
+            </div>
+            <div class="input_group">
+                <label>对接人手机</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="text" dy-name="mobile" class="stValidate" validate-mobile-msg="手机号格式不正确"
+                           validate-len-max="11" validate-len-max-msg="最大11位"
+                           validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.mobile"/>
+                </span>
+            </div>
+            <div class="input_group">
+                <label>对接人传真</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="fax" ng-model="postData.fax"/>
+
+                </span>
+            </div>
+            <div class="input_group">
+                <label>对接人邮箱</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="email" name="email" class="stValidate" validate-email-msg="请确保邮箱格式正确"
+                           trigger="focus" ng-model="postData.email"/>
+
+                </span>
+            </div>
+            <div class="input_group">
+                <label>其他联系方式</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="text" name="link"
+                           trigger="focus" ng-model="postData.link"/>
+
+                </span>
+            </div>
+        </div>
+
+
+        <h2>备注</h2>
+
+        <div class="offset">
+            <div class="editor clear" th:if="${permission} != 'detail'">
+                  <textarea class="stUeditor" config="normal" name="remark" ng-model="postData.remark"
+                            style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+            <div class="editor clear" th:if="${permission} == 'detail'">
+                  <textarea class="stUeditor" setdisabled="true" config="normal" name="remark"
+                            ng-model="postData.remark"
+                            style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+        </div>
+        <div th:if="${viewForm.id} == null">
+            <button type="button" th:attr="url=@{/sale/add}"
+                    ng-click="submit($event)"
+                    class="red"
+                    style='margin:20px 10px 20px'>添&nbsp;&nbsp;&nbsp;&nbsp;加
+            </button>
+        </div>
+        <div th:if="${viewForm.id} != null">
+            <button type="button" ng-click="delete($event)" class="gray delButton"
+                    style='margin:20px 10px 20px 575px'>删&nbsp;&nbsp;&nbsp;&nbsp;除
+            </button>
+            <button type="button" th:attr="url=@{/sale/edit}"
+                    ng-click="submit($event)"
+                    class="red"
+                    style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新
+            </button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/kindeditor/kindeditor.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zh_CN.js}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=v7cmA7sPIOlhyVGISwFzQZqy"></script>
+<script type="text/javascript" th:src="@{/static/lib/resources.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ngClip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ZeroClipboard.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller('companyController', ['$scope', '$http', 'ngSubmit', 'stModal', 'areas', 'gpsLocation', function ($scope, $http, ngSubmit, stModal, areas, gpsLocation) {
+        var permission = [[${permission}]];
+        if (permission == 'detail') {
+            setTimeout(function () {
+                $('input[type=text]').attr("readonly", true).unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('select').attr('disabled', 'disabled').unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('.input_group').find('ul').css('display', 'none').parent('div').css({display: 'none', opacity: 0});
+            }, 0);
+        }
+        $scope.areajson = areas;
+        $scope.postData = {
+            name: [[${viewForm.name}]] || '',
+            contact: [[${viewForm.contact}]] || '',
+            mobile: [[${viewForm.mobile}]] || '',
+            fax: [[${viewForm.fax}]] || '',
+            email: [[${viewForm.email}]] || '',
+            key: [[${viewForm.key}]],
+            secret: [[${viewForm.secret}]],
+            reserveTime: [[${viewForm.reserveTime}]],
+            link: [[${viewForm.link}]] || '',
+            remark: [[${viewForm.remark}]],
+            version: [[${viewForm.version}]] || 0,
+            id: [[${viewForm.id}]]
+        };
+        $scope.location = function () {
+            var locationObject;
+            var d = gpsLocation.gps($scope.destinationName, $scope.postData.address);
+            d.then(function () {
+                locationObject = gpsLocation.getGps();
+                $scope.locationStatus = locationObject.status;
+                $scope.postData.latitude = locationObject.lat;
+            }, function () {
+                locationObject = gpsLocation.getGps();
+                $scope.locationStatus = locationObject.status;
+                $scope.postData.longitude = locationObject.lng;
+                $scope.postData.latitude = locationObject.lat;
+            });
+        };
+        $scope.open = function ($event) {
+            angular.element($event.target).blur();
+            stModal({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                ok: function (selectedItem) {
+                    $scope.postData.destinationName = selectedItem.name;
+                    $scope.postData.destinationId = selectedItem.id;
+                },
+                cancel: function () {
+                }
+            });
+        };
+        $scope.submit = function (event) {
+            ngSubmit({
+                ele: event.target,
+                data: $scope.postData,
+                form: $scope.form,
+                success: function (data) {
+                    setTimeout(function () {
+                        location.href = data.jumpUrl;
+                    }, 3000);
+                },
+                error: function (data) {
+                    $scope.errorTips = data.tip;
+                }
+            });
+        };
+        $scope.delete = function (event) {
+            angular.element(event.target).attr('disabled', 'disabled');
+            $.alertMsg.confirm({
+                title: '确认删除？',
+                detailed: '该操作是不可逆的，是否仍然继续？',
+                no: '取  消',
+                yes: '确认删除',
+                delay: '500',
+                confirm: function () {
+                    $http.post('/sale/delete/' + $scope.postData.id).success(function (data) {
+                        if (data.code == 0) {
+                            setTimeout(function () {
+                                location.href = data.jumpUrl;
+                            }, 3000);
+                            $.alertMsg.alert({
+                                title: data.msg,
+                                detailed: '此提示5秒后关闭',
+                                type: 'success'
+                            })
+                        } else {
+                            $.alertMsg.alert({
+                                title: data.detail,
+                                detailed: '此提示5秒后关闭'
+                            })
+                            angular.element(event.target).attr('disabled', false);
+                        }
+                    })
+                },
+                cancel: function () {
+                    angular.element(event.target).attr('disabled', false);
+                }
+            })
+        };
+    }]);
+</script>
+</body>
+</html>

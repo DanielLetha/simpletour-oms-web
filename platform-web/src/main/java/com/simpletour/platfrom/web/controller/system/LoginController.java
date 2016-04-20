@@ -8,6 +8,7 @@ import com.simpletour.platfrom.web.form.system.LoginForm;
 import com.simpletour.platfrom.web.form.system.ModifyPasswordForm;
 import com.simpletour.platfrom.web.util.PasswordUtil;
 import com.simpletour.service.company.IEmployeeService;
+import com.simpletour.platfrom.web.form.account.LoginForm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;

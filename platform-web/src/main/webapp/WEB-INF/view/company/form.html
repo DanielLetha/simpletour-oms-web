@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+    <style>
+        .iframe_content .input_group {
+            width: 320px;
+        }
+        .iframe_content .input_group label {
+            width: 96px;
+        }
+        .iframe_content .input_group {
+            width: 288px;
+        }
+
+        .iframe_content .input_group input {
+            width: 201px;
+        }
+
+        .iframe_content .input_group.special {
+            position: relative;
+        }
+
+        .iframe_content .input_group.special .currency {
+            position: absolute;
+            bottom: 0px;
+            right: 8px;
+        }
+
+        .iframe_content .input_group.special .right.one, .iframe_content .input_group.special .right.two {
+            width: 110px;
+            text-indent: 16px;
+        }
+
+        .iframe_content .input_group.special .currency.enough {
+            position: absolute;
+            bottom: 0px;
+            right: 203px;
+        }
+
+        .iframe_content .input_group.special .currency.reduce {
+            position: absolute;
+            bottom: 0px;
+            right: 92px;
+        }
+
+        .iframe_content .input_group label {
+            width: 84px;
+        }
+
+        .activeselect {
+            width: 952px;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            box-sizing: border-box;
+        }
+
+        .activeselect .activeselect_header {
+            height: 30px;
+            line-height: 30px;
+            padding: 0 10px;
+            background-color: #efebe9;
+        }
+
+        .activeselect .activeselect_header .screened {
+            float: right;
+            height: 30px;
+            display: inline-block;
+            margin-left: 600px;
+        }
+
+        .activeselect .activeselect_header .screened input {
+            margin: 3px 35px 4px 0;
+            vertical-align: middle;
+            display: inline-block;
+            width: 100px;
+            height: 14px;
+        }
+
+        .activeselect .activeselect_content {
+            /*width: 278px;*/
+            width: 930px;
+            min-height: 176px;
+            padding: 0 10px;
+            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #e0e0e0;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+
+        .activeselect .activeselect_content .titles {
+            border-bottom: 1px solid #e0e0e0;
+            height: 30px;
+            width: 100%;
+            font-size: 0;
+        }
+
+        .activeselect .activeselect_content .titles .unit_title {
+            font-size: 0;
+            display: inline-block;
+            width: 100%;
+            height: 30px;
+        }
+
+        .activeselect .activeselect_content .titles .unit_title span {
+            text-align: center;
+            line-height: 30px;
+            height: 30px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        .activeselect .activeselect_content .activelist {
+            width: 930px;
+            padding-right: 10px;
+            height: 240px;
+            font-size: 0;
+        }
+
+        .activeselect .activeselect_content .unit {
+            display: inline-block;
+            vertical-align: middle;
+            width: 100%;
+            text-align: center;
+            font-size: 0;
+            min-height: 30px;
+            line-height: 30px;
+        }
+
+        .activeselect .activeselect_content .unit:hover {
+            background-color: #45b97c;
+        }
+        .activeselect .activeselect_content .operation {
+            vertical-align: middle;
+            display: inline-block;
+            width: 20%;
+        }
+
+        .activeselect .activeselect_content .operation .mcheckbox {
+            display: inline-block;
+            vertical-align: middle;
+            padding-bottom: 3px;
+        }
+
+        .activeselect .activeselect_content .activename {
+            vertical-align: middle;
+            text-align: center;
+            display: inline-block;
+            width: 20%;
+        }
+        .ellipsis {
+            height: 30px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .activeselect .activeselect_content .functionName {
+            text-align: center;
+            vertical-align: middle;
+            display: inline-block;
+            width: 60%;
+        }
+        .activeselect .activeselect_footer {
+            padding: 0 10px;
+            height: 30px;
+            background-color: #efebe9;
+        }
+
+        .activeselect a {
+            display: inline-block;
+            /*padding: 8px 8px;*/
+            /*border: none;*/
+            /*height: 18px;*/
+            /*background-color: #d84527;*/
+            float: right;
+            margin-right: 10px;
+            line-height: 30px;
+            color: #d84527;
+            text-decoration: underline;
+        }
+
+        .dialog_header {
+            margin-bottom: 10px;
+            font-size: 0;
+        }
+
+        .dialog_header .search_group {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .dialog_header button.searchBtn {
+            float: right;
+            vertical-align: middle;
+            display: inline-block;
+            font-size: 12px;
+            border-radius: 4px;
+            height: 30px;
+        }
+
+        .dialog_header button.searchBtn[disabled=disabled] {
+            background-color: #a1a1a1;
+        }
+
+        .dialog_header .search_group .input_unit {
+            line-height: 30px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .dialog_header .search_group .input_unit input {
+            border: 1px solid #d8d8d8;
+            box-sizing: border-box;
+            float: none;
+        }
+
+        .modal-dialog {
+            max-width: 725px;
+        }
+
+        .modal-dialog .dialog_content {
+            max-width: 748px;
+        }
+
+        .modal-dialog .dialog_content .grid {
+            overflow-y: auto;
+            height: 307px;
+        }
+
+        .modal-dialog .dialog_content .grid td {
+            color: #4a4a4a;
+        }
+
+        .modal-dialog .dialog_content .grid td .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+
+        .modal-dialog .dialog_content .table_footer .selects .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+
+        .selects .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        .activeselect_footer .selects {
+            padding: 0;
+        }
+
+        .modal-dialog .dialog_content .table_footer .ops {
+            width: 130px;
+            height: 30px;
+            line-height: 30px;
+            padding: 15px 0;
+            float: right;
+        }
+
+        .modal-dialog .dialog_content .table_footer .ops a {
+            margin-left: 0;
+            padding: 0;
+            background-color: #eee;
+            float: none;
+            border-radius: 0;
+            color: #a1a1a1;
+            margin-right: 15px;
+        }
+
+        .modal-dialog .dialog_content .table_footer .ops button {
+            border: none;
+            background-color: #43a047;
+            color: white;
+            z-index: 2;
+            position: relative;
+            padding: 5px 5px;
+            border-radius: 4px;
+        }
+
+        .search_group .dropdown .selected:after {
+            content: '';
+            height: 30px;
+            background: url(/static/images/dropdownArrow.png) no-repeat center;
+        }
+        .selects {
+            width: 300px;
+            display: inline-block;
+            margin-left: 10px;
+            height: 30px;
+            line-height: 30px;
+            padding: 15px 0;
+        }
+
+        .container_main {
+            padding-bottom: 60px;
+        }
+
+        .input_unit .dropdown {
+            height: 30px;
+            color: #4a4a4a;
+            display: inline-block;
+            text-align: left;
+            border-color: #d8d8d8;
+        }
+
+        .input_unit .dropdown li.hover {
+            background-color: #45b97c;
+            color: white;
+        }
+
+        .input_unit .dropdown .selected {
+            height: 30px;
+        }
+
+        .erorrTip {
+            display: none;
+            z-index: 2;
+            color: #d84527;
+            position: absolute;
+            height: 30px;
+            padding: 15px 0;
+            line-height: 30px;
+        }
+
+        .dialog_content .table_footer .ops button[disabled=disabled] {
+            background-color: #a1a1a1;
+        }
+        select {
+            opacity: 0;
+        }
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"></div>
+<div class="iframe_content" ng-controller="companyController">
+
+
+    <form th:action="@{/company/add}" name="form" novalidate="novalidate" method="POST">
+        <h2>基础信息</h2>
+
+        <div class="offset">
+            <div class="input_group">
+                <label>公司名称</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="name" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位"
+                         validate-len-max="20" validate-len-max-msg="最大20位"
+                         validate-not-blank-msg="不能为空" trigger="focus"
+                         ng-model="postData.name"/>
+                </span>
+            </div>
+            <div class="location_group">
+                <div class="input_group">
+                    <label>公司地址</label>
+                    <div class="cutline"></div>
+                    <input type="text" dy-name="address" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位"
+                           validate-len-max="50" validate-len-max-msg="最大50位"
+                           validate-not-blank-msg="不能为空" trigger="focus"
+                           ng-blur="location()" ng-model="postData.address"/>
+                </div>
+                <div class="location" ng-class="{success:locationStatus}">
+                </div>
+            </div>
+        </div>
+
+        <h2>对接人信息</h2>
+
+        <div class="offset">
+            <div class="input_group">
+                <label>对接人姓名</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="contacts" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位"
+                         validate-len-max="20" validate-len-max-msg="最大20位"
+                         validate-not-blank-msg="不能为空" trigger="focus"
+                         ng-model="postData.contacts"/>
+                </span>
+            </div>
+            <div class="input_group">
+                <label>对接人手机</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="text" dy-name="mobile" class="stValidate"  validate-mobile-msg="手机号格式不正确"
+                           validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.mobile"/>
+                </span>
+            </div>
+            <div class="input_group">
+                <label>对接人传真</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="fax" class="stValidate"
+                         validate-len-max="16" validate-len-max-msg="最大16位"
+                         trigger="focus" ng-model="postData.fax"/>
+
+                </span>
+            </div>
+            <div class="input_group">
+                <label>对接人邮箱</label>
+                <div class="cutline"></div>
+                <span>
+                    <input type="email" name="email" class="stValidate" validate-email-msg="请确保邮箱格式正确"
+                           validate-len-max="32" validate-len-max-msg="最大32位"
+                           trigger="focus"  ng-model="postData.email"/>
+
+                </span>
+            </div>
+            <div class="input_group">
+                <label>其他联系方式</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" dy-name="link" class="stValidate"
+                         validate-len-max="16" validate-len-max-msg="最大16位"
+                         trigger="focus" ng-model="postData.link"/>
+
+                </span>
+            </div>
+        </div>
+
+        <h2>权限范围信息</h2>
+
+        <div class="offset">
+            <div class="input_group">
+                <label>权限范围</label>
+                <div class="cutline"></div>
+                <span>
+                  <input type="text" ng-click="openScopeName($event)" ng-model="postData.scopeName"/>
+                </span>
+            </div>
+            <div class="activeselect">
+                <div class="activeselect_header">
+                    模块列表
+                    <sapn class="screened">
+                        筛选:&nbsp;&nbsp;<input type="text" ng-model="query"/>
+                        <a ng-click="openModule($event)">添&nbsp;&nbsp;加</a>
+                    </sapn>
+                </div>
+                <div class="activeselect_content">
+                    <div class="titles">
+                        <div class="unit_title">
+                            <span class="operation">操作</span>
+                            <span class="activename">模块名称</span>
+                            <span class="functionName">功能名称</span>
+                        </div>
+                    </div>
+                    <div class="activelist">
+                        <div class="unit" ng-repeat="scope in (queryScopes = (postData.scopes | filter: query)) track by $index" >
+                            <span class="operation">
+                                <input ng-model="scope.isChecked" class="stCheckbox" type="checkbox"/>&nbsp;&nbsp;选择
+                            </span>
+                            <span class="activename" ng-mouseenter="displayAll($event)" ng-mouseleave="hideAll($event)" ng-bind="scope.moduleName"></span>
+                            <span class="functionName">
+                                <div style="display: inline-block;margin-right: 10px" ng-repeat="permission in scope.permissions" ng-bind="permission.permissionName"></div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="activeselect_footer">
+                    <span class="selects">
+                        <input type="checkbox" class="stCheckbox" ng-model="allChecked" ng-click="getAll($event)"/>&nbsp;&nbsp;全选&nbsp;&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <a ng-click="deleteModule($event)">删&nbsp;除</a>
+                </div>
+            </div>
+        </div>
+
+
+        <h2>备注</h2>
+
+        <div class="offset">
+            <div class="editor clear">
+                  <textarea class="stUeditor" config="normal" name="remark" ng-model="postData.remark"
+                            style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+        </div>
+        <div th:if="${viewForm.id} == null">
+            <button type="button" th:attr="url=@{/company/add}"
+                    ng-click="submit($event)"
+                    class="red"
+                    style='margin:20px 10px 20px'>添&nbsp;&nbsp;&nbsp;&nbsp;加
+            </button>
+        </div>
+        <div th:if="${viewForm.id} != null">
+            <button type="button" ng-click="delete($event)" class="gray delButton"
+                    style='margin:20px 10px 20px 575px'>删&nbsp;&nbsp;&nbsp;&nbsp;除
+            </button>
+            <button type="button" th:attr="url=@{/company/edit}"
+                    ng-click="submit($event)"
+                    class="red"
+                    style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新
+            </button>
+        </div>
+    </form>
+</div>
+<div class="popover bottom">
+    <div class="arrow" style="left:50%;"></div>
+    <div class="map_title">
+        地址：<input class="map_address" type="text" readonly="readonly"/>
+				<span style="float:right;margin-right:10px;">
+					<span></span>
+					<button type="button" style="background-color:#43a047">重新定位</button>
+					<button type="button">关闭</button>
+				</span>
+    </div>
+    <div id="map"></div>
+</div>
+<script type="text/ng-template" id="scope.html">
+    <div class="dialog_header">
+        <form>
+            <input ng-model="postData.name" name="name" type="text" />
+            <button ng-click="search($event)">搜&nbsp;&nbsp;索</button>
+            <input type="hidden" name="index" />
+            <input type="hidden" name="size"/>
+        </form>
+    </div>
+    <div class="dialog_content">
+        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/scope/scopes" tabindex="5000" style="overflow: hidden; outline: none;">
+            <table>
+                <tbody>
+                <tr ng-repeat = 'item in items'>
+                    <td style="width:5%;">
+                        <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item" ng-value="item" class="stRadio" type="radio" />
+                    </td>
+                    <td style="width:40%;">
+                        <div ng-bind="item.scopeName"></div>
+                    </td>
+                </tr>
+                </tbody>
+                <div ng-if="empty" style="margin: 40px auto;width: 190px;">无数据，请修改搜索条件搜索</div>
+            </table>
+        </div>
+    </div>
+    <div class="dialog_footer">
+        <div class="ops">
+            <a href="#" ng-click="cancel()">取&nbsp;&nbsp;消</a>
+            <button ng-click="ok()">确认添加</button>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="activeProducts.html">
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+    <div class="dialog_header" >
+        <div class="search_group">
+            <div class="input_unit">
+                模块名称&nbsp;&nbsp;<input type="text" ng-model="postData.name" style="width:220px;"/>
+            </div>
+            <div class="input_unit">
+                功能名称&nbsp;&nbsp;<input type="text" ng-model="postData.permissionName" style="width:230px;"/>
+            </div>
+        </div>
+        <button type="button" class="searchBtn" ng-click="search($event)">搜&nbsp;&nbsp;&nbsp;索</button>
+    </div>
+    <div class="dialog_content" style="position:relative;">
+        <div class="container_main">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style='width:7%'>操作</th>
+                    <th style='width:20%'>模块名称</th>
+                    <th style='width:73%'>功能名称</th>
+                </tr>
+                </thead>
+            </table>
+            <div class="grid">
+                <table class="table">
+                    <tbody style="overflow:hidden;height:307px;">
+                    <tr ng-repeat="module in modules track by $index" ng-cloak="">
+                        <td style='width:7%'>
+                            <input class="chooseCheckbox stCheckbox" ng-model="module.isSelected" type="checkbox"/>
+                        </td>
+                        <td style='width:20%' ng-bind="module.moduleName"></td>
+                        <td style='width:73%'>
+                            <span style="margin-right: 10px" ng-repeat="permission in module.permissions track by $index" ng-bind="permission.permissionName"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="table_footer">
+            <div class="selects">
+                <input type="checkbox" class="stCheckbox"  ng-class="{selected:flag}" ng-model="allSelected"
+                       ng-click="checkAll($event)"/>&nbsp;&nbsp;全选&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" ng-model="inverseSelected" class="stCheckbox"  ng-click="inverse($event)"/>&nbsp;&nbsp;反选
+            </div>
+            <div class="ops">
+                <a href="#" ng-click="cancel()">取&nbsp;&nbsp;消</a>
+                <button ng-click="ok()">确认添加</button>
+            </div>
+        </div>
+    </div>
+    <div class="dialog_footer"></div>
+    </html>
+</script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/kindeditor/kindeditor.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zh_CN.js}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=v7cmA7sPIOlhyVGISwFzQZqy"></script>
+<script type="text/javascript" th:src="@{/static/lib/resources.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ngClip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ZeroClipboard.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
+    Array.prototype.del = function (idx) {
+        if (isNaN(idx) || idx > this.length) return false;
+        for (var i = 0, n = 0; i < this.length; i++) {
+            if (i != idx) {
+                this[n++] = this[i];
+            }
+        }
+        this.length -= 1;
+    }
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller('companyController', ['$scope', '$http', 'ngSubmit', 'stModal', 'areas', 'gpsLocation', function ($scope, $http, ngSubmit, stModal, areas, gpsLocation) {
+        var permission = [[${permission}]];
+        if (permission == 'detail') {
+            setTimeout(function () {
+                $('input[type=text]').attr("readonly", true).unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('select').attr('disabled', 'disabled').unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('.input_group').find('ul').css('display', 'none').parent('div').css({display: 'none', opacity: 0});
+            }, 0);
+        }
+        $scope.queryScopes = [];
+        $scope.areajson = areas;
+        $scope.postData = {
+            name: [[${viewForm.name}]] || '',
+            address: [[${viewForm.address}]] || '',
+            remark: [[${viewForm.remark}]] || '',
+            contacts: [[${viewForm.contacts}]] || '',
+            mobile: [[${viewForm.mobile}]] || '',
+            fax: [[${viewForm.fax}]] || '',
+            email: [[${viewForm.email}]] || '',
+            link: [[${viewForm.link}]] || '',
+            version: [[${viewForm.version}]] || 0,
+            id: [[${viewForm.id}]],
+            scopes: [[${viewForm.scopes}]] || []
+        };
+        $scope.isChecked = false;//是否选中的初始值
+        $scope.allChecked = false;
+        $scope.displayAll = function (event) {
+            angular.element(event.target).removeClass('ellipsis');
+        };
+        $scope.hideAll = function (event) {
+            angular.element(event.target).addClass('ellipsis');
+        };
+        $scope.getAll = function (event) {
+            var isAllChecked = !$scope.allChecked;
+            angular.forEach($scope.queryScopes, function (scope, index) {
+                scope.isChecked = isAllChecked;
+            });
+        };
+        $scope.deleteModule = function (event) {
+            var length = $scope.postData.scopes.length;
+            for (var i = 0; i < length; i++) {
+                if ($scope.postData.scopes[i].isChecked) {
+                    $scope.postData.scopes.del(i);
+                    length -= 1;
+                    i -= 1;
+                }
+            }
+        };
+        $scope.removeRepeat = function (existObj, resultsObj) {
+            angular.forEach(existObj, function (exist, key) {
+                angular.forEach(resultsObj, function (result, index) {
+                    if (result.moduleId === exist.moduleId) {
+                        resultsObj.del(index);
+                        index -= 1;
+                    }
+                });
+            });
+            return Array.prototype.concat(existObj, resultsObj);
+        };
+        $scope.bodyScroll = function (status) {
+            $(document.body).css({'overflow': status});
+        };
+        $scope.location = function () {
+            var locationObject;
+            var d = gpsLocation.gps($scope.destinationName, $scope.postData.address);
+            d.then(function () {
+                locationObject = gpsLocation.getGps();
+                $scope.locationStatus = locationObject.status;
+                $scope.postData.latitude = locationObject.lat;
+            }, function () {
+                locationObject = gpsLocation.getGps();
+                $scope.locationStatus = locationObject.status;
+                $scope.postData.longitude = locationObject.lng;
+                $scope.postData.latitude = locationObject.lat;
+            });
+        };
+        $scope.openScopeName = function(e) {
+            e.preventDefault();
+            stModal({
+                templateUrl : 'scope.html',
+                controller: 'scopeCtrl',
+                ok: function(selectedItem) {
+                    $scope.postData.scopeName = selectedItem.scopeName;
+                    $scope.postData.scopes = selectedItem.moduleQueryList;
+                },
+                cancel: function() {
+                }
+            });
+        }
+        $scope.openModule = function(e) {
+            e.preventDefault();
+            $scope.bodyScroll('hidden');
+            stModal({
+                templateUrl : 'activeProducts.html',
+                controller: 'apController',
+                ok: function(results) {
+                    angular.element('.activelist').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+                    angular.forEach(results, function (obj, key) {
+                        obj.isChecked = $scope.isChecked;
+                    });
+                    if ($scope.postData.scopes != null) {
+                        var scopes = $scope.postData.scopes;
+                        $scope.postData.scopes = $scope.removeRepeat(scopes, results);
+                    } else {
+                        $scope.postData.scopes = results;
+                    }
+                    angular.element('.activelist').getNiceScroll().resize();
+                    $scope.bodyScroll('auto');
+                },
+                cancel: function() {
+                    $scope.bodyScroll('auto');
+                }
+            });
+        };
+        $scope.submit = function (event) {
+            ngSubmit({
+                ele: event.target,
+                data: $scope.postData,
+                form: $scope.form,
+                success: function (data) {
+                    setTimeout(function () {
+                        location.href = data.jumpUrl;
+                    }, 3000);
+                },
+                error: function (data) {
+                    $scope.errorTips = data.tip;
+                }
+            });
+        };
+        $scope.delete = function (event) {
+            angular.element(event.target).attr('disabled', 'disabled');
+            $.alertMsg.confirm({
+                title: '确认删除？',
+                detailed: '该操作是不可逆的，是否仍然继续？',
+                no: '取  消',
+                yes: '确认删除',
+                delay: '500',
+                confirm: function () {
+                    $http.post('/company/delete/' + $scope.postData.id).success(function (data) {
+                        if (data.code == 0) {
+                            setTimeout(function () {
+                                location.href = data.jumpUrl;
+                            }, 3000);
+                            $.alertMsg.alert({
+                                title: data.msg,
+                                detailed: '此提示5秒后关闭',
+                                type: 'success'
+                            })
+                        } else {
+                            $.alertMsg.alert({
+                                title: data.detail,
+                                detailed: '此提示5秒后关闭'
+                            })
+                            angular.element(event.target).attr('disabled', false);
+                        }
+                    })
+                },
+                cancel: function () {
+                    angular.element(event.target).attr('disabled', false);
+                }
+            })
+        };
+    }]);
+    // 权限范围
+    app.controller('scopeCtrl', function ($scope, $modalInstance,$http) {
+        $scope.postData = {'name':'','index':1,'size':10};
+        $scope.items = [];
+        $scope.selected = false;
+        $scope.empty = false;
+        $scope.search = function(event){
+            $scope.postData.index = 1;
+            $scope.items = [];
+            $scope.empty = false;
+            angular.element('.dialog_content .grid').niceScroll({cursorborder:'',cursorcolor:'#000',cursoropacitymax:'0.5'});
+            var $this = angular.element(event.target).attr('disabled','disabeld');
+            $http.post('/scope/scopes',$scope.postData).success(function(data){
+                $this.attr('disabled',false);
+                if(data.code==0){
+                    $scope.items = data.data;
+                    $scope.postData.index += 1;
+                    $scope.index = 'false';
+                    angular.element('.dialog_content .grid').getNiceScroll().resize();
+                }else if(data.code==2){
+                    $scope.empty =true;
+                }
+            }).error(function(){
+                $this.attr('disabled',false);
+            })
+        };
+        $scope.index = 'false';
+        $scope.checked =function(index){
+            $scope.index = index;
+        };
+        $scope.ok = function () {
+            if($scope.selected == false){
+                $.alertMsg.alert({
+                    title : '请至少选择一项',
+                    detailed : '此提示5秒后关闭'
+                })
+            }else{
+                $modalInstance.close($scope.selected);
+            }
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    });
+    app.controller('apController', ['$scope', '$modalInstance', 'ngSubmit', '$http', function ($scope, $modalInstance, ngSubmit, $http) {
+        $scope.postData = {
+            name: '',
+            permissionName: ''
+        };
+        $scope.modules = [];
+        $scope.search = function (event) {
+            angular.element(event.target).attr('disabled', true);
+            $http.post('/module/modules', $scope.postData).success(function (data) {
+                if (data.code == 0) {
+                    $scope.modules = data.data.list;
+                    angular.element(event.target).attr('disabled', false);
+                    angular.element('.dialog_content .grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+                } else {
+                    $.alertMsg.alert({
+                        title: data.msg,
+                        detailed: '此提示5秒后关闭',
+                        button: '关闭',
+                        delay: 500,
+                        type: 'fail'
+                    });
+                    angular.element(event.target).attr('disabled', false);
+                }
+            }).error(function (data) {
+                $.alertMsg.alert({
+                    title: data.msg,
+                    detailed: '网络异常，请重试！',
+                    button: '关闭',
+                    delay: 500,
+                    type: 'fail'
+                });
+                angular.element(event.target).attr('disabled', false);
+            });
+        };
+        $scope.index = 'false';
+        $scope.selects = null;
+        $scope.allSelected = null;
+        $scope.inverseSelected = null;
+        $scope.flag = false;
+        var isAllSelected;
+
+        $scope.focus = function (event) {
+            angular.element('span.erorrTip').css('display', 'none');
+        };
+
+        $scope.checkAll = function (event) {
+            isAllSelected = $scope.allSelected ? false : true;
+            angular.forEach($scope.modules, function (module, index) {
+                module.isSelected = isAllSelected;
+            });
+            if ($scope.inverseSelected) {
+                $scope.inverseSelected = !$scope.inverseSelected;
+            }
+        };
+
+        $scope.inverse = function (event) {
+            if (!$scope.inverseSelected) {
+                angular.forEach($scope.modules, function (module, index) {
+                    module.isSelected = !module.isSelected;
+                });
+            }
+            if ($scope.allSelected) {
+                $scope.allSelected = !$scope.allSelected;
+            }
+        };
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+        $scope.ok = function () {
+            $scope.selected = [];
+            angular.forEach($scope.modules, function (obj, key) {
+                if (obj.isSelected) {
+                    $scope.selected.push(obj);
+                }
+            });
+            $modalInstance.close($scope.selected);
+        }
+    }]);
+    //    ]]>
+</script>
+</body>
+</html>

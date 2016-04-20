@@ -49,15 +49,15 @@
 
     <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
         <property name="templateResolver" ref="templateResolver"/>
-        <!--<property name="additionalDialects">-->
-            <!--<set>-->
-                <!--<bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>-->
-            <!--</set>-->
-        <!--</property>-->
+        <property name="additionalDialects">
+            <set>
+                <bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>
+            </set>
+        </property>
     </bean>
 
-    <bean class="com.simpletour.util.framework.init.ThymeleafInitializer">
-        <property name="contentType" value="text/html;charset=UTF-8"/>
+    <bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <!--<property name="contentType" value="text/html;charset=UTF-8"/>-->
         <property name="templateEngine" ref="templateEngine"/>
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
@@ -82,7 +82,6 @@
     <mvc:resources mapping="/static/css/**" location="/static/css/" cache-period="1"/>
     <mvc:resources mapping="/static/js/**" location="/static/js/" cache-period="1"/>
     <mvc:resources mapping="/static/images/**" location="/static/images/" cache-period="1"/>
-    <!--<mvc:resources mapping="/robots.txt" location="/robots.txt" order="0"/>-->
     <mvc:resources mapping="/static/**" location="/static/"/>
 
     <!--配置异常处理机制-->

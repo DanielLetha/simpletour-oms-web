@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,10 +64,9 @@ public class CompanyForm extends BaseForm {
 
     //权限范围的id
     @Valid
-    @Size(min=1,message = "{pms.company.scope.size}")
     private List<CompanyScopeForm> scopes = new ArrayList<>();
 
-    private int version;
+    private Integer version;
 
     public static CompanyForm toCompanyForm(Company company){
         CompanyForm companyForm = new CompanyForm();
@@ -98,7 +96,7 @@ public class CompanyForm extends BaseForm {
                 ArrayList<CompanyPermissionForm> permissionForms = new ArrayList<>();
                 for (Permission permission : permissions){
                     permissionForms.add(new CompanyPermissionForm(){{
-                        setPermissionId(String.valueOf(permission.getId()));
+                        setPermissionId(permission.getId());
                         setPermissionName(permission.getName());
                     }});
                 }
@@ -114,11 +112,11 @@ public class CompanyForm extends BaseForm {
         Company company = new Company();
         if (this.getMode().equals(FormModeType.UPDATE.getValue())) {
             company.setId(this.getId());
+            company.setVersion(this.getVersion());
         }
         company.setName(this.getName());
         company.setAddress(this.getAddress());
         company.setRemark(this.getRemark());
-        company.setVersion(this.getVersion());
         company.setContacts(this.getContacts());
         company.setMobile(this.getMobile());
         company.setFax(this.getFax());
@@ -128,9 +126,9 @@ public class CompanyForm extends BaseForm {
         for (CompanyScopeForm scopeForm : this.scopes) {
             for (CompanyPermissionForm permissionForm:scopeForm.getPermissions()){
                 Permission permission = new Permission();
-                permission.setId(Long.valueOf(permissionForm.getPermissionId()));
+                permission.setId(permissionForm.getPermissionId());
                 Module module = new Module();
-                module.setId(Long.valueOf(scopeForm.getModuleId()));
+                module.setId(scopeForm.getModuleId());
                 permission.setModule(module);
                 permissions.add(permission);
             }
@@ -211,11 +209,11 @@ public class CompanyForm extends BaseForm {
         this.scopes = scopes;
     }
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 }

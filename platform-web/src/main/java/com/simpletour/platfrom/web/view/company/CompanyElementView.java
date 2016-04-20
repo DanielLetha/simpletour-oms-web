@@ -22,7 +22,7 @@ public class CompanyElementView extends BaseElementView<Company> {
     private String address;
 
     /**
-     * 供呢个名称
+     * 功能名称
      *  初始化或未使用功能名称搜索时，列表字段展示“......”，当使用功能名称搜索时，展示搜索的功能名称；
      */
     private String permissionName;
@@ -37,10 +37,16 @@ public class CompanyElementView extends BaseElementView<Company> {
             this.address = company.getAddress();
             this.buttManName = company.getContacts();
             if (query.getPermissionName() == null || "".equals(query.getPermissionName())){
-                this.permissionName = "......";
+                this.permissionName = "... ...";
             } else {
-                //只有底层代码不出错,公司权限集合中肯定包含作为查询条件的功能名称
-                this.permissionName = query.getPermissionName();
+              /*  只有底层代码不出错,公司权限集合中肯定包含作为查询条件的功能名称，不过最好还是判断一下，
+                  如果页面什么都不显示说明底层程序出错
+              */
+                if (company.getPermissions() != null && !company.getPermissions().isEmpty()){
+                    if (company.getPermissions().stream().anyMatch(permission -> query.getPermissionName().equals(permission.getName()))){
+                        this.permissionName = query.getPermissionName();
+                    }
+                }
             }
         }
     }

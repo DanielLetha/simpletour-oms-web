@@ -1,5 +1,6 @@
 package com.simpletour.platfrom.web.view.module;
 
+
 import com.simpletour.domain.company.Module;
 import com.simpletour.platfrom.web.view.permission.PermissionQueryElementView;
 
