@@ -5,27 +5,26 @@
         简途旅行核心管理系统
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link th:href="@{/static/images/logo.ico}" th:mce_href="images/tab_icon.ico" rel="icon" type="image/x-icon"/>
-    <link rel="stylesheet" th:href="@{/static/css/main_a340c41.css}"/>
+    <link th:href="@{/static/images/logo.ico}" th:mce_href="images/tab_icon.ico" rel="icon" type="image/x-icon" />
+    <link rel="stylesheet" th:href="@{/static/css/main_a340c41.css}" />
 </head>
 <body style="display:table;">
 <div class="login" ng-controller="login">
     <div class="loginimg">
         <img th:src="@{/static/images/login.png}"/>
     </div>
-    <div class="login_error" ng-show='msgStatus' th:text="${msg}">
+    <!--<div class="login_error" ng-show='msgStatus' th:text="${msg}">-->
 
-    </div>
-    <div th:if="${errorInfo}!=null" class="login_error" th:text="${errorInfo}">
-
+    <!--</div>-->
+    <div ng-show="msg != ''" class="login_error" ng-bind="msg">
     </div>
     <div class="login_content">
-        <form th:action="@{/login}" th:object="${loginForm}" th:method="post">
+        <form>
             <div>用户名</div>
-            <div><input type="text" th:field="*{userName}" ng-model="usr.jobNO"/></div>
+            <div><input type="text" name="username" ng-blur="checkUsername()" ng-model="usr.jobNO" /></div>
             <div>密码</div>
-            <div><input type="password" th:field="*{password}" ng-model="usr.password"/></div>
-            <button type="submit">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+            <div><input type="password" name="password" ng-model="usr.password" ng-blur="checkPassword()"/></div>
+            <button ng-click="loginSubmit()">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
             <input type="hidden" name="rememberMe" ng-value="usr.rememberMe"/>
         </form>
     </div>
@@ -36,20 +35,70 @@
     </div>
 </div>
 <script type="text/javascript" th:src="@{/static/lib/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/lib/iframe.js}"></script>
-<script type="text/javascript" th:src="@{/static/lib/md5.min.js}"></script>
+<script type="text/javascript"  th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript"  th:src="@{/static/lib/iframe.js}"></script>
+<script type="text/javascript"  th:src="@{/static/lib/md5.min.js}"></script>
 </body>
-<script type="text/javascript">
-    var loginApp = angular.module('loginApp', []);
-    loginApp.controller('login', ['$scope', '$http', function ($scope, $http) {
-        $scope.usr = {jobNO: '', password: '', rememberMe: false}
-        $scope.msgStatus = false;
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
+    var loginApp = angular.module('loginApp',[]);
+    loginApp.controller('login',['$scope','$http',function($scope, $http){
+        $scope.usr = { jobNO : '', password : '', rememberMe : false}
         $scope.msg = '';
-        $scope.disabled = false;
-        $scope.checkboxClick = function () {
+        $scope.isNameOk = false;
+        $scope.isPasswdOk = false;
+        $scope.checkboxClick = function(){
             $scope.usr.rememberMe = !$scope.usr.rememberMe;
         }
+
+        $scope.checkUsername = function() {
+            var len = $scope.usr.jobNO.length;
+            if (len < 6 || len > 20) {
+                $scope.msg = "登录名长度必须在6-20位之间";
+                $scope.isNameOk = false;
+            } else {
+                $scope.msg = '';
+                $scope.isNameOk = true;
+            }
+        }
+        $scope.checkPassword = function() {
+            if ($scope.isNameOk) {
+                var len = $scope.usr.password.length;
+                if (len < 6 || len > 64) {
+                    $scope.msg = "密码长必须在6-64位之间";
+                    $scope.isPasswdOk = false;
+                } else {
+                    $scope.msg = '';
+                    $scope.isPasswdOk = true;
+                }
+            } else {
+                $scope.checkUsername();
+            }
+        }
+        $scope.loginSubmit = function() {
+            $scope.checkUsername();
+            $scope.checkPassword();
+            if ($scope.isNameOk && $scope.isPasswdOk) {
+                $http.post('/login', {
+                    username: $scope.usr.jobNO,
+                    password: md5($scope.usr.password),
+                    rememberMe: $scope.usr.rememberMe
+                }).success(function(data){
+                    if(data.code==0){
+                        location.href = data.jumpUrl;
+                    } else {
+                        $scope.msg = data.msg;
+                    }
+                }).error(function() {
+                    alert.alert({
+                        content: '网络异常，请重试！'
+                    });
+                });
+            } else {
+                location.reload();
+            }
+        }
     }])
+    //    ]]>
 </script>
 </html>

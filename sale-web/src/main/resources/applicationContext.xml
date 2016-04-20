@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
-            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
 
     <!--配置扫描类包-->
     <context:component-scan base-package="com.simpletour">
@@ -11,20 +13,16 @@
         <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
-    <!--加载配置文件-->
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:db.properties</value>
-                <value>classpath:config.properties</value>
-                <value>classpath:validationMessage.properties</value>
-            </list>
-        </property>
-        <property name="fileEncoding" value="utf-8"/>
-    </bean>
+    <!-- 激活自动代理功能 -->
+    <aop:aspectj-autoproxy/>
+
+    <!--加载数据库配置文件-->
+    <context:property-placeholder
+            location="classpath:db.properties,classpath:config.properties,classpath:validationMessage.properties"/>
 
     <!--配置数据源-->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" scope="singleton">
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close" scope="singleton">
         <property name="driverClassName" value="${db.driver}"/>
         <property name="url" value="${db.jdbcURL}"/>
         <property name="username" value="${db.username}"/>
@@ -42,7 +40,6 @@
         <property name="packagesToScan">
             <array>
                 <value>com.simpletour.domain</value>
-                <!--<value>com.simpletour.common.core.domain</value>-->
                 <value>com.simpletour.commons.data.domain</value>
             </array>
         </property>
@@ -61,5 +58,15 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">/withoutpermission</prop>
+            </props>
+        </property>
+        <property name="order" value="-1"/>
+    </bean>
+
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false"/>
+
 </beans>
