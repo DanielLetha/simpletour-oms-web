@@ -9,14 +9,15 @@
     <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/static/lib/main.css}"/>
     <style>
-        .add{
+        .add {
             display: inline-block;
             margin-left: 104px;
             margin-top: 27px;
             text-decoration: underline;
             color: #d84527;
         }
-        .permission_item{
+
+        .permission_item {
             position: relative;
             width: 371px;
             height: 175px;
@@ -25,60 +26,62 @@
             padding-top: 1px;
             margin-bottom: 20px;
         }
+
         .delete {
             position: absolute;
-            top:84px;
-            right:19px;
+            top: 84px;
+            right: 19px;
             color: #d84527;
         }
     </style>
 </head>
 <body>
 <div class="header" th:include="fragments :: iframe_header"/>
-<div class="iframe_content" ng-controller="moduleController">
-    <form th:action="@{/module/add}" name="form" novalidate="novalidate"  method="post">
+<div class="iframe_content" ng-controller="refundPolicyController">
+    <form th:action="@{/refundPolicy/add}" name="form" novalidate="novalidate" method="post">
         <h2>基础信息</h2>
         <div class="offset">
             <div class="input_group">
-                <label>模块名称</label>
+                <label>模板名称</label>
                 <div class="cutline"></div>
-                <span><input type="text" dy-name="module_name" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位" validate-len-max="20" validate-len-max-msg="最大20位" validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.name"/></span>
+                <span><input type="text" dy-name="refundPolicy_name" class="stValidate" validate-len-min="2"
+                             validate-len-min-msg="最小2位" validate-len-max="20" validate-len-max-msg="最大20位"
+                             validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.name"/></span>
             </div>
         </div>
+
+        <h2>下单规则信息</h2>
+
+        <h2>退款规则信息</h2>
         <div class="offset">
-            <div class="input_group">
-                <label>域名</label>
-                <div class="cutline"></div>
-                <span><input type="text" dy-name="domain" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位" validate-len-max="50" validate-len-max-msg="最大50位" validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.domain"/></span>
-            </div>
-        </div>
-        <h2>功能信息</h2>
-        <div class="offset">
-            <div class="permission_item" ng-repeat="permission in postData.permissionFormList track by $index" >
-                <a ng-click="delete_permission($event,$index)" class="delete" th:href="@{/module/permission/delete/}">删&nbsp;&nbsp;除</a>
-                <div class="input_group">
-                    <label>功能名称</label>
-                    <div class="cutline"></div>
-                    <span><input type="text" dy-name="'name'+$index" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位" validate-len-max="20" validate-len-max-msg="最大20位" validate-not-blank-msg="不能为空" trigger="focus" ng-model="permission.name"/></span>
-                </div>
-                <div class="input_group">
-                    <label>路径</label>
-                    <div class="cutline"></div>
-                    <span><input type="text" dy-name="'path'+$index" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位" validate-len-max="50" validate-len-max-msg="最大50位" validate-not-blank-msg="不能为空" trigger="focus" ng-model="permission.path"/></span>
-                </div>
-                <div class="input_group">
-                    <label>功能代码</label>
-                    <div class="cutline"></div>
-                    <span><input type="text" dy-name="'code'+$index" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位" validate-len-max="50" validate-len-max-msg="最大50位" validate-not-blank-msg="不能为空" trigger="focus" ng-model="permission.code"/></span>
-                </div>
-            </div>
+
             <a ng-click="add()" class="add">添加功能</a>
         </div>
 
-        <button th:if="${viewForm.id}==null" th:attr="url=@{/module/add}"  type="button" class="red" style='margin:20px 10px 20px 675px' ng-click="submit($event)">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
+        <h2>其他信息</h2>
+
+        <div class="offset">
+            <div class="editor clear" th:if="${permission} != 'detail'">
+                  <textarea class="stUeditor" config="normal" name="remark" ng-model="postData.remark"
+                            style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+            <div class="editor clear" th:if="${permission} == 'detail'">
+                  <textarea class="stUeditor" setdisabled="true" config="normal" name="remark"
+                            ng-model="postData.remark"
+                            style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+        </div>
+
+        <button th:if="${viewForm.id}==null" th:attr="url=@{/refundPolicy/add}" type="button" class="red"
+                style='margin:20px 10px 20px 675px' ng-click="submit($event)">添&nbsp;&nbsp;&nbsp;&nbsp;加
+        </button>
         <div th:if="${viewForm.id} != null">
-            <button type="button" th:attr="url=@{/module/delete}" ng-click="delete($event)" class="gray delButton" style='margin:20px 10px 20px 575px'>删&nbsp;&nbsp;&nbsp;&nbsp;除</button>
-            <button type="button" th:attr="url=@{/module/edit}" ng-click="submit($event)" class="red"  style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新</button>
+            <button type="button" th:attr="url=@{/refundPolicy/delete}" ng-click="delete($event)" class="gray delButton"
+                    style='margin:20px 10px 20px 575px'>删&nbsp;&nbsp;&nbsp;&nbsp;除
+            </button>
+            <button type="button" th:attr="url=@{/refundPolicy/edit}" ng-click="submit($event)" class="red"
+                    style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新
+            </button>
         </div>
     </form>
 </div>
@@ -100,49 +103,51 @@
 
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
-    var app = angular.module('app',['ngPlugin']);
-    app.controller('moduleController',['$scope','$http','ngSubmit','$modal','gpsLocation',function($scope,$http,ngSubmit,$modal,gpsLocation){
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller('refundPolicyController', ['$scope', '$http', 'ngSubmit', '$modal', 'gpsLocation', function ($scope, $http, ngSubmit, $modal, gpsLocation) {
         var permission = [[${permission}]];
-        if(permission == 'detail') {
-            setTimeout(function() {
-                $('input[type=text]').attr("readonly",true).unbind('focus').unbind('mouseenter').css('color','#9b9b9b');
-                $('select').attr('disabled','disabled').unbind('focus').unbind('mouseenter').css('color','#9b9b9b');
-                $('.input_group').find('ul').css('display','none').parent('div').css({display:'none',opacity: 0});
-            },0);
+        if (permission == 'detail') {
+            setTimeout(function () {
+                $('input[type=text]').attr("readonly", true).unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('select').attr('disabled', 'disabled').unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('.input_group').find('ul').css('display', 'none').parent('div').css({display: 'none', opacity: 0});
+            }, 0);
         }
         $scope.postData = {
             name: [[${viewForm.name}]] || "",
-            domain:[[${viewForm.domain}]]||"",
+            deadline: [[${viewForm.deadLine}]] || 0,
+            instruction:[[${viewForm.instruction}]]||"",
+            remark:[[${remark}]],
             version: [[${viewForm.version}]] || 0,
             id: [[${viewForm.id}]],
-            permissionFormList:[[${viewForm.permissionFormList}]]||[{name:"",code:"",path:"",version:0}]
+            refundRuleForms: [[${viewForm.refundRuleForms}]] || [{timing: 0, ration: 0, version: 0}]
         };
-        $scope.add=function(){
-            var obj={name:"",code:"",path:"",version:0};
-            $scope.postData.permissionFormList.push(obj);
+        $scope.add = function () {
+            var obj = {name: "", code: "", path: "", version: 0};
+            $scope.postData.refundRuleForms.push(obj);
         };
         // 删除
-        $scope.delete_permission = function(e,index) {
+        $scope.delete_permission = function (e, index) {
             e.preventDefault();
-            $scope.postData.permissionFormList.splice(index,1);
+            $scope.postData.refundRuleForms.splice(index, 1);
         };
-        $scope.submit = function(event){
+        $scope.submit = function (event) {
             ngSubmit({
                 ele: event.target,
                 data: $scope.postData,
-                form:  $scope.form,
-                success : function(data){
-                    setTimeout(function(){
+                form: $scope.form,
+                success: function (data) {
+                    setTimeout(function () {
                         location.href = data.jumpUrl;
-                    },3000);
+                    }, 3000);
                 },
-                error: function(data){
+                error: function (data) {
                     $scope.errorTips = data.tip;
                 }
             });
         };
-        $scope.delete = function(event){
-            angular.element(event.target).attr('disabled','disabled');
+        $scope.delete = function (event) {
+            angular.element(event.target).attr('disabled', 'disabled');
             $.alertMsg.confirm({
                 title: '确认删除？',
                 detailed: '该操作是不可逆的，是否仍然继续？',
@@ -150,22 +155,22 @@
                 yes: '确认删除',
                 delay: '500',
                 confirm: function () {
-                    $http.post('/module/delete/'+$scope.postData.id).success(function(data){
-                        if(data.code == 0){
-                            setTimeout(function(){
+                    $http.post('/refundPolicy/delete/' + $scope.postData.id).success(function (data) {
+                        if (data.code == 0) {
+                            setTimeout(function () {
                                 location.href = data.jumpUrl;
-                            },3000);
+                            }, 3000);
                             $.alertMsg.alert({
-                                title : data.msg,
-                                detailed : '此提示5秒后关闭',
-                                type:'success'
+                                title: data.msg,
+                                detailed: '此提示5秒后关闭',
+                                type: 'success'
                             })
-                        }else{
+                        } else {
                             $.alertMsg.alert({
-                                title : data.detail,
-                                detailed : '此提示5秒后关闭'
+                                title: data.detail,
+                                detailed: '此提示5秒后关闭'
                             })
-                            angular.element(event.target).attr('disabled',false);
+                            angular.element(event.target).attr('disabled', false);
                         }
                     })
                 },
