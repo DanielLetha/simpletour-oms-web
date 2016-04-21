@@ -83,7 +83,7 @@ public class RoleController extends BaseController {
         if (null == page || page.getDomains().isEmpty()) {
             return BaseDataResponse.noData();
         } else {
-            return BaseDataResponse.ok().data(page);
+            return BaseDataResponse.ok().data(page.getDomains());
         }
     }
 
