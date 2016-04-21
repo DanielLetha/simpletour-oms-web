@@ -112,7 +112,6 @@ public class SaleAppController extends BaseController {
         }
         try{
             saleAppService.deleteSaleApp(Long.valueOf(id));
-
         }catch (BaseSystemException e) {
             return BaseDataResponse.fail().msg(BaseAction.DEL_FAIL(DOMAIN).getTitle()).detail(e.getMessage());
         }
