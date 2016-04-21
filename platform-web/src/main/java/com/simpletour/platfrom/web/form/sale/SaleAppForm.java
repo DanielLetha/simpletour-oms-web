@@ -25,7 +25,7 @@ public class SaleAppForm extends BaseForm {
      * 销售端名称
      */
     @NotBlank(message = "{pms.saleApp.name.notnull}")
-    @Length(min = 2,max = 32,message = "{pms.saleApp.name.length}")
+    @Length(min = 2,max = 20,message = "{pms.saleApp.name.length}")
     private String name;
     /**
      * 对接人
