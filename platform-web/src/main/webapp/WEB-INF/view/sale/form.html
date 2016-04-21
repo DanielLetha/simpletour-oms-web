@@ -10,13 +10,15 @@
     <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
     <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
     <style>
-        .iframe_content .input_group label{
+        .iframe_content .input_group label {
             width: 72px;
         }
-        .iframe_content .input_group input{
+
+        .iframe_content .input_group input {
             width: 245px;
         }
-        .iframe_content .input_group{
+
+        .iframe_content .input_group {
             width: 320px;
         }
     </style>
@@ -49,7 +51,8 @@
                 <label>对接人姓名</label>
                 <div class="cutline"></div>
                 <span>
-                  <input type="text" dy-name="contact" class="stValidate" validate-len-min="2" validate-len-min-msg="最小2位"
+                  <input type="text" dy-name="contact" class="stValidate" validate-len-min="2"
+                         validate-len-min-msg="最小2位"
                          validate-len-max="20" validate-len-max-msg="最大20位"
                          validate-not-blank-msg="不能为空" trigger="focus"
                          ng-model="postData.contact"/>
@@ -59,7 +62,7 @@
                 <label>对接人手机</label>
                 <div class="cutline"></div>
                 <span>
-                    <input type="text" dy-name="mobile" class="stValidate"  validate-mobile-msg="手机号格式不正确"
+                    <input type="text" dy-name="mobile" class="stValidate" validate-mobile-msg="手机号格式不正确"
                            validate-len-max="11" validate-len-max-msg="最大11位"
                            validate-not-blank-msg="不能为空" trigger="focus" ng-model="postData.mobile"/>
                 </span>
@@ -68,7 +71,8 @@
                 <label>对接人传真</label>
                 <div class="cutline"></div>
                 <span>
-                  <input type="text" dy-name="fax" ng-model="postData.fax"/>
+                  <input type="text" name="fax" class="stValidate"
+                         validate-len-max="16" validate-len-max-msg="最大16位" trigger="focus" ng-model="postData.fax"/>
 
                 </span>
             </div>
@@ -77,7 +81,8 @@
                 <div class="cutline"></div>
                 <span>
                     <input type="email" name="email" class="stValidate" validate-email-msg="请确保邮箱格式正确"
-                           trigger="focus"  ng-model="postData.email"/>
+                           validate-len-max="32" validate-len-max-msg="最大32位"
+                           trigger="focus" ng-model="postData.email"/>
 
                 </span>
             </div>
@@ -86,7 +91,9 @@
                 <div class="cutline"></div>
                 <span>
                     <input type="text" name="link"
-                           trigger="focus"  ng-model="postData.link"/>
+                           class="stValidate"
+                           validate-len-max="100" validate-len-max-msg="最大100位"
+                           trigger="focus" ng-model="postData.link"/>
 
                 </span>
             </div>
@@ -155,12 +162,12 @@
         $scope.postData = {
             name: [[${viewForm.name}]] || '',
             contact: [[${viewForm.contact}]] || '',
-            mobile:[[${viewForm.mobile}]] || '',
-            fax:[[${viewForm.fax}]] || '',
-            email:[[${viewForm.email}]] || '',
-            key:[[${viewForm.key}]],
-            secret:[[${viewForm.secret}]],
-            link:[[${viewForm.link}]] || '',
+            mobile: [[${viewForm.mobile}]] || '',
+            fax: [[${viewForm.fax}]] || '',
+            email: [[${viewForm.email}]] || '',
+            key: [[${viewForm.key}]],
+            secret: [[${viewForm.secret}]],
+            link: [[${viewForm.link}]] || '',
             remark: [[${viewForm.remark}]],
             version: [[${viewForm.version}]] || 0,
             id: [[${viewForm.id}]]
