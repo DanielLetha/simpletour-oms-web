@@ -43,18 +43,18 @@ public class SaleAppForm extends BaseForm {
      * 传真
      */
     @Fax(message = "{pms.saleApp.fax.format}")
-    @Length(min = 2,max = 16,message = "{pms.saleApp.fax.length}")
+    @Length(max = 16,message = "{pms.saleApp.fax.length}")
     private String fax;
     /**
      * 邮箱
      */
     @Email(message = "{pms.saleApp.mail.format}")
-    @Length(min = 2,max = 32,message = "{pms.saleApp.email.length}")
+    @Length(max = 32,message = "{pms.saleApp.email.length}")
     private String email;
     /**
      * 其他方式
      */
-    @Length(min = 2,max = 100,message = "{pms.saleApp.link.length}")
+    @Length(max = 100,message = "{pms.saleApp.link.length}")
     private String link;
     /**
      * 备注
