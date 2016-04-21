@@ -48,7 +48,7 @@ public class SaleAppForm extends BaseForm {
     /**
      * 邮箱
      */
-    @Email
+    @Email(message = "{pms.saleApp.mail.format}")
     @Length(min = 2,max = 32,message = "{pms.saleApp.email.length}")
     private String email;
     /**
