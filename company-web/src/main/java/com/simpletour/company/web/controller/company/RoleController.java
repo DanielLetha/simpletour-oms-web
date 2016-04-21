@@ -37,8 +37,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/company/role")
 public class RoleController extends BaseController {
-    //private static final Logger LOGGER = LoggerFactory.getLogger(RoleController.class);
-
     private static final String DOMAIN = "角色";
 
     private static final String MAPPING_URL = "/company/role/";
