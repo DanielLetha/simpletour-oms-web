@@ -61,7 +61,7 @@
         <!--<property name="additionalDialects">-->
             <!--<set>-->
                 <!--<bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>-->
-            <!--</set>-->
+            <!--</set> -->
         <!--</property>-->
     </bean>
 
