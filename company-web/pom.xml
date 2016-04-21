@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.simpletour</groupId>
             <artifactId>simpletour-util-framework</artifactId>
-        </dependency>
+        </dependency> 
 
         <!-- spring -->
         <dependency>
