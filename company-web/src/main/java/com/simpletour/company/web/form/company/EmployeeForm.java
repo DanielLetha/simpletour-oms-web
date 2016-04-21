@@ -17,10 +17,7 @@ import javax.validation.constraints.NotNull;
 public class EmployeeForm extends BaseForm {
     /**
      * 工号
-     * Remark: Modified by shiguanglu@simpletour.com at 2016-4-14
      */
-    //@NotNull(message = "{oms.employee.jobNo.notNull}")
-    //@Length(min = 0, max = 32, message = "{oms.employee.jobNo.length}")
     private Integer jobno;
     /**
      * 姓名
@@ -43,16 +40,15 @@ public class EmployeeForm extends BaseForm {
     private String roleName;
     /**
      * 公司
-     * Remark: Modified by shiguanglu@simpletour.com at 2016-4-14
      */
-    //@NotNull(message = "{oms.employee.company.notNull}")
     private Long companyId;
     private String companyName;
 
     /**
+     * 备注信息
      * Remark: Modified by shiguanglu@simpletour.com at 2016-4-14
      */
-    //@Length(min = 0, max = 10000, message = "{oms.employee.remark.length}")
+    @Length(min = 0, max = 10000, message = "{oms.employee.remark.length}")
     private String remark;
 
     private String avatar;
@@ -71,6 +67,8 @@ public class EmployeeForm extends BaseForm {
         this.roleName = employee.getRole().getName();
         this.companyId = employee.getCompany().getId();
         this.companyName = employee.getCompany().getName();
+        this.avatar = employee.getAvater();
+        this.remark  = employee.getRemark();
         this.version = employee.getVersion();
     }
 
@@ -158,16 +156,12 @@ public class EmployeeForm extends BaseForm {
 
     public Employee as() {
         Employee employee = new Employee();
-        if (this.getMode().equals(FormModeType.ADD.getValue())) {
-            //TODO...设置默认头像地址
-        }
         if (this.getMode().equals(FormModeType.UPDATE.getValue())) {
             employee.setId(this.getId());
             employee.setJobNo(this.getJobno());
-            //TODO...设置头像地址
         }
 
-        employee.setAvater("images/member.jpg");
+        employee.setAvater(this.getAvatar());
         employee.setName(this.getName());
         employee.setMobile(this.getMobile());
         Company company = new Company();

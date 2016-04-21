@@ -1,7 +1,6 @@
 package com.simpletour.company.web.query.support;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.simpletour.commons.data.dao.IBaseDao;
 import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
 import com.simpletour.commons.data.dao.query.condition.Condition;
@@ -140,7 +139,7 @@ public class QueryExt<T extends Object> implements Serializable {
     }
 
     public void setSortByField(ConditionOrderByQuery res) {
-        res.addSortByField("id", IBaseDao.SortBy.DESC);
+//        res.addSortByField("id", IBaseDao.SortBy.DESC);
     }
 
     private void setKeyValue(ConditionSet conditionSet, QueryWord key, Field value) throws IllegalAccessException, InstantiationException {

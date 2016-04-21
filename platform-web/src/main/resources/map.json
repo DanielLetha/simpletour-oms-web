@@ -1,0 +1,13 @@
+{
+    "res": {
+        "css/main.css": {
+            "uri": "/static/css/main_a340c41.css",
+            "type": "css"
+        },
+        "js/ngPlugin-unCompress.js": {
+            "uri": "/static/js/admin/ngPlugin-unCompress.4f7c7e4.js",
+            "type": "js"
+        }
+    },
+    "pkg": {}
+}

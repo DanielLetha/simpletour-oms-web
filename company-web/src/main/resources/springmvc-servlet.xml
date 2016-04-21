@@ -5,7 +5,6 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
             http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.2.xsd
-
             http://www.springframework.org/schema/mvc  http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!--配置扫描的controller-->
@@ -37,6 +36,16 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+                <value>classpath:validationMessage.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
+
     <!--配置Thymeleaf模板引擎和视图解析器-->
     <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/view/"/>
@@ -56,8 +65,8 @@
         <!--</property>-->
     </bean>
 
-    <bean class="com.simpletour.util.framework.init.ThymeleafInitializer">
-        <property name="contentType" value="text/html;charset=UTF-8"/>
+    <bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <!--<property name="contentType" value="text/html;charset=UTF-8"/>-->
         <property name="templateEngine" ref="templateEngine"/>
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
@@ -73,7 +82,7 @@
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basenames" value="classpath:validationMessage.properties"/>
+        <property name="basenames" value="classpath:validationMessage"/>
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 

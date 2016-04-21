@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/module/list}" method="post"
+          style="width: 100%;box-sizing: border-box;padding-right:70px; ">
+        <div class="search_group">
+            <div class="input_group">
+                <input type="text" name="name" placeholder="模块名称" th:value="${query.name}"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="permissionName" placeholder="功能名称" th:value="${query.permissionName}"/>
+            </div>
+        </div>
+        <button type="submit" ng-click="search($event)" class="search">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style='width:5%'>模块编号</th>
+            <th style='width:10%'>模块名称</th>
+            <th style='width:40%'>功能名称</th>
+            <th style='width:5%'>操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+            <tr th:each="module : ${page.getDomains()}">
+                <td th:text="${module.id}"></td>
+                <td th:text="${module.name}"></td>
+                <td ><span style="margin-right: 10px" th:each="permission:${module.permissions}" th:text="${permission.name}"></span></td>
+                <td>
+                    <a th:href="@{'/module/edit/'+${module.id}}">编辑</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table_footer">
+    <a shiro:hasPermssion="permission_add" th:href="@{/module/add}">添加模块</a>
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/tooltip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootpopover.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/date.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/sendMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    // 调用分页函数
+    window.onload = function() {
+        pagination([[${query}]],'/module/list');
+    };
+
+    $(document).ready(function () {
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height() - 212 - $('table thead').height()).getNiceScroll().resize();
+        });
+
+    });
+
+</script>
+</body>
+</html>

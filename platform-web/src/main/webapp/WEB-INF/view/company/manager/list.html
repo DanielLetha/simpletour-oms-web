@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+    <style>
+        .dropdown {
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/company/manager/list}" method="GET"
+          style="width: 100%;box-sizing: border-box;padding-right:170px; ">
+        <div class="input_group">
+            <input type="text" name="companyName" th:value="${query.companyName}" placeholder="所属公司"/>
+        </div>
+        <button type="submit" class="search">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style='width:25%'>公司管理员账号</th>
+            <th style='width:25%'>公司</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+            <tr th:each="manager :${page.domains}">
+                <td style='width:25%' th:text="${manager.jobNo}"></td>
+                <td style='width:25%' th:text="${manager.company.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table_footer">
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/adminlist.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    // 调用分页函数
+    window.onload = function () {
+        pagination([[${query}]], '/company/manager/list');
+    };
+
+    $(document).ready(function () {
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height() - 212 - $('table thead').height()).getNiceScroll().resize();
+        });
+
+    });
+</script>
+</body>
+</html>

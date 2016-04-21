@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -18,15 +17,12 @@ import java.io.IOException;
  */
 @Controller
 public class UploadController {
-    private static final long SIZE_LIMIT = 3 * 1024 * 1024;
-
     @Autowired
     IUploadService uploadService;
 
     @ResponseBody
-    @RequestMapping(value = "/simpletour/images/{table:(?:wechat_product)}", method = RequestMethod.POST)
-    public BaseDataResponse uploadImage(@RequestParam(value = "file", required = false) MultipartFile file, @PathVariable String table, HttpServletRequest
-            request) {
+    @RequestMapping(value = "/simpletour/images/{table:(?:company_employee)}", method = RequestMethod.POST)
+    public BaseDataResponse uploadImage(@RequestParam(value = "file", required = false) MultipartFile file, @PathVariable String table) {
         UpYun yun = null;
         try {
             yun = uploadService.upload("/simpletour/images/" + table + "/" + uploadService.generateFileName(file), file, true);

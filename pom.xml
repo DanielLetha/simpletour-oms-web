@@ -11,6 +11,8 @@
 
     <modules>
         <module>company-web</module>
+        <module>platform-web</module>
+        <!--<module>sale-web</module>-->
     </modules>
 
     <properties>
@@ -21,7 +23,7 @@
         <shiro.version>1.2.4</shiro.version>
         <thymeleaf-spring4>2.1.4.RELEASE</thymeleaf-spring4>
         <servlet.version>3.1.0</servlet.version>
-        <company.version>2.0-SNAPSHOT</company.version>
+        <simpletour.module.version>2.0-SNAPSHOT</simpletour.module.version>
         <simpletour.version>1.0</simpletour.version>
         <jackson.version>2.6.3</jackson.version>
         <hibernate.version>5.1.0.Final</hibernate.version>
@@ -32,12 +34,24 @@
             <dependency>
                 <groupId>com.simpletour.module</groupId>
                 <artifactId>company-service</artifactId>
-                <version>${company.version}</version>
+                <version>${simpletour.module.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.simpletour.module</groupId>
+                <artifactId>sale-service</artifactId>
+                <version>${simpletour.module.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.simpletour.commons</groupId>
                 <artifactId>data</artifactId>
+                <version>${simpletour.common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.simpletour.commons</groupId>
+                <artifactId>util</artifactId>
                 <version>${simpletour.common.version}</version>
             </dependency>
 
@@ -103,31 +117,31 @@
             </dependency>
 
             <!--shiro-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.shiro</groupId>-->
-                <!--<artifactId>shiro-core</artifactId>-->
-                <!--<version>${shiro.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.shiro</groupId>-->
-                <!--<artifactId>shiro-spring</artifactId>-->
-                <!--<version>${shiro.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.shiro</groupId>-->
-                <!--<artifactId>shiro-web</artifactId>-->
-                <!--<version>${shiro.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.shiro</groupId>-->
-                <!--<artifactId>shiro-quartz</artifactId>-->
-                <!--<version>${shiro.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.shiro</groupId>-->
-                <!--<artifactId>shiro-ehcache</artifactId>-->
-                <!--<version>${shiro.version}</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-quartz</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
 
             <!--thymeleaf-->
             <dependency>
