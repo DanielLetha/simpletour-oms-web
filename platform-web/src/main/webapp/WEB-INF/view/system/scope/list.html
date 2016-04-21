@@ -43,7 +43,7 @@
                     <td th:text="${scope.id}"></td>
                     <td th:text="${scope.name}"></td>
                     <td >
-                        <a th:each="module:${scope.moduleForms}" th:utext="${module.name}"></a>
+                        <span style="margin-right: 10px" th:each="module:${scope.moduleForms}" th:text="${module.name}"></span>
                     </td>
                     <td >
                         <a class="decoration" th:href="@{/scope/edit/}+${scope.id}">编辑</a>

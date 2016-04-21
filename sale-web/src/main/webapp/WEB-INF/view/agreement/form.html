@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" ng-app="app"
+>
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/main_a340c41.css}"/>
+    <style>
+
+        .iframe_content .input_group .refundPolicy input {
+            width: 40px;
+            border: 1px solid #d8d8d8;
+            float: none;
+            padding: 7px;
+            text-align: center;
+        }
+
+        .stUeditor {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .editor {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="iframe_content" ng-controller="agreementController">
+    <form th:action="@{/agreement/add}" name="form" novalidate="novalidate" method="post">
+        <h2>协议关系信息</h2>
+        <div class="offset">
+            <div class="input_group">
+                <label>销售端</label>
+                <div class="cutline"></div>
+                <span>
+                <input type="text" ng-focus="open($event)" class="stValidate" dy-name="layoutName"
+                       ng-model="postData.appName" validate-not-blank-msg="销售端不能为空" trigger="mouseenter"/>
+                </span>
+            </div>
+        </div>
+        <div class="offset">
+            <div class="input_group">
+                <label>状态</label>
+                <div class="cutline"></div>
+                <span>
+                    <select dy-name="status" class="stDropdown" width="221" th:attr="n=${#arrays.length(status)}"
+                            ng-model="postData.enabled">
+                        <option th:each="statu : ${status}" th:value="${statu.value}" th:text="${statu.name}"
+                                th:attr="selected=${statu.selected}"></option>
+                    </select>
+                </span>
+            </div>
+        </div>
+
+        <h2>其他信息</h2>
+        <div class="offset">
+            <div class="editor clear">
+                <span style="display: inline-block;vertical-align: top;margin-right:15px;font-weight:bold;font-size:14px;">备&nbsp;&nbsp;&nbsp;&nbsp;注</span>
+                  <textarea class="stUeditor" config="normal" name="remark" ng-model="postData.remark"
+                            style="resize:none;width:700px;height: 200px;"></textarea>
+            </div>
+        </div>
+
+        <button th:if="${viewForm.id}==null" th:attr="url=@{/agreement/add}" type="button" class="red"
+                style='margin:20px 10px 20px' ng-click="submit($event)">添&nbsp;&nbsp;&nbsp;&nbsp;加
+        </button>
+        <div th:if="${viewForm.id} != null">
+            <button type="button" th:attr="url=@{/agreement/edit}" ng-click="submit($event)" class="red"
+                    style='margin:20px 10px 20px'>更&nbsp;&nbsp;&nbsp;&nbsp;新
+            </button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/kindeditor/kindeditor.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zh_CN.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/resources.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ngClip.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/zeroclipboard/ZeroClipboard.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.4f7c7e4.js}"></script>
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="dialog_header">
+        <form>
+            <input ng-model="postData.name" name="name" type="text"/>
+            <button ng-click="search($event)">搜&nbsp;&nbsp;索</button>
+            <input type="hidden" name="index"/>
+            <input type="hidden" name="size"/>
+        </form>
+    </div>
+    <div class="dialog_content">
+        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items"
+             url="/sale/select" tabindex="5000" style="overflow: hidden; outline: none;">
+            <table>
+                <tbody>
+                <tr ng-repeat='item in items'>
+                    <td style="width:5%;">
+                        <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item"
+                               ng-value="item" class="stRadio" type="radio"/>
+                    </td>
+                    <td style="width:60%;">
+                        <div ng-bind="item.name"></div>
+                    </td>
+                </tr>
+                </tbody>
+                <div ng-if="empty">无数据，请修改搜索条件搜索</div>
+            </table>
+        </div>
+    </div>
+    <div class="dialog_footer">
+        <div class="ops">
+            <a href="#" ng-click="cancel()">取&nbsp;&nbsp;消</a>
+            <button ng-click="ok()">确认添加</button>
+        </div>
+    </div>
+</script>
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller('agreementController', ['$scope', '$http', 'ngSubmit', 'stModal', 'alert', function ($scope, $http, ngSubmit, stModal, alert) {
+        var permission = [[${permission}]];
+        if (permission == 'detail') {
+            setTimeout(function () {
+                $('input[type=text]').attr("readonly", true).unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('select').attr('disabled', 'disabled').unbind('focus').unbind('mouseenter').css('color', '#9b9b9b');
+                $('.input_group').find('ul').css('display', 'none').parent('div').css({display: 'none', opacity: 0});
+            }, 0);
+        }
+        $scope.postData = {
+            appName: [[${viewForm.appName}]] || '',
+            appId: [[${viewForm.appId}]],
+            enabled: [[${viewForm.enabled}]] || 'false',
+            remark: [[${viewForm.remark}]],
+            version: [[${viewForm.version}]] || 0,
+            id: [[${viewForm.id}]]
+        };
+
+        $scope.open = function ($event) {
+            angular.element($event.target).blur();
+            stModal({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                ok: function (selectedItem) {
+                    $scope.postData.appName = selectedItem.name;
+                    $scope.postData.appId = selectedItem.id;
+                },
+                cancel: function () {
+                }
+            });
+        };
+
+        $scope.submit = function (event) {
+            ngSubmit({
+                ele: event.target,
+                data: $scope.postData,
+                form: $scope.form,
+                success: function (data) {
+                    setTimeout(function () {
+                        location.href = data.jumpUrl;
+                    }, 3000);
+                },
+                error: function (data) {
+                    $scope.errorTips = data.tip;
+                }
+            });
+        };
+    }]);
+    //弹出框controller
+    app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, $http) {
+        $scope.postData = {'name': '', 'index': 1, 'size': 10};
+        $scope.items = [];
+        $scope.selected = false;
+        $scope.empty = false;
+        $scope.search = function (event) {
+            $scope.postData.index = 1;
+            $scope.items = [];
+            angular.element('.dialog_content .grid').niceScroll({
+                cursorborder: '',
+                cursorcolor: '#000',
+                cursoropacitymax: '0.5'
+            });
+            var $this = angular.element(event.target).attr('disabled', 'disabeld');
+            $http.post('/sale/select', $scope.postData).success(function (data) {
+                $this.attr('disabled', false);
+                if (data.code == 0) {
+                    $scope.items = data.data;
+                    $scope.postData.index += 1;
+                    $scope.index = 'false';
+                    angular.element('.dialog_content .grid').getNiceScroll().resize();
+                } else if (data.code == 2) {
+                    $scope.empty = true;
+                }
+            }).error(function () {
+                $this.attr('disabled', false);
+            })
+        };
+        $scope.index = 'false';
+        $scope.checked = function (index) {
+            $scope.index = index;
+        };
+        $scope.ok = function () {
+            if ($scope.selected == false) {
+                $.alertMsg.alert({
+                    title: '请至少选择一项',
+                    detailed: '此提示5秒后关闭'
+                })
+            } else {
+                $modalInstance.close($scope.selected);
+            }
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    });
+    //    ]]>
+</script>
+</body>
+</html>
+

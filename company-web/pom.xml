@@ -31,6 +31,13 @@
 
         <dependency>
             <groupId>com.simpletour</groupId>
+            <artifactId>simpletour-sms-service</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!--增加simpletour util,使用文件上传下载功能-->
+        <dependency>
+            <groupId>com.simpletour</groupId>
             <artifactId>simpletour-redis</artifactId>
         </dependency>
 

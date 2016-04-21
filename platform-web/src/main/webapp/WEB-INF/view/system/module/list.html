@@ -44,7 +44,7 @@
             <tr th:each="module : ${page.getDomains()}">
                 <td th:text="${module.id}"></td>
                 <td th:text="${module.name}"></td>
-                <td ><a th:each="permission:${module.permissions}" th:utext="${permission.name}"></a></td>
+                <td ><span style="margin-right: 10px" th:each="permission:${module.permissions}" th:text="${permission.name}"></span></td>
                 <td>
                     <a th:href="@{'/module/edit/'+${module.id}}">编辑</a>
                 </td>

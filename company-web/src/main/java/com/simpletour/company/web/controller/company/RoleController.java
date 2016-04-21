@@ -37,8 +37,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/company/role")
 public class RoleController extends BaseController {
-    //private static final Logger LOGGER = LoggerFactory.getLogger(RoleController.class);
-
     private static final String DOMAIN = "角色";
 
     private static final String MAPPING_URL = "/company/role/";
@@ -83,7 +81,7 @@ public class RoleController extends BaseController {
         if (null == page || page.getDomains().isEmpty()) {
             return BaseDataResponse.noData();
         } else {
-            return BaseDataResponse.ok().data(page);
+            return BaseDataResponse.ok().data(page.getDomains());
         }
     }
 
@@ -101,6 +99,8 @@ public class RoleController extends BaseController {
 
         Optional<Company> company = companyService.getCompanyById(TokenStorage.COMPANY_ID);
         if (!isPresentAndNotDel(company)) {
+            Company em = new Company();
+            roleForm.setCompany(em);
             model.addAttribute("viewForm", roleForm);
             System.out.println("get list failed by get");
             return MAPPING_URL + "form";
@@ -162,6 +162,8 @@ public class RoleController extends BaseController {
 
         Optional<Role> role = roleService.getRoleById(id);
         if (!isPresentAndNotDel(role)) {
+            Company em = new Company();
+            viewForm.setCompany(em);
             model.addAttribute("viewForm", viewForm);
             System.out.println("get list failed by get");
             return MAPPING_URL + "form";
