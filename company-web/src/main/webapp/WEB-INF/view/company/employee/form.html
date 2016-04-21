@@ -118,46 +118,11 @@
     </div>
 </script>
 
-<script type="text/ng-template" id="companyModalContent.html">
-    <div class="dialog_header">
-        <form>
-            <input ng-model="postData.name" name="name" type="text" />
-            <button ng-click="search($event)">搜&nbsp;&nbsp;索</button>
-            <input type="hidden" name="index" />
-            <input type="hidden" name="size"/>
-        </form>
-    </div>
-    <div class="dialog_content">
-        <div class="grid stScroll" index="postData.index" size="postData.size" name="postData.name" array="items" url="/company/role/select" tabindex="5000" style="overflow: hidden; outline: none;">
-            <table>
-                <tbody>
-                <tr ng-repeat = 'item in items'>
-                    <td style="width:5%;">
-                        <input ng-model="$parent.selected" name="name" ng-checked="$parent.selected == item" ng-value="item" class="stRadio" type="radio" />
-                    </td>
-                    <td style="width:60%;">
-                        <div ng-bind="item.id"></div>
-                        <div ng-bind="item.address"></div>
-                    </td>
-                </tr>
-                </tbody>
-                <div ng-if="empty" style="margin: 40px auto;width: 190px;">无数据，请修改搜索条件搜索</div>
-            </table>
-        </div>
-    </div>
-    <div class="dialog_footer">
-        <div class="ops">
-            <a href="#" ng-click="cancel()">取&nbsp;&nbsp;消</a>
-            <button ng-click="ok()">确认添加</button>
-        </div>
-    </div>
-</script>
-
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
 
     var app = angular.module('employee',['ngPlugin']);
-    app.controller('employeeController',['$scope','$http','ngSubmit','stModal','gpsLocation', 'alert',function($scope,$http,ngSubmit,stModal,gpsLocation,alert) {
+    app.controller('employeeController',['$scope','$http','ngSubmit','stModal', 'alert',function($scope,$http,ngSubmit,stModal,alert) {
         var permission = [[${permission}]];
         if(permission == 'detail') {
             setTimeout(function() {
@@ -207,20 +172,6 @@
                 }
             });
         };
-        $scope.openCompanyModal = function ($event) {
-            angular.element($event.target).blur();
-            stModal({
-                templateUrl : 'companyModalContent.html',
-                controller: 'companyModalInstanceCtrl',
-                ok: function(selectedItem) {
-                    $scope.companyName = selectedItem.name;
-                    $scope.postData.companyId = selectedItem.id;
-                },
-                cancel: function() {
-                }
-            });
-        };
-
 
         function generateMixed(n) {
             var jschars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -332,51 +283,6 @@
             $http.post('/company/role/select',$scope.postData).success(function(data){
                 $this.attr('disabled',false);
                 if(data.code==0){
-                    $scope.items = data.data.domains;
-                    $scope.postData.index += 1;
-                    $scope.index = 'false';
-                    angular.element('.dialog_content .grid').getNiceScroll().resize();
-                }else if(data.code==2){
-                    $scope.empty =true;
-                }
-            }).error(function(){
-                $this.attr('disabled',false);
-            })
-        };
-        $scope.index = 'false';
-        $scope.checked =function(index){
-            $scope.index = index;
-        };
-        $scope.ok = function () {
-            if($scope.selected == false){
-                $.alertMsg.alert({
-                    title : '请至少选择一项',
-                    detailed : '此提示5秒后关闭'
-                })
-            }else{
-                $modalInstance.close($scope.selected);
-            }
-        };
-
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
-    });
-
-    app.controller('companyModalInstanceCtrl', function ($scope, $modalInstance,$http) {
-        $scope.postData = {'name':'','index':1,'size':10};
-        $scope.items = [];
-        $scope.selected = false;
-        $scope.empty = false;
-        $scope.search = function(event){
-            $scope.postData.index = 1;
-            $scope.items = [];
-            $scope.empty = false;
-            angular.element('.dialog_content .grid').niceScroll({cursorborder:'',cursorcolor:'#000',cursoropacitymax:'0.5'});
-            var $this = angular.element(event.target).attr('disabled','disabeld');
-            $http.post('/select/company/select',$scope.postData).success(function(data){
-                $this.attr('disabled',false);
-                if(data.code==0){
                     $scope.items = data.data;
                     $scope.postData.index += 1;
                     $scope.index = 'false';
@@ -407,6 +313,7 @@
             $modalInstance.dismiss('cancel');
         };
     });
+
     //    ]]>
 
     </script>
