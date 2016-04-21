@@ -20,7 +20,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @Brief :  销售端
@@ -46,6 +49,19 @@ public class SaleAppController extends BaseController {
         model.addAttribute("pageHelper", new PageHelper(pages));
         model.addAttribute("query", query);
         return "/sale/list";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "select", method = RequestMethod.POST)
+    public BaseDataResponse select(SaleAppQuery query) {
+        List<SaleApp> modules = saleAppService.querySaleAppsPagesByConditions(query.asMap(),"id", IBaseDao.SortBy.DESC,query.getIndex(),query.getSize(),true).getDomains();
+        if (modules == null || modules.isEmpty()) {
+            return BaseDataResponse.noData();
+        } else {
+            List<SaleAppForm> saleAppForms = modules.stream()
+                    .map(SaleAppForm::new).collect(toList());
+            return BaseDataResponse.ok().data(saleAppForms);
+        }
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)

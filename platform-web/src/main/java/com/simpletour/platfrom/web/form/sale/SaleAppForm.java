@@ -5,6 +5,7 @@ import com.simpletour.platfrom.web.annotation.Fax;
 import com.simpletour.platfrom.web.annotation.Mobile;
 import com.simpletour.platfrom.web.enums.FormModeType;
 import com.simpletour.platfrom.web.form.support.BaseForm;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -24,13 +25,13 @@ public class SaleAppForm extends BaseForm {
      * 销售端名称
      */
     @NotBlank(message = "{pms.saleApp.name.notnull}")
-    @Length(min = 1,max = 32,message = "{pms.saleApp.name.length}")
+    @Length(min = 2,max = 20,message = "{pms.saleApp.name.length}")
     private String name;
     /**
      * 对接人
      */
     @NotBlank(message = "{pms.saleApp.contact.notnull}")
-    @Length(min = 1,max = 20,message = "{pms.saleApp.contact.length}")
+    @Length(min = 2,max = 20,message = "{pms.saleApp.contact.length}")
     private String contact;
     /**
      * 电话
@@ -42,14 +43,18 @@ public class SaleAppForm extends BaseForm {
      * 传真
      */
     @Fax(message = "{pms.saleApp.fax.format}")
+    @Length(min = 2,max = 16,message = "{pms.saleApp.fax.length}")
     private String fax;
     /**
      * 邮箱
      */
+    @Email
+    @Length(min = 2,max = 32,message = "{pms.saleApp.email.length}")
     private String email;
     /**
      * 其他方式
      */
+    @Length(min = 2,max = 100,message = "{pms.saleApp.link.length}")
     private String link;
     /**
      * 备注
