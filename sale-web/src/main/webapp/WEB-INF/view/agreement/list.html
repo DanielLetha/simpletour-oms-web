@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/agreement/list/}" method="GET"
+          style="width: 100%;box-sizing: border-box;padding-right:170px; ">
+        <div class="input_group">
+            <input type="text" name="appName" th:value="${query.appName}" placeholder="销售端名称"/>
+        </div>
+        <div class="input_group">
+            <select name="enabled">
+                <option th:each="statu : ${status}" th:value="${statu.value}" th:text="${statu.name}"
+                        th:attr="selected=${statu.selected}"></option>
+            </select>
+        </div>
+        <button type="submit" class="search">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style='width:15%'>销售协议编号</th>
+            <th style='width:25%'>销售端名称</th>
+            <th style='width:20%'>状态</th>
+            <th style='width:20%'>操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+            <tr th:each="agreement :${page.domains}">
+                <td style='width:15%' th:text="${agreement.id}"></td>
+                <td style='width:25%' th:text="${agreement.saleApp.name}"></td>
+                <td style='width:20%'>
+                    <a class="decoration" onclick="updateStatus(event)"
+                       th:text="${agreement.enabled ? '启用' : '禁用'}"></a>
+                </td>
+                <td style='width:20%'>
+                    <a class="decoration" th:href="@{'/agreement/edit/' + ${agreement.id}}">查看|编辑</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table_footer">
+    <a th:href="@{/agreement/add}">添加协议</a>
+
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/adminlist.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    // 调用分页函数
+    window.onload = function () {
+        pagination([[${query}]], '/agreement/list');
+    };
+
+    $(document).ready(function () {
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height() - 212 - $('table thead').height()).getNiceScroll().resize();
+        });
+
+    });
+
+    function updateStatus(event) {
+        var status = $(event.target).text();
+        var id = $(event.target).parents('td').siblings().eq(0).text();
+        $.ajax({
+            url: '/agreement/edit/status/' + id,
+            data: {status: status},
+            type: 'POST',
+            success: function (data) {
+                if (data.code == 0) {
+                    $.alertMsg.alert({
+                        title: data.msg,
+                        detailed: '此提示3秒后关闭',
+                        button: '关闭',
+                        delay: 300,
+                        type: 'success'
+                    });
+                    $(event.target).html(data.data);
+                } else {
+                    $.alertMsg.alert({
+                        title: data.msg,
+                        detailed: data.detail,
+                        button: '关闭',
+                        delay: 500,
+                        type: 'fail'
+                    });
+                }
+            },
+            error: function (data) {
+                $.alertMsg.alert({
+                    title: '网络不给力，请重试',
+                    detailed: '此提示5秒后关闭',
+                    button: '关闭',
+                    delay: 500,
+                    type: 'fail'
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>
