@@ -16,7 +16,7 @@
     <!--<div class="login_error" ng-show='msgStatus' th:text="${msg}">-->
 
     <!--</div>-->
-    <div ng-show="msg != ''" class="login_error" ng-bind="msg">
+    <div ng-show="msg != ''" ng-cloak="" class="login_error" ng-bind="msg">
     </div>
     <div class="login_content">
         <form>
@@ -57,7 +57,6 @@
                 $scope.msg = "登录名长度必须在6-20位之间";
                 $scope.isNameOk = false;
             } else {
-                $scope.msg = '';
                 $scope.isNameOk = true;
             }
         }
@@ -68,7 +67,6 @@
                     $scope.msg = "密码长必须在6-64位之间";
                     $scope.isPasswdOk = false;
                 } else {
-                    $scope.msg = '';
                     $scope.isPasswdOk = true;
                 }
             } else {
@@ -95,7 +93,7 @@
                     });
                 });
             } else {
-                location.reload();
+//                location.reload();
             }
         }
     }])
