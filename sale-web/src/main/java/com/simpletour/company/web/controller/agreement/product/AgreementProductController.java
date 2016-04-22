@@ -1,4 +1,4 @@
-package com.simpletour.company.web.controller.agreement;
+package com.simpletour.company.web.controller.agreement.product;
 
 import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.domain.DomainPage;
@@ -10,18 +10,24 @@ import com.simpletour.company.web.query.sale.SaleAppQuery;
 import com.simpletour.company.web.util.OptionsUtil;
 import com.simpletour.company.web.view.agreement.AgreementProductListView;
 import com.simpletour.company.web.view.agreement.SaleAppView;
+import com.simpletour.domain.company.Company;
 import com.simpletour.domain.product.Product;
+import com.simpletour.domain.sale.Agreement;
 import com.simpletour.domain.sale.AgreementProduct;
 import com.simpletour.domain.sale.SaleApp;
 import com.simpletour.service.sale.IAgreementProductService;
+import com.simpletour.service.sale.IAgreementService;
 import com.simpletour.service.sale.ISaleAppService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Author:  wangLin
@@ -41,6 +47,25 @@ public class AgreementProductController extends BaseController {
 
     @Resource
     private ISaleAppService saleAppService;
+
+    @Resource
+    private IAgreementService agreementService;
+
+    /**
+     * 该方法主要用于在销售协议对产品列表的操作(添加和编辑)
+     */
+//    @RequestMapping(value = "add/products/{id}", method = RequestMethod.GET)
+//    public String addProducts4Agreement(@PathVariable Long id, Model model) {
+//        this.setPageTitle(model, "销售协议-产品列表");
+//        this.enableGoBack(model);
+//        Optional<Agreement> agreement = agreementService.getAgreementById(id);
+//        if (agreement.isPresent()) {
+//            CompanyForm companyForm = CompanyForm.toCompanyForm(company.get());
+//            model.addAttribute("viewForm", companyForm);
+//            return "/company/form";
+//        }
+//        return this.error();
+//    }
 
     @RequestMapping(value = {"", "list"})
     public String list(AgreementProductQuery query, Model model) {
