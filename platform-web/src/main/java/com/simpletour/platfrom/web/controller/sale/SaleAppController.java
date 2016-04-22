@@ -40,7 +40,7 @@ public class SaleAppController extends BaseController {
     @RequestMapping(value = {"", "list"})
     public String list(SaleAppQuery query, Model model) {
         this.setPageTitle(model,"销售端列表");
-        DomainPage<SaleApp> pages =  saleAppService.querySaleAppsPagesByConditions(query.asMap(),"id", IBaseDao.SortBy.DESC,query.getIndex(),query.getSize(),true);
+        DomainPage<SaleApp> pages =  saleAppService.querySaleAppPagesByConditions(query.asMap(),"id", IBaseDao.SortBy.DESC,query.getIndex(),query.getSize(),true);
         model.addAttribute("page", pages);
         model.addAttribute("pageHelper", new PageHelper(pages));
         model.addAttribute("query", query);
