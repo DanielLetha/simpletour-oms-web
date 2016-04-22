@@ -54,13 +54,11 @@ public class ModuleController extends BaseController {
     @RequestMapping(value = "select", method = RequestMethod.POST)
     public BaseDataResponse select(@RequestBody ModuleQuery query) {
         List<Module> modules = moduleService.findModuleList((ModuleDaoQuery) query.asQuery(ModuleDaoQuery.class));
-        if (modules == null || modules.isEmpty()) {
-            return BaseDataResponse.noData();
-        } else {
-            List<ModuleForm> moduleForms = modules.stream()
-                    .map(tmp -> new ModuleForm((Module) tmp)).collect(toList());
-            return BaseDataResponse.ok().data(moduleForms);
-        }
+
+        List<ModuleForm> moduleForms = modules.stream()
+                .map(tmp -> new ModuleForm((Module) tmp)).collect(toList());
+        return BaseDataResponse.ok().data(moduleForms);
+
     }
 
     @ResponseBody
