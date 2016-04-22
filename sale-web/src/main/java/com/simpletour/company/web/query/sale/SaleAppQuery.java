@@ -1,5 +1,6 @@
 package com.simpletour.company.web.query.sale;
 
+import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.Condition;
 import com.simpletour.company.web.query.support.QueryExt;
 import com.simpletour.company.web.query.support.QueryWord;
@@ -35,6 +36,10 @@ public class SaleAppQuery extends QueryExt {
         }
 
         return map;
+    }
+
+    public ConditionOrderByQuery asQuery(){
+        return null;
     }
 
     public String getName() {
