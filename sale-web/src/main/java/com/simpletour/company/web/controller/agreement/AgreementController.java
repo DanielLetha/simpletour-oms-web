@@ -73,6 +73,7 @@ public class AgreementController extends BaseController {
         this.setPageTitle(model, "添加销售协议");
         this.enableGoBack(model);
         AgreementForm viewForm = new AgreementForm();
+        viewForm.setEnabled(Boolean.TRUE);
         model.addAttribute("viewForm", viewForm);
         model.addAttribute("status", OptionsUtil.getBooleanOption("启用", "禁用", Boolean.TRUE));
         return "/agreement/form";
