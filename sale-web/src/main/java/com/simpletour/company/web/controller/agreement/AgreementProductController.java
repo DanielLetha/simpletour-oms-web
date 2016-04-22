@@ -7,6 +7,7 @@ import com.simpletour.company.web.controller.support.PageHelper;
 import com.simpletour.company.web.enums.Option;
 import com.simpletour.company.web.query.agreement.AgreementProductQuery;
 import com.simpletour.company.web.query.agreement.AgreementQuery;
+import com.simpletour.company.web.query.sale.SaleAppQuery;
 import com.simpletour.company.web.util.OptionsUtil;
 import com.simpletour.company.web.view.agreement.AgreementProductListView;
 import com.simpletour.company.web.view.agreement.SaleAppView;
@@ -56,8 +57,8 @@ public class AgreementProductController extends BaseController {
         //产品类型下拉框的处理
         List<Option> productTypeOptions = OptionsUtil.addAllToEnumTypes("产品类型", "", query.getProductType(), Product.Type.class);
 
-        //TODO 得到所有的saleAppList,并且包装一下
-        List<SaleApp> saleApps = new ArrayList<>(); //TODO 需要从数据库查出来
+        //得到所有的saleAppList,并且包装一下
+        List<SaleApp> saleApps = saleAppService.querySaleAppList(new SaleAppQuery().asQuery(ConditionOrderByQuery.class));
         List<SaleAppView> saleAppViews = new ArrayList<>();
         if (saleApps != null && !saleApps.isEmpty()){
             saleApps.stream().forEach(saleApp -> saleAppViews.add(new SaleAppView(saleApp.getId(),saleApp.getName())) );
