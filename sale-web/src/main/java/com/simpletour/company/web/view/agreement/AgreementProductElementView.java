@@ -79,19 +79,19 @@ public class AgreementProductElementView extends BaseElementView<AgreementProduc
     private void handleProductName(String productType){
         switch (productType){
             case "bus":
-                this.productType = "车";
+                this.productType = "车位";
                 break;
             case "hotel":
-                this.productType = "住";
+                this.productType = "住宿";
                 break;
             case "scenic":
-                this.productType = "景";
+                this.productType = "景点";
                 break;
             case "catering":
-                this.productType = "餐";
+                this.productType = "餐饮";
                 break;
             case "entertainment":
-                this.productType = "娱";
+                this.productType = "娱乐";
                 break;
             case "other":
                 this.productType = "其他";
