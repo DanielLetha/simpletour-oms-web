@@ -25,6 +25,8 @@ public class AgreementProductQuery extends Query {
     @QueryWord(value = "product.name",matchType = Condition.MatchType.like)
     private String productName;
 
+    private Long saleAppId;
+
     public String getProductType() {
         return productType;
     }
@@ -47,5 +49,13 @@ public class AgreementProductQuery extends Query {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public Long getSaleAppId() {
+        return saleAppId;
+    }
+
+    public void setSaleAppId(Long saleAppId) {
+        this.saleAppId = saleAppId;
     }
 }

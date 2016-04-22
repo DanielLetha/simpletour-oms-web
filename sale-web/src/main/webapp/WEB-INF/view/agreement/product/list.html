@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+    <style>
+        .dropdown {
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid #ccc;
+        }
+        *{
+            outline: none;
+        }
+        .stAutoComplete{
+            display: inline-block;
+            position: relative;
+        }
+        .stAutoComplete ul{
+            margin: 0;
+            background-color: #fff;
+            list-style: none;
+            position: absolute;
+            border: 1px solid #ccc;
+            border-top: none;
+            overflow: hidden;
+        }
+        .stAutoComplete ul li{
+            list-style: none;
+            min-height: 30px;
+            line-height: 30px;
+            padding: 0 5px;
+            overflow-x:hidden;
+        }
+        .stAutoComplete ul li:hover{
+            cursor: pointer;
+            background-color: #e0e0e0;
+        }
+        .stAutoComplete ul li.hover{
+            cursor: pointer;
+            color: white;
+            background-color: #43a047;
+        }
+    </style>
+</head>
+<body>
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="sContainer search" style="position: relative">
+    <form th:action="@{/agreement/product/list}" method="GET"
+          style="width: 100%;box-sizing: border-box;padding-right:170px; ">
+        <div class="search_group" ng-controller="queryController">
+            <div class="input_group">
+                <select name="productType">
+                    <option th:each="productType :${productTypeOptions}" th:value="${productType.value}"
+                            th:text="${productType.name}" th:attr="selected=${productType.selected}"></option>
+                </select>
+            </div>
+            <div class="input_group">
+                <input class="stAutoComplete" id-name="saleAppId" id-value="saleAppId" type="text" placeholder="销售端名称" name="saleAppName" ng-model="saleAppName" n="5" array="saleAppList"/>
+            </div>
+            <div class="input_group">
+                <input type="text" name="productName" th:value="${page.searchObj.productName}" placeholder="产品名称"/>
+            </div>
+        </div>
+        <button type="submit" class="search">搜索</button>
+    </form>
+</div>
+<div class="container_main">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style='width:25%'>产品名称</th>
+            <th style='width:25%'>销售端名称</th>
+            <th style='width:25%'>类型</th>
+            <th style='width:25%'>操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="grid">
+        <table class="table">
+            <tbody>
+            <tr th:each="agreementProduct :${page.getSubViews()}">
+                <td style='width:25%' th:text="${agreementProduct.productName}"></td>
+                <td style='width:25%' th:text="${agreementProduct.saleAppName}"></td>
+                <td style='width:25%' th:text="${agreementProduct.productType}"></td>
+                <td  style='width:25%'>
+                    <a class="decoration" th:href="@{'/company/edit/' + ${agreementProduct.id}}">规则设置</a>&emsp;&emsp;
+                    <a class="decoration" th:href="@{'/company/edit/' + ${agreementProduct.id}}">价格日历</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="table_footer">
+    <div class='pager-page' th:include="fragments :: iframe_pager"/>
+</div>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/adminlist.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/dropdown.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/pagination.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
+    //     调用分页函数
+    window.onload = function () {
+        pagination([[${page.searchObj}]], '/agreement/product/list');
+    };
+
+    $(document).ready(function () {
+        $('.sContainer select[name=productType]').dropdown({width: 120, n: [[${#arrays.length(productTypeOptions)}]]});
+        $('.grid').height($(window).height() - 212 - $('table thead').height());
+        $('.grid').find('tr:first td').each(function (index, el) {
+            $(this).width($('table th').eq(index).width());
+        });
+        $('.grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+        $(window).resize(function () {
+            $('.grid').find('tr:first td').each(function (index, el) {
+                $(this).width($('table th').eq(index).width());
+            });
+            $('.grid').height($(window).height() - 212 - $('table thead').height()).getNiceScroll().resize();
+        });
+
+    });
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller('queryController', ['$scope', '$http', function ($scope, $http) {
+        $('.saleAppList ul').dropdown({width: 150, n: 3});
+        $scope.saleAppList = [[${saleAppViews}]] || [];
+        $scope.searchedSaleAppList = [];
+        $scope.saleAppName = [[${page.searchObj.saleAppName}]] || "";
+        $scope.saleAppId = [[${page.searchObj.saleAppId}]] || '';
+    }]);
+    //    ]]>
+</script>
+</body>
+</html>

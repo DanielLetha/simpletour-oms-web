@@ -66,8 +66,8 @@ public class AgreementProductController extends BaseController {
         AgreementProductListView listView = new AgreementProductListView(domainPage, query);
         model.addAttribute("page",listView);
         model.addAttribute("pageHelper", new PageHelper(domainPage));
-        model.addAttribute("saleAppList", saleAppViews);
+        model.addAttribute("saleAppViews", saleAppViews);
         model.addAttribute("productTypeOptions", productTypeOptions);
-        return "/company/list";
+        return "/agreement/product/list";
     }
 }
