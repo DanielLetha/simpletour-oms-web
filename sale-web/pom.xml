@@ -25,6 +25,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.simpletour.module</groupId>
+            <artifactId>product-service</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.simpletour.commons</groupId>
             <artifactId>data</artifactId>
         </dependency>
