@@ -32,7 +32,7 @@ public class AgreementProductElementView extends BaseElementView<AgreementProduc
             Agreement agreement = agreementProduct.getAgreement();
             if (product != null){
                 this.productName = product.getName();
-                handleProductName(product.getType());
+                this.productType = Product.Type.valueOf(product.getType()).getRemark();
             }
             if (agreement != null && agreement.getSaleApp() != null){
                 this.saleAppName = agreement.getSaleApp().getName();
@@ -76,26 +76,26 @@ public class AgreementProductElementView extends BaseElementView<AgreementProduc
      * 处理产品的类型
      * @param productType
      */
-    private void handleProductName(String productType){
-        switch (productType){
-            case "bus":
-                this.productType = "车位";
-                break;
-            case "hotel":
-                this.productType = "住宿";
-                break;
-            case "scenic":
-                this.productType = "景点";
-                break;
-            case "catering":
-                this.productType = "餐饮";
-                break;
-            case "entertainment":
-                this.productType = "娱乐";
-                break;
-            case "other":
-                this.productType = "其他";
-                break;
-        }
-    }
+//    private void handleProductName(String productType){
+//        switch (productType){
+//            case "bus":
+//                this.productType = "车";
+//                break;
+//            case "hotel":
+//                this.productType = "住";
+//                break;
+//            case "scenic":
+//                this.productType = "景";
+//                break;
+//            case "catering":
+//                this.productType = "餐";
+//                break;
+//            case "entertainment":
+//                this.productType = "娱";
+//                break;
+//            case "other":
+//                this.productType = "其他";
+//                break;
+//        }
+//    }
 }
