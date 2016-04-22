@@ -25,13 +25,13 @@ public class AgreementForm extends BaseForm {
     /**
      * 协议状态
      */
-    private Boolean enabled;
+    private String status;
     /**
      * 备注
      */
     @Length(max = 10000, message = "{pms.common.object.remark.length}")
     private String remark;
-    
+
     private Integer version;
 
     public AgreementForm() {
@@ -41,7 +41,7 @@ public class AgreementForm extends BaseForm {
         this.id = agreement.getId();
         this.appName = agreement.getSaleApp().getName();
         this.appId = agreement.getSaleApp().getId();
-        this.enabled = agreement.isEnabled();
+        this.status = agreement.isEnabled().toString();
         this.remark = agreement.getRemark();
         this.version = agreement.getVersion();
     }
@@ -50,7 +50,7 @@ public class AgreementForm extends BaseForm {
         SaleApp app = new SaleApp();
         app.setId(appId);
         app.setName(appName);
-        Agreement agreement = new Agreement(app, enabled, remark);
+        Agreement agreement = new Agreement(app, !status.equals("false"), remark);
         if (mode.equals(FormModeType.UPDATE.getValue())) {
             agreement.setId(id);
             agreement.setVersion(version);
@@ -74,12 +74,12 @@ public class AgreementForm extends BaseForm {
         this.appId = appId;
     }
 
-    public Boolean isEnabled() {
-        return enabled;
+    public String getStatus() {
+        return status;
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getRemark() {

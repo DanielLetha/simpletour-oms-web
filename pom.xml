@@ -12,7 +12,7 @@
     <modules>
         <module>company-web</module>
         <module>platform-web</module>
-        <!--<module>sale-web</module>-->
+        <module>sale-web</module>
     </modules>
 
     <properties>
@@ -59,18 +59,6 @@
                 <groupId>com.simpletour</groupId>
                 <artifactId>simpletour-redis</artifactId>
                 <version>1.0-SNAPSHOT</version>
-            </dependency>
-
-            <!--增加simpletour util,使用文件上传下载功能-->
-            <dependency>
-                <groupId>com.simpletour</groupId>
-                <artifactId>simpletour-util-utils</artifactId>
-                <version>${simpletour.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.simpletour</groupId>
-                <artifactId>simpletour-util-framework</artifactId>
-                <version>${simpletour.version}</version>
             </dependency>
 
             <!-- spring -->
@@ -161,6 +149,11 @@
             </dependency>
 
             <!--other-->
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache-core</artifactId>
+                <version>2.6.9</version>
+            </dependency>
             <dependency>
                 <groupId>org.jboss.logging</groupId>
                 <artifactId>jboss-logging</artifactId>
