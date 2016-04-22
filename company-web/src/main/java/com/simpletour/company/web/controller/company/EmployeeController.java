@@ -92,10 +92,7 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = {"", "list"})
     public String list(EmployeeQuery employeeQuery, Model model) {
         this.setPageTitle(model, "人员信息列表");
-
-        TokenStorage.setLocalTokenWithCompanyId(0L);
         employeeQuery.setTenantId(TokenStorage.COMPANY_ID);
-
         DomainPage<Employee> domainPage = employeeService.queryEmployeesPagesByConditions(employeeQuery.asConditionQuery());
         model.addAttribute("query", employeeQuery);
         model.addAttribute("page", domainPage);
@@ -149,10 +146,6 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "delete/{id}")
     public BaseDataResponse delete(@PathVariable Long id) {
         Optional<Employee> employeeOptional;
-
-        // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L);
-
         try {
             employeeOptional = employeeService.queryEmployeeById(id);
             if (!employeeOptional.isPresent()) {

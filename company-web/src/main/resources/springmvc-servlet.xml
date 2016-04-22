@@ -10,7 +10,8 @@
     <!--配置扫描的controller-->
     <context:component-scan base-package="com.simpletour.company.web.controller">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <!--shiro注解aop配置-->
@@ -59,9 +60,9 @@
     <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
         <property name="templateResolver" ref="templateResolver"/>
         <!--<property name="additionalDialects">-->
-            <!--<set>-->
-                <!--<bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>-->
-            <!--</set> -->
+        <!--<set>-->
+        <!--<bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>-->
+        <!--</set> -->
         <!--</property>-->
     </bean>
 
@@ -103,4 +104,13 @@
         </property>
         <property name="order" value="-1"/>
     </bean>
+
+    <!--配置aop-->
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="mutitenantAspect" ref="mutitenant">
+            <aop:pointcut id="tenant" expression="within(@org.springframework.stereotype.Controller *)"/>
+            <aop:before method="doBefore" pointcut-ref="tenant"/>
+        </aop:aspect>
+    </aop:config>
+    <bean name="mutitenant" class="com.simpletour.company.web.aop.MutitenantAspect"/>
 </beans>
