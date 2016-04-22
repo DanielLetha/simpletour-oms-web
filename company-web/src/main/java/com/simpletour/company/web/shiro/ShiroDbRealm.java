@@ -1,6 +1,8 @@
 package com.simpletour.company.web.shiro;
 
 import com.simpletour.domain.company.Employee;
+import com.simpletour.domain.company.Permission;
+import com.simpletour.domain.company.Role;
 import com.simpletour.service.company.IEmployeeService;
 import com.simpletour.service.company.IRoleService;
 import org.apache.shiro.authc.*;
@@ -35,13 +37,14 @@ public class ShiroDbRealm extends AuthorizingRealm {
         if (!user.isPresent()) throw new AuthorizationException();
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-//        info.addRole(user.get().getRole().getName());
-//        if (role.isPresent() && role.get().getPermissionList() != null && role.get().getPermissionList().size() > 0) {
-//            for (Permission permission : role.get().getPermissionList()) {
-//                // 由于Permission采用状态删除，需要保证SimpleAuthorizationInfo中加入的Permission是有效状态
-//                if (permission != null && !permission.getDel()) info.addStringPermission(permission.getCode());
-//            }
-//        }
+        info.addRole(user.get().getRole().getName());
+        Optional<Role> role = roleService.getRoleById(user.get().getRole().getId());
+        if (role.isPresent() && role.get().getPermissionList() != null && role.get().getPermissionList().size() > 0) {
+            for (Permission permission : role.get().getPermissionList()) {
+                // 由于Permission采用状态删除，需要保证SimpleAuthorizationInfo中加入的Permission是有效状态
+                if (permission != null) info.addStringPermission(permission.getCode());
+            }
+        }
         return info;
     }
 
@@ -59,5 +62,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
                     employeeOptional.get().getCompany() != null ? employeeOptional.get().getCompany().getId() : null), employeeOptional.get().getPasswd(), getName());
         }
         throw new AuthenticationException();
+    }
+
+    public void setEmployeeService(IEmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    public void setRoleService(IRoleService roleService) {
+        this.roleService = roleService;
     }
 }
