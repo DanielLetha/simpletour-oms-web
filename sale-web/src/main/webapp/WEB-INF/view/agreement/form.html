@@ -49,7 +49,7 @@
                 <div class="cutline"></div>
                 <span>
                     <select dy-name="status" class="stDropdown" width="221" th:attr="n=${#arrays.length(status)}"
-                            ng-model="postData.enabled">
+                            ng-model="postData.status">
                         <option th:each="statu : ${status}" th:value="${statu.value}" th:text="${statu.name}"
                                 th:attr="selected=${statu.selected}"></option>
                     </select>
@@ -141,7 +141,7 @@
         $scope.postData = {
             appName: [[${viewForm.appName}]] || '',
             appId: [[${viewForm.appId}]],
-            enabled: String([[${viewForm.enabled}]]),
+            status: [[${viewForm.status}]] || 'true',
             remark: [[${viewForm.remark}]],
             version: [[${viewForm.version}]] || 0,
             id: [[${viewForm.id}]]
