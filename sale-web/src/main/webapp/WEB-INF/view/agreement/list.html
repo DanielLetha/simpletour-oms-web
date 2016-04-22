@@ -19,7 +19,7 @@
             <input type="text" name="appName" th:value="${query.appName}" placeholder="销售端名称"/>
         </div>
         <div class="input_group">
-            <select name="enabled">
+            <select name="status">
                 <option th:each="statu : ${status}" th:value="${statu.value}" th:text="${statu.name}"
                         th:attr="selected=${statu.selected}"></option>
             </select>
@@ -45,11 +45,12 @@
                 <td style='width:15%' th:text="${agreement.id}"></td>
                 <td style='width:25%' th:text="${agreement.saleApp.name}"></td>
                 <td style='width:20%'>
-                    <a class="decoration" onclick="updateStatus(event)"
+                    <a class="decoration" onclick="updateStatus(event)" th:value="${agreement.enabled}"
                        th:text="${agreement.enabled ? '启用' : '禁用'}"></a>
                 </td>
                 <td style='width:20%'>
                     <a class="decoration" th:href="@{'/agreement/edit/' + ${agreement.id}}">查看|编辑</a>
+                    <a class="decoration" th:href="@{''}">产品列表</a>
                 </td>
             </tr>
             </tbody>
@@ -88,7 +89,7 @@
     });
 
     function updateStatus(event) {
-        var status = $(event.target).text();
+        var status = $(event.target).attr('value');
         var id = $(event.target).parents('td').siblings().eq(0).text();
         $.ajax({
             url: '/agreement/edit/status/' + id,
@@ -96,9 +97,10 @@
             type: 'POST',
             success: function (data) {
                 if (data.code == 0) {
+                    $(event.target).attr('value', data.data == "启用");
                     $.alertMsg.alert({
                         title: data.msg,
-                        detailed: '此提示3秒后关闭',
+                        detailed: data.data,
                         button: '关闭',
                         delay: 300,
                         type: 'success'

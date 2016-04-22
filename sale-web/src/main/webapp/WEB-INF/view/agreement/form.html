@@ -49,7 +49,7 @@
                 <div class="cutline"></div>
                 <span>
                     <select dy-name="status" class="stDropdown" width="221" th:attr="n=${#arrays.length(status)}"
-                            ng-model="postData.enabled">
+                            ng-model="postData.status">
                         <option th:each="statu : ${status}" th:value="${statu.value}" th:text="${statu.name}"
                                 th:attr="selected=${statu.selected}"></option>
                     </select>
@@ -129,7 +129,7 @@
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
     var app = angular.module('app', ['ngPlugin']);
-    app.controller('agreementController', ['$scope', '$http', 'ngSubmit', 'stModal', 'alert', function ($scope, $http, ngSubmit, stModal, alert) {
+    app.controller('agreementController', ['$scope', '$http', 'ngSubmit', 'stModal', function ($scope, $http, ngSubmit, stModal) {
         var permission = [[${permission}]];
         if (permission == 'detail') {
             setTimeout(function () {
@@ -141,7 +141,7 @@
         $scope.postData = {
             appName: [[${viewForm.appName}]] || '',
             appId: [[${viewForm.appId}]],
-            enabled: [[${viewForm.enabled}]] || 'false',
+            status: [[${viewForm.status}]] || 'true',
             remark: [[${viewForm.remark}]],
             version: [[${viewForm.version}]] || 0,
             id: [[${viewForm.id}]]

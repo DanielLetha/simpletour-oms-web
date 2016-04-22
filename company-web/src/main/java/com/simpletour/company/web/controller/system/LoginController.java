@@ -22,10 +22,11 @@ import java.util.stream.Collectors;
 public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (!currentUser.isAuthenticated() && currentUser.isRemembered()) {
-            return "redirect:/home";
-        }
+        // TODO: 当前版本没有登录鉴权功能，这里先不获取当前登录用户信息
+//        Subject currentUser = SecurityUtils.getSubject();
+//        if (!currentUser.isAuthenticated() && currentUser.isRemembered()) {
+//            return "redirect:/home";
+//        }
         model.addAttribute("loginForm", new LoginForm());
         return "login";
     }

@@ -2,12 +2,12 @@ package com.simpletour.company.web.controller.company;
 
 import com.simpletour.commons.data.domain.DomainPage;
 import com.simpletour.commons.data.exception.BaseSystemException;
+import com.simpletour.commons.util.PasswordUtil;
 import com.simpletour.company.web.controller.support.*;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.company.EmployeeForm;
 import com.simpletour.company.web.form.system.PasswordForm;
 import com.simpletour.company.web.query.company.EmployeeQuery;
-import com.simpletour.company.web.util.PasswordUtil;
 import com.simpletour.domain.company.Company;
 import com.simpletour.domain.company.Employee;
 import com.simpletour.domain.company.Role;
@@ -92,10 +92,7 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = {"", "list"})
     public String list(EmployeeQuery employeeQuery, Model model) {
         this.setPageTitle(model, "人员信息列表");
-
-        TokenStorage.setLocalTokenWithCompanyId(0L);
         employeeQuery.setTenantId(TokenStorage.COMPANY_ID);
-
         DomainPage<Employee> domainPage = employeeService.queryEmployeesPagesByConditions(employeeQuery.asConditionQuery());
         model.addAttribute("query", employeeQuery);
         model.addAttribute("page", domainPage);
@@ -149,10 +146,6 @@ public class EmployeeController extends BaseController {
     @RequestMapping(value = "delete/{id}")
     public BaseDataResponse delete(@PathVariable Long id) {
         Optional<Employee> employeeOptional;
-
-        // TODO: 暂时先将租户ID写死
-        TokenStorage.setLocalTokenWithCompanyId(0L);
-
         try {
             employeeOptional = employeeService.queryEmployeeById(id);
             if (!employeeOptional.isPresent()) {
@@ -171,13 +164,14 @@ public class EmployeeController extends BaseController {
 
     @RequestMapping(value = "/password", method = RequestMethod.GET)
     public String password(Model model) {
+        this.setPageTitle(model, "修改密码");
+        this.enableGoBack(model);
         EmployeeQuery employeeQuery = new EmployeeQuery();
         employeeQuery.setTenantId(TokenStorage.COMPANY_ID);
         DomainPage<Employee> domainPage = employeeService.queryEmployeesPagesByConditions(employeeQuery.asConditionQuery());
         if (null == domainPage || 0 == domainPage.getDomainTotalCount()) {
             new BaseSystemException("用户不存在");
         }
-//        model.addAttribute("viewForm", new EmployeeForm(domainPage.getDomains().get(0)));
         model.addAttribute("viewForm", new EmployeeForm());
 
         return "/company/employee/password";

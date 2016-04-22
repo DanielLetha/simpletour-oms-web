@@ -3,8 +3,8 @@ package com.simpletour.company.web.controller.system;
 import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
 import com.simpletour.commons.data.domain.DomainPage;
-import com.simpletour.company.web.controller.support.TokenStorage;
-import com.simpletour.company.web.util.PasswordUtil;
+import com.simpletour.commons.data.exception.BaseSystemException;
+import com.simpletour.commons.util.PasswordUtil;
 import com.simpletour.domain.company.Employee;
 import com.simpletour.service.company.IEmployeeService;
 import com.simpletour.service.sms.ISMSService;
@@ -12,9 +12,12 @@ import com.simpletour.sms.core.SMSTemplateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +33,7 @@ import java.util.*;
  * @since 2.0-SNAPSHOT
  */
 @Controller
+@SessionAttributes(names = {"mobile", "code", "employee"})
 public class FindPasswordController {
     @Autowired
     private IEmployeeService employeeService;
@@ -40,8 +44,6 @@ public class FindPasswordController {
     @Resource
     private TaskExecutor taskExecutor;
 
-    Map<String, Employee> verifyInfo = new HashMap<>();
-
     @RequestMapping(value = "/findpass", method = RequestMethod.GET)
     public String findpass() {
         System.out.println("enter findpass page");
@@ -49,7 +51,7 @@ public class FindPasswordController {
     }
 
     @RequestMapping(value = "/getcode", method = RequestMethod.POST)
-    public void getcode(@RequestParam("mobile") String mobile, HttpServletResponse response) {
+    public void getcode(@RequestParam("mobile") String mobile, ModelMap model, HttpServletResponse response) {
         System.out.println("getcode: " + mobile);
         if (null == mobile || mobile.isEmpty()) {
             outputResponse(response, "请正确填写手机号码");
@@ -58,7 +60,6 @@ public class FindPasswordController {
 
         AndConditionSet andConditionSet = new AndConditionSet();
         andConditionSet.addCondition("c.mobile", mobile);
-        andConditionSet.addCondition("c.company.id", TokenStorage.COMPANY_ID);
 
         ConditionOrderByQuery conditionOrderByQuery = new ConditionOrderByQuery();
         conditionOrderByQuery.setCondition(andConditionSet);
@@ -76,42 +77,57 @@ public class FindPasswordController {
         moblies.add(mobile);
         int code = (int)((Math.random() * 9 + 1) * 100000);
         smsService.send(taskExecutor, moblies, SMSTemplateEnum.SIGNUPVERIFYCODE.getKey(), code + ",10");
-        verifyInfo.put(mobile + code, employeeList.get(0));
+
+        model.addAttribute("mobile", mobile);
+        model.addAttribute("code", code);
+        model.addAttribute("employee", employeeList.get(0));
+
         System.out.println("getcode: " + (mobile + code));
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public String modify(@RequestParam("mobile") String mobile, @RequestParam("code") String code, @RequestParam("new_password") String newPassword,
-                         @RequestParam("confirm_password") String confirmPassword, HttpServletResponse response) {
+                         @RequestParam("confirm_password") String confirmPassword, ModelMap model, SessionStatus sessionStatus, HttpServletResponse response) {
         System.out.println("getcode: " + mobile + ", " + code + ", " + newPassword + ", " + confirmPassword);
-        String key = mobile + code;
-        Employee employee;
+
+        if (null == mobile || null == code || mobile.isEmpty() || code.isEmpty()) {
+            outputResponse(response, "手机号码和验证码不能为空，请重新输入");
+            return "findpass";
+        }
+
+        String savedMobile = model.get("mobile").toString();
+        String savedCode = model.get("code").toString();
+        if (!mobile.equals(savedMobile) || !code.equals(savedCode) || null == model.get("employee")) {
+            outputResponse(response, "请先验证您绑定的手机号码");
+            return "findpass";
+        }
 
         if (!newPassword.equals(confirmPassword)) {
             outputResponse(response, "新密码与确认密码不一致，请重新输入");
             return "findpass";
         }
 
-        if (!verifyInfo.containsKey(key) || null == (employee = verifyInfo.get(key))) {
-            outputResponse(response, "请先验证您绑定的手机号码");
-            return "findpass";
-        }
-
-        String oldPass = employee.getPasswd();
+        Employee savedEmployee = (Employee)model.get("employee");
+        String oldPass = savedEmployee.getPasswd();
         String newSalt = PasswordUtil.generateSalt();
         String newPass = PasswordUtil.getMd5Password(newPassword, newSalt);
-        employee.setPasswd(newPass);
-        employee.setSalt(newSalt);
 
-        Optional<Employee> optional = employeeService.updateEmployee(employee);
-        if (!optional.isPresent() || (null != oldPass && oldPass.equals(optional.get().getPasswd()))) {
-            outputResponse(response, "新密码设置失败，请重新设置");
-            return "findpass";
+        String url = "redirect:/login";
+        Optional<Employee> optional = Optional.empty();
+        try {
+            optional = employeeService.changePwdForEmployee(savedEmployee.getId(), newPass, newSalt);
+        } catch (BaseSystemException e) {
+            url = "findpass";
+        } finally {
+            if (!optional.isPresent() || (null != oldPass && oldPass.equals(optional.get().getPasswd()))) {
+                outputResponse(response, "新密码设置失败，请重新设置");
+                return url;
+            }
         }
 
-        verifyInfo.remove(key);
+        sessionStatus.setComplete();
 
-        return "redirect:/login";
+        return url;
     }
 
     private void outputResponse(HttpServletResponse response, String msg) {

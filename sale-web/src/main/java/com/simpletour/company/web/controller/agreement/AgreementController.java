@@ -107,7 +107,7 @@ public class AgreementController extends BaseController {
         }
         AgreementForm agreementForm = new AgreementForm(module.get());
         model.addAttribute("viewForm", agreementForm);
-        model.addAttribute("status", OptionsUtil.getBooleanOption("启用", "禁用", agreementForm.isEnabled()));
+        model.addAttribute("status", OptionsUtil.getBooleanOption("启用", "禁用", !agreementForm.getStatus().equals("false")));
         this.setPageTitle(model, agreementForm.getAppName() + " 销售协议 - 编辑");
         this.enableGoBack(model);
         return "/agreement/form";
@@ -136,12 +136,10 @@ public class AgreementController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "edit/status/{id}", method = RequestMethod.POST)
-    public BaseDataResponse editStatus(@PathVariable Long id) {
+    public BaseDataResponse editStatus(@PathVariable Long id, Boolean status) {
         try {
-            Optional<Agreement> agreement = agreementService.getAgreementById(id);
-            agreement.get().setEnabled(!agreement.get().isEnabled());
-            agreementService.updateAgreement(agreement.get());
-            return BaseDataResponse.ok().msg("状态更新成功").data(agreement.get().isEnabled() ? "启用" : "禁用");
+            agreementService.updateStatus(id, !status);
+            return BaseDataResponse.ok().msg("状态更新成功").data(status ? "禁用" : "启用");
         } catch (BaseSystemException e) {
             return BaseDataResponse.fail().msg("状态更新失败").detail(e.getMessage());
         } catch (Exception e) {
