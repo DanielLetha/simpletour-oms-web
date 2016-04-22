@@ -44,6 +44,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.simpletour.module</groupId>
+                <artifactId>product-service</artifactId>
+                <version>${simpletour.module.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.simpletour.commons</groupId>
                 <artifactId>data</artifactId>
                 <version>${simpletour.common.version}</version>
