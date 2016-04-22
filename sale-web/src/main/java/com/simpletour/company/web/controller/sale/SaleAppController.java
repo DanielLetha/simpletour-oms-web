@@ -1,6 +1,7 @@
 package com.simpletour.company.web.controller.sale;
 
 import com.simpletour.commons.data.dao.IBaseDao;
+import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.domain.DomainPage;
 import com.simpletour.commons.data.exception.BaseSystemException;
 import com.simpletour.company.web.controller.support.BaseAction;
@@ -20,7 +21,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @Brief :  销售端
@@ -41,11 +44,24 @@ public class SaleAppController extends BaseController {
     @RequestMapping(value = {"", "list"})
     public String list(SaleAppQuery query, Model model) {
         this.setPageTitle(model,"销售端列表");
-        DomainPage<SaleApp> pages =  saleAppService.querySaleAppsPagesByConditions(query.asMap(),"id", IBaseDao.SortBy.DESC,query.getIndex(),query.getSize(),true);
+        DomainPage<SaleApp> pages =  saleAppService.querySaleAppPagesByConditions(query.asMap(),"id", IBaseDao.SortBy.DESC,query.getIndex(),query.getSize(),true);
         model.addAttribute("page", pages);
         model.addAttribute("pageHelper", new PageHelper(pages));
         model.addAttribute("query", query);
         return "/sale/list";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "select", method = RequestMethod.POST)
+    public BaseDataResponse select(SaleAppQuery query) {
+        List<SaleApp> modules = saleAppService.querySaleAppList(query.asQuery(ConditionOrderByQuery.class));
+        if (modules == null || modules.isEmpty()) {
+            return BaseDataResponse.noData();
+        } else {
+            List<SaleAppForm> saleAppForms = modules.stream()
+                    .map(SaleAppForm::new).collect(Collectors.toList());
+            return BaseDataResponse.ok().data(saleAppForms);
+        }
     }
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
