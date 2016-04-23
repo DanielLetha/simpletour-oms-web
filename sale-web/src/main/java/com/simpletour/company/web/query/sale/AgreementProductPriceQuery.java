@@ -17,25 +17,27 @@ import java.util.Date;
  */
 public class AgreementProductPriceQuery extends Query {
 
+    private Long agreementProductId;
+
     private Date startDate;
 
     private Date endDate;
 
 
-    public ConditionOrderByQuery asQuery(){
-        ConditionOrderByQuery query = new ConditionOrderByQuery();
-        AndConditionSet conditionSet = new AndConditionSet();
-        conditionSet.addCondition("date",startDate, Condition.MatchType.greaterOrEqual);
-        conditionSet.addCondition("date",endDate,Condition.MatchType.lessOrEqual);
-        query.setCondition(conditionSet);
-        return query;
 
-    }
 
     public AgreementProductPriceQuery() {
     }
 
-    public AgreementProductPriceQuery(Date startDate, Date endDate) {
+    public AgreementProductPriceQuery(Long agreementProductId, Date startDate, Date endDate) {
+        this.agreementProductId = agreementProductId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public AgreementProductPriceQuery(int index, int size, Long agreementProductId, Date startDate, Date endDate) {
+        super(index, size);
+        this.agreementProductId = agreementProductId;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -44,6 +46,14 @@ public class AgreementProductPriceQuery extends Query {
         super(index, size);
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Long getAgreementProductId() {
+        return agreementProductId;
+    }
+
+    public void setAgreementProductId(Long agreementProductId) {
+        this.agreementProductId = agreementProductId;
     }
 
     public Date getStartDate() {
