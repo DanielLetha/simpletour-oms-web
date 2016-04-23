@@ -31,7 +31,7 @@ public class ProductQuerElementView {
             this.type = Product.Type.valueOf(product.getType()).getRemark();
             this.name = product.getName();
             this.arrive = product.getArrive();
-            this.arrive = product.getOnline() ? "上线" : "下线";
+            this.online = product.getOnline() ? "上线" : "下线";
         }
     }
 
