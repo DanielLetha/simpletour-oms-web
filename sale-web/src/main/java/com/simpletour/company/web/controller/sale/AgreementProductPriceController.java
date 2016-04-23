@@ -58,7 +58,7 @@ public class AgreementProductPriceController extends BaseController {
         List<AgreementPriceBo> agreementProductPriceList = priceService.getAgreementProductPriceListByQuery(orderByQuery);
         List<AgreementProductPriceForm> agreementProductPriceForms = agreementProductPriceList.stream().map(p -> new AgreementProductPriceForm(p)).collect(Collectors.toList());
 
-        model.addAttribute("agreementProductPrice",agreementProductPriceForms);
+        model.addAttribute("productPriceList",agreementProductPriceForms);
         return "/sale/productPrice/list";
     }
 
