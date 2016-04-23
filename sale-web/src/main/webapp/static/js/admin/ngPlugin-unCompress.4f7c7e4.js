@@ -1135,6 +1135,8 @@ angular.module('ngPlugin',[])
         return  {
             restrict:'AC',
             scope : {
+                arrive: '=arrive',
+                online: '=online',
                 array : '=array',
                 index : '=index',
                 size : '=size',
@@ -1176,7 +1178,7 @@ angular.module('ngPlugin',[])
                             });
                             if(angular.element(element).height()+angular.element(element).scrollTop() >= trHeight){
                                 angular.element(element).append('<div class="loading" style="text-align: center;">加载中</div>');
-                                $http.post(angular.element(element).attr('url'),{'date':scope.date,'min':scope.min,'index':scope.index,'size':scope.size,'name':scope.name,'type':scope.type,'id':scope.id}).success(function(d){
+                                $http.post(angular.element(element).attr('url'),{'date':scope.date,'min':scope.min,'index':scope.index,'size':scope.size,'name':scope.name,'type':scope.type,'id':scope.id,'arrive':scope.arrive,'online':scope.online}).success(function(d){
                                     if(d.code==0){
                                         scope.index = parseInt(scope.index) + 1;
                                         scope.array = scope.array.concat(d.data);

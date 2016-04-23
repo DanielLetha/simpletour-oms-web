@@ -22,13 +22,10 @@ public class ProductForm {
     @NotBlank(message = "oms.sale.agreement.product.name.notBlank")
     private String name;
 
-    //销售协议产品的版本号
-    private Integer version;
 
     public ProductForm(AgreementProduct agreementProduct) {
         if (agreementProduct != null){
             this.productId = agreementProduct.getId();
-            this.version = agreementProduct.getVersion();
             if (agreementProduct.getProduct() != null){
                 this.name = agreementProduct.getProduct().getName();
             }
@@ -49,13 +46,5 @@ public class ProductForm {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 }

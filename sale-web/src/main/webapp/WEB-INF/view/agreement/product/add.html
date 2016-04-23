@@ -144,7 +144,7 @@
         }
 
         .productselect .productselect_content .productname {
-            text-align: left;
+            text-align: center;
             vertical-align: middle;
             display: inline-block;
             width: 75%;
@@ -433,7 +433,7 @@
                 </tr>
                 </thead>
             </table>
-            <div class="grid">
+            <div class="grid stScroll"  index="postData.index" type="postData.type" size="postData.size" arrive="postData.arrive" online="postData.online" name="postData.name" array="products" url="/agreement/product/products" tabindex="5000" style="overflow: hidden; outline: none;">
                 <table class="table">
                     <tbody style="overflow:hidden;height:307px;">
                     <tr ng-repeat="product in products track by $index" ng-cloak="">
@@ -473,7 +473,7 @@
 <script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
 <script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
 <script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.4f7c7e4.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
     Array.prototype.del = function (idx) {
@@ -594,6 +594,8 @@
         $scope.statusOptionselected = '';
         $scope.statusOptions = items.statusOptions;//产品状态
         $scope.postData = {
+            index: 1,
+            size: 10,
             arrive: '',
             name: '',
             type: '',
@@ -620,7 +622,8 @@
                             $scope.selected = obj.value;
                         }
                     });
-                    $scope.products = data.data.list;
+                    $scope.postData.index++;
+                    $scope.products = data.data;
                     angular.element(event.target).attr('disabled', false);
                     angular.element('.dialog_content .grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
 //                        $scope.index = 'false';

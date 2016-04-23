@@ -84,8 +84,8 @@ public class AgreementProductController extends BaseController {
     @RequestMapping(value = "/products", method = RequestMethod.POST)
     public BaseDataResponse listProducts(@RequestBody ProductQuery query) {
         try {
-            List<Product> products = productService.getProductByCondition(query.asConditison());
-            return BaseDataResponse.ok().data(JSON.toJSON(new ProductQueryListView(products)));
+            DomainPage<Product> page = productService.getProductByConditionPage(query.asConditison(), query.getIndex(), query.getSize());
+            return BaseDataResponse.ok().data(new ProductQueryListView(page.getDomains()).getList());
         } catch (BaseSystemException e) {
             return BaseDataResponse.fail().data(e.getMessage());
         }
