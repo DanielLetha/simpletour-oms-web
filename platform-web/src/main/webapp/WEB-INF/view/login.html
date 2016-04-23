@@ -20,7 +20,8 @@
             <div>用户名</div>
             <div><input type="text" name="username" ng-blur="checkUsername()" ng-model="usr.jobNO" /></div>
             <div>密码</div>
-            <div><input type="password" name="password" ng-model="usr.password" ng-blur="checkPassword()"/></div>
+            <div><input type="password" name="password" ng-trim="false"
+                        ng-model="usr.password" ng-blur="checkPassword()"/></div>
             <button ng-click="loginSubmit()">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
             <input type="hidden" name="rememberMe" ng-value="usr.rememberMe"/>
         </form>

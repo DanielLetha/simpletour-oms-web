@@ -354,7 +354,7 @@
     </style>
 </head>
 <body>
-<div class="header" th:include="fragments :: iframe_header"/>
+<div class="header" th:include="fragments :: iframe_header"></div>
 <div class="iframe_content" ng-controller="scopeController">
     <form th:action="@{/scope/add}" name="form" novalidate="novalidate"  method="post">
         <h2>基础信息</h2>
@@ -444,7 +444,7 @@
                 </tr>
                 </thead>
             </table>
-            <div class="grid">
+            <div class="grid stScroll" index="postData.index" permission="postData.permissionName" size="postData.size" name="postData.name" array="modules" url="/module/select" tabindex="5000" >
                 <table class="table">
                     <tbody style="overflow:hidden;height:307px;">
                     <tr ng-repeat="module in modules track by $index" ng-cloak="">
@@ -638,15 +638,19 @@
 
     app.controller('apController', ['$scope', '$modalInstance', 'ngSubmit', '$http', function ($scope, $modalInstance, ngSubmit, $http) {
         $scope.postData = {
+            index: 1,
             name: '',
-            permissionName: ''
+            permissionName: '',
+            size: 10
         };
         $scope.modules = [];
         $scope.search = function (event) {
+            $scope.postData.index = 1;
             angular.element(event.target).attr('disabled', true);
             $http.post('/module/select', $scope.postData).success(function (data) {
                 if (data.code == 0) {
                     $scope.modules = data.data;
+                    $scope.postData.index += 1;
                     angular.element(event.target).attr('disabled', false);
                     angular.element('.dialog_content .grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
                 } else {

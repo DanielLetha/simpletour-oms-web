@@ -1,6 +1,5 @@
 package com.simpletour.platfrom.web.controller.system;
 
-import com.alibaba.fastjson.JSON;
 import com.simpletour.commons.data.domain.DomainPage;
 import com.simpletour.commons.data.exception.BaseSystemException;
 import com.simpletour.dao.company.query.ModuleDaoQuery;
@@ -53,9 +52,9 @@ public class ModuleController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "select", method = RequestMethod.POST)
     public BaseDataResponse select(@RequestBody ModuleQuery query) {
-        List<Module> modules = moduleService.findModuleList((ModuleDaoQuery) query.asQuery(ModuleDaoQuery.class));
+        DomainPage<Module> modules = moduleService.findModulePage((ModuleDaoQuery) query.asQuery(ModuleDaoQuery.class));
 
-        List<ModuleForm> moduleForms = modules.stream()
+        List<ModuleForm> moduleForms = modules.getDomains().stream()
                 .map(tmp -> new ModuleForm((Module) tmp)).collect(toList());
         return BaseDataResponse.ok().data(moduleForms);
 
@@ -65,8 +64,8 @@ public class ModuleController extends BaseController {
     @RequestMapping(value = "modules", method = RequestMethod.POST)
     public BaseDataResponse listModules(@RequestBody ModuleQuery query) {
         try {
-            List<Module> modules = moduleService.findModuleList((ModuleDaoQuery) query.asQuery(ModuleDaoQuery.class));
-            return BaseDataResponse.ok().data(JSON.toJSON(new ModuleQueryListView(modules)));
+            DomainPage<Module> modules = moduleService.findModulePage((ModuleDaoQuery) query.asQuery(ModuleDaoQuery.class));
+            return BaseDataResponse.ok().data(new ModuleQueryListView(modules.getDomains()).getList());
         } catch (BaseSystemException e) {
             return BaseDataResponse.fail().data(e.getMessage());
         }

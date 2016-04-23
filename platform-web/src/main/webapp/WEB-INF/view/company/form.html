@@ -582,7 +582,7 @@
                 </tr>
                 </thead>
             </table>
-            <div class="grid">
+            <div class="grid stScroll" index="postData.index" size="postData.size" permission="postData.permissionName" name="postData.name" array="modules" url="/module/modules">
                 <table class="table">
                     <tbody style="overflow:hidden;height:307px;">
                     <tr ng-repeat="module in modules track by $index" ng-cloak="">
@@ -625,7 +625,7 @@
 <script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
 <script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
 <script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.4f7c7e4.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     //    <![CDATA[
     Array.prototype.del = function (idx) {
@@ -848,15 +848,18 @@
     });
     app.controller('apController', ['$scope', '$modalInstance', 'ngSubmit', '$http', function ($scope, $modalInstance, ngSubmit, $http) {
         $scope.postData = {
+            index: 1,
             name: '',
-            permissionName: ''
+            permissionName: '',
+            size:10
         };
         $scope.modules = [];
         $scope.search = function (event) {
             angular.element(event.target).attr('disabled', true);
             $http.post('/module/modules', $scope.postData).success(function (data) {
                 if (data.code == 0) {
-                    $scope.modules = data.data.list;
+                    $scope.modules = data.data;
+                    $scope.postData.index++;
                     angular.element(event.target).attr('disabled', false);
                     angular.element('.dialog_content .grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
                 } else {
