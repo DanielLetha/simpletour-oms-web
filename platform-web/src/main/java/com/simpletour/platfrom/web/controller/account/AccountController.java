@@ -13,6 +13,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +74,10 @@ public class AccountController extends BaseController {
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.GET)
-    public String password() {
+    public String password(Model model) {
+        String name = getCurrentUser().getName();
+        this.setPageTitle(model, name+"—修改密码");
+        this.enableGoBack(model);
         return "/password";
     }
 
