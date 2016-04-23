@@ -2,12 +2,12 @@ package com.simpletour.company.web.controller.company;
 
 import com.simpletour.commons.data.domain.DomainPage;
 import com.simpletour.commons.data.exception.BaseSystemException;
+import com.simpletour.commons.util.PasswordUtil;
 import com.simpletour.company.web.controller.support.*;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.company.EmployeeForm;
 import com.simpletour.company.web.form.system.PasswordForm;
 import com.simpletour.company.web.query.company.EmployeeQuery;
-import com.simpletour.company.web.util.PasswordUtil;
 import com.simpletour.domain.company.Company;
 import com.simpletour.domain.company.Employee;
 import com.simpletour.domain.company.Role;

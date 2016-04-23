@@ -4,7 +4,7 @@ import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
 import com.simpletour.commons.data.domain.DomainPage;
 import com.simpletour.commons.data.exception.BaseSystemException;
-import com.simpletour.company.web.util.PasswordUtil;
+import com.simpletour.commons.util.PasswordUtil;
 import com.simpletour.domain.company.Employee;
 import com.simpletour.service.company.IEmployeeService;
 import com.simpletour.service.sms.ISMSService;

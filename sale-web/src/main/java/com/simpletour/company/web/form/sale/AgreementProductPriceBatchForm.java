@@ -1,8 +1,14 @@
 package com.simpletour.company.web.form.sale;
 
+import com.simpletour.biz.sale.bo.AgreementPriceBo;
+import com.simpletour.biz.sale.bo.Price;
+import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
+import com.simpletour.domain.sale.AgreementProductPrice;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Brief :  ${用途}
@@ -11,13 +17,14 @@ import java.util.Date;
  * @Since ： ${VERSION}
  * @Remark: ${Remark}
  */
-public class AgreementProductPriceBatchForm  extends BaseForm{
+public class AgreementProductPriceBatchForm extends BaseForm {
+
+    private Long agreementProductId;
 
     private Date startDate;
 
     private Date endDate;
 
-    private boolean all;
 
     private boolean Sunday;
 
@@ -45,13 +52,30 @@ public class AgreementProductPriceBatchForm  extends BaseForm{
 
     private Integer childRetail;
 
+
+    public AgreementPriceBo as() {
+        AgreementPriceBo agreementPriceBo = new AgreementPriceBo();
+        Map<AgreementProductPrice.Type, Price> map = new HashMap<>();
+        Price adultPrice = null;
+        Price childPrice = null;
+
+        adultPrice = new Price(this.adultCost, this.adultSettlement, this.adultRetail);
+        childPrice = new Price(this.childCost, this.childSettlement, this.childRetail);
+
+
+        map.put(AgreementProductPrice.Type.ADULT, adultPrice);
+        map.put(AgreementProductPrice.Type.CHILD, childPrice);
+        agreementPriceBo.setPriceMap(map);
+        return agreementPriceBo;
+    }
+
     public AgreementProductPriceBatchForm() {
     }
 
-    public AgreementProductPriceBatchForm(Date startDate, Date endDate, boolean all, boolean sunday, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, Integer adultCost, Integer adultSettlement, Integer adultRetail, Integer childCost, Integer childSettlement, Integer childRetail) {
+    public AgreementProductPriceBatchForm(Long agreementProductId, Date startDate, Date endDate, boolean sunday, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, Integer adultCost, Integer adultSettlement, Integer adultRetail, Integer childCost, Integer childSettlement, Integer childRetail) {
+        this.agreementProductId = agreementProductId;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.all = all;
         Sunday = sunday;
         Monday = monday;
         Tuesday = tuesday;
@@ -65,6 +89,14 @@ public class AgreementProductPriceBatchForm  extends BaseForm{
         this.childCost = childCost;
         this.childSettlement = childSettlement;
         this.childRetail = childRetail;
+    }
+
+    public Long getAgreementProductId() {
+        return agreementProductId;
+    }
+
+    public void setAgreementProductId(Long agreementProductId) {
+        this.agreementProductId = agreementProductId;
     }
 
     public Date getStartDate() {
@@ -81,14 +113,6 @@ public class AgreementProductPriceBatchForm  extends BaseForm{
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public boolean isAll() {
-        return all;
-    }
-
-    public void setAll(boolean all) {
-        this.all = all;
     }
 
     public boolean isSunday() {

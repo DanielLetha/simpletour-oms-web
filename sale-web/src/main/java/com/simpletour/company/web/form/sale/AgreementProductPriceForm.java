@@ -1,8 +1,15 @@
 package com.simpletour.company.web.form.sale;
 
+import com.simpletour.biz.sale.bo.AgreementPriceBo;
+import com.simpletour.biz.sale.bo.Price;
+import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
+import com.simpletour.domain.sale.AgreementProduct;
+import com.simpletour.domain.sale.AgreementProductPrice;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Brief :  销售产品价格的form
@@ -15,20 +22,14 @@ public class AgreementProductPriceForm extends BaseForm {
     /**
      * 主键
      */
-    private Long id;
-    /**
-     * 协议主键
-     */
-    private Long agreementId;
-    /**
-     * 产品的主键
-     */
-    private Long productId;
+    private Long adultId;
 
+    private Long childId;
     /**
-     * 类型
+     * 协议产品主键
      */
-    private String type;
+    private Long agreementProductId;
+
     /**
      * 日期
      */
@@ -37,63 +38,92 @@ public class AgreementProductPriceForm extends BaseForm {
     /**
      * 成本
      */
-    private Integer cost;
+    private Integer adultCost;
     /**
      * 结算价
      */
-    private Integer settlement;
+    private Integer adultSettlement;
 
     /**
      * 建议价
      */
-    private Integer retail;
-    /**
-     * 备注
-     */
-    private String remark;
+    private Integer adultRetail;
+
+
+    private Integer childCost;
+
+    private Integer childSettlement;
+
+
+    private Integer childRetail;
+
     /**
      * 版本号
      */
-    private Integer version;
+    private Integer adultVersion;
 
+    private Integer childVersion;
 
     public AgreementProductPriceForm() {
     }
 
-    public AgreementProductPriceForm(Long agreementId, Long productId, String type, Date date, Integer cost, Integer settlement, Integer retail, String remark, Integer version) {
-        this.agreementId = agreementId;
-        this.productId = productId;
-        this.type = type;
-        this.date = date;
-        this.cost = cost;
-        this.settlement = settlement;
-        this.retail = retail;
-        this.remark = remark;
-        this.version = version;
+    public AgreementPriceBo as(){
+        AgreementPriceBo agreementPriceBo = new AgreementPriceBo();
+        Map<AgreementProductPrice.Type,Price> map = new HashMap<>();
+        Price adultPrice = null;
+        Price childPrice = null;
+        if(this.mode.equals(FormModeType.UPDATE)){
+            adultPrice = new Price(this.adultId,this.adultCost,this.adultSettlement,this.adultRetail,this.adultVersion);
+            childPrice = new Price(this.childId,this.childCost,this.childSettlement,this.childRetail,this.childVersion);
+        }else{
+            adultPrice = new Price(this.adultCost,this.adultSettlement,this.adultRetail,this.adultVersion);
+            childPrice = new Price(this.childCost,this.childSettlement,this.childRetail,this.childVersion);
+        }
+
+        map.put(AgreementProductPrice.Type.ADULT,adultPrice);
+        map.put(AgreementProductPrice.Type.CHILD,childPrice);
+        agreementPriceBo.setPriceMap(map);
+        agreementPriceBo.setDate(this.date);
+        return agreementPriceBo;
     }
 
-    public Long getAgreementId() {
-        return agreementId;
+
+    public AgreementProductPriceForm(AgreementPriceBo agreementPriceBo) {
+        this.date = agreementPriceBo.getDate();
+        this.agreementProductId = agreementPriceBo.getAgreementProduct().getId();
+        this.adultId = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getId();
+        this.adultCost = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getCost();
+        this.adultSettlement = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getSettlement();
+        this.adultVersion = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getVersion();
+        this.childId = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getId();
+        this.childCost = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getCost();
+        this.childSettlement = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getSettlement();
+        this.childRetail = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getRetail();
+        this.childVersion = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getVersion();
     }
 
-    public void setAgreementId(Long agreementId) {
-        this.agreementId = agreementId;
+    public Long getAdultId() {
+        return adultId;
     }
 
-    public Long getProductId() {
-        return productId;
+    public void setAdultId(Long adultId) {
+        this.adultId = adultId;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public Long getChildId() {
+        return childId;
     }
 
-    public String getType() {
-        return type;
+    public void setChildId(Long childId) {
+        this.childId = childId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public Long getAgreementProductId() {
+        return agreementProductId;
+    }
+
+    public void setAgreementProductId(Long agreementProductId) {
+        this.agreementProductId = agreementProductId;
     }
 
     public Date getDate() {
@@ -104,43 +134,67 @@ public class AgreementProductPriceForm extends BaseForm {
         this.date = date;
     }
 
-    public Integer getCost() {
-        return cost;
+    public Integer getAdultCost() {
+        return adultCost;
     }
 
-    public void setCost(Integer cost) {
-        this.cost = cost;
+    public void setAdultCost(Integer adultCost) {
+        this.adultCost = adultCost;
     }
 
-    public Integer getSettlement() {
-        return settlement;
+    public Integer getAdultSettlement() {
+        return adultSettlement;
     }
 
-    public void setSettlement(Integer settlement) {
-        this.settlement = settlement;
+    public void setAdultSettlement(Integer adultSettlement) {
+        this.adultSettlement = adultSettlement;
     }
 
-    public Integer getRetail() {
-        return retail;
+    public Integer getAdultRetail() {
+        return adultRetail;
     }
 
-    public void setRetail(Integer retail) {
-        this.retail = retail;
+    public void setAdultRetail(Integer adultRetail) {
+        this.adultRetail = adultRetail;
     }
 
-    public String getRemark() {
-        return remark;
+    public Integer getChildCost() {
+        return childCost;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setChildCost(Integer childCost) {
+        this.childCost = childCost;
     }
 
-    public Integer getVersion() {
-        return version;
+    public Integer getChildSettlement() {
+        return childSettlement;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setChildSettlement(Integer childSettlement) {
+        this.childSettlement = childSettlement;
+    }
+
+    public Integer getChildRetail() {
+        return childRetail;
+    }
+
+    public void setChildRetail(Integer childRetail) {
+        this.childRetail = childRetail;
+    }
+
+    public Integer getAdultVersion() {
+        return adultVersion;
+    }
+
+    public void setAdultVersion(Integer adultVersion) {
+        this.adultVersion = adultVersion;
+    }
+
+    public Integer getChildVersion() {
+        return childVersion;
+    }
+
+    public void setChildVersion(Integer childVersion) {
+        this.childVersion = childVersion;
     }
 }

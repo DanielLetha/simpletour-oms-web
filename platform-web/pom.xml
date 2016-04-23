@@ -34,11 +34,6 @@
             <artifactId>util</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.simpletour</groupId>
-            <artifactId>simpletour-redis</artifactId>
-        </dependency>
-
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
