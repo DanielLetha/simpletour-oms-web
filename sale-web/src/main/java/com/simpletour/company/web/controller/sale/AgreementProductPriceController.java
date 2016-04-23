@@ -7,15 +7,12 @@ import com.simpletour.commons.data.dao.query.condition.Condition;
 import com.simpletour.company.web.controller.support.BaseController;
 import com.simpletour.company.web.controller.support.BaseDataResponse;
 import com.simpletour.company.web.enums.FormModeType;
-import com.simpletour.company.web.enums.Option;
 import com.simpletour.company.web.form.sale.AgreementProductPriceBatchForm;
 import com.simpletour.company.web.form.sale.AgreementProductPriceForm;
 import com.simpletour.company.web.query.sale.AgreementProductPriceQuery;
 import com.simpletour.domain.sale.AgreementProduct;
-import com.simpletour.domain.sale.AgreementProductPrice;
 import com.simpletour.service.sale.IAgreementProductPriceService;
 import com.simpletour.service.sale.IAgreementProductService;
-import org.apache.poi.ss.formula.functions.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
