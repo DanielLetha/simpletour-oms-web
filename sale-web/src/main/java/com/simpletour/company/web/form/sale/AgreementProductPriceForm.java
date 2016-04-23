@@ -107,6 +107,7 @@ public class AgreementProductPriceForm extends BaseForm {
         this.agreementProductId = agreementPriceBo.getAgreementProduct().getId();
         this.adultId = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getId();
         this.adultCost = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getCost();
+        this.adultRetail = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getRetail();
         this.adultSettlement = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getSettlement();
         this.adultVersion = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getVersion();
         this.childId = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getId();
