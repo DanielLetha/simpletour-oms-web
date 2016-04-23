@@ -52,7 +52,6 @@ public class RoleController extends BaseController {
 
     @RequestMapping(value = {"", "list"})
     public String list(RoleQueryConditions query, Model model) {
-        System.out.println("enter list");
 
         // TODO: 暂时先将租户ID写死
         //TokenStorage.setLocalTokenWithCompanyId(0L, COMPANY_ID);
@@ -63,8 +62,6 @@ public class RoleController extends BaseController {
         model.addAttribute("page", page);
         model.addAttribute("query", query);
         model.addAttribute("pageHelper", new PageHelper(page));
-
-        System.out.println("end list");
 
         return MAPPING_URL + "list";
     }

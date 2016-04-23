@@ -73,8 +73,16 @@
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basenames" value="classpath:validationMessage.properties"/>
+        <property name="basenames" value="classpath:validationMessage"/>
         <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    <bean id="conversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    </bean>
+
+    <bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+        <property name="validator" ref="beansValidator"/>
+        <property name="conversionService" ref="conversionService"/>
     </bean>
 
     <!-- 静态资源-->

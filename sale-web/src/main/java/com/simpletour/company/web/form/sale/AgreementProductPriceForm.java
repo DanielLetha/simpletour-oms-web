@@ -6,7 +6,9 @@ import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
 import com.simpletour.domain.sale.AgreementProduct;
 import com.simpletour.domain.sale.AgreementProductPrice;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,28 +35,40 @@ public class AgreementProductPriceForm extends BaseForm {
     /**
      * 日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     /**
-     * 成本
+     * 成本(成人)
      */
+    @NotNull(message = "{agreementProductPrice.adultCost.null}")
     private Integer adultCost;
     /**
-     * 结算价
+     * 结算价(成人)
      */
+    @NotNull(message = "{agreementProductPrice.adultSettlement.nul}")
     private Integer adultSettlement;
 
     /**
-     * 建议价
+     * 建议价(成人)
      */
+    @NotNull(message = "{agreementProductPrice.adultRetail.null}")
     private Integer adultRetail;
 
-
+    /**
+     * 成本(儿童)
+     */
+    @NotNull(message = "{agreementProductPrice.childCost.null}")
     private Integer childCost;
-
+    /**
+     * 结算价(儿童)
+     */
+    @NotNull(message = "{agreementProductPrice.childSettlement.null}")
     private Integer childSettlement;
-
-
+    /**
+     * 建议价(儿童)
+     */
+    @NotNull(message = "{agreementProductPrice.childRetail.null}")
     private Integer childRetail;
 
     /**
@@ -67,21 +81,21 @@ public class AgreementProductPriceForm extends BaseForm {
     public AgreementProductPriceForm() {
     }
 
-    public AgreementPriceBo as(){
+    public AgreementPriceBo as() {
         AgreementPriceBo agreementPriceBo = new AgreementPriceBo();
-        Map<AgreementProductPrice.Type,Price> map = new HashMap<>();
+        Map<AgreementProductPrice.Type, Price> map = new HashMap<>();
         Price adultPrice = null;
         Price childPrice = null;
-        if(this.mode.equals(FormModeType.UPDATE)){
-            adultPrice = new Price(this.adultId,this.adultCost,this.adultSettlement,this.adultRetail,this.adultVersion);
-            childPrice = new Price(this.childId,this.childCost,this.childSettlement,this.childRetail,this.childVersion);
-        }else{
-            adultPrice = new Price(this.adultCost,this.adultSettlement,this.adultRetail,this.adultVersion);
-            childPrice = new Price(this.childCost,this.childSettlement,this.childRetail,this.childVersion);
+        if (this.mode.equals(FormModeType.UPDATE)) {
+            adultPrice = new Price(this.adultId, this.adultCost, this.adultSettlement, this.adultRetail, this.adultVersion);
+            childPrice = new Price(this.childId, this.childCost, this.childSettlement, this.childRetail, this.childVersion);
+        } else {
+            adultPrice = new Price(this.adultCost, this.adultSettlement, this.adultRetail, this.adultVersion);
+            childPrice = new Price(this.childCost, this.childSettlement, this.childRetail, this.childVersion);
         }
 
-        map.put(AgreementProductPrice.Type.ADULT,adultPrice);
-        map.put(AgreementProductPrice.Type.CHILD,childPrice);
+        map.put(AgreementProductPrice.Type.ADULT, adultPrice);
+        map.put(AgreementProductPrice.Type.CHILD, childPrice);
         agreementPriceBo.setPriceMap(map);
         agreementPriceBo.setDate(this.date);
         return agreementPriceBo;
