@@ -137,6 +137,10 @@
             $scope.$apply();
             stock();
         });
+
+        $scope.postData = {
+            productPriceList: [[${productPriceList}]] || ''
+        };
         //请求库存
         function stock() {
             $http.post('/url', {start: $scope.start, end: $scope.end}).success(function (data) {
