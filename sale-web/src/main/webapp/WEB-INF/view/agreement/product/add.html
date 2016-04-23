@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<!--SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd"-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" ng-app="app">
+<head>
+    <title>
+        简途旅行核心管理系统
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/main.css}"/>
+    <link rel="stylesheet" th:href="@{/static/lib/bootstrap-datetimepicker.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/lib/jquery-1.11.1.min.js}"></script>
+
+    <style>
+        .iframe_content .input_group {
+            width: 288px;
+        }
+
+        .iframe_content .input_group input {
+            width: 201px;
+        }
+
+        .iframe_content .input_group.special {
+            position: relative;
+        }
+
+        .iframe_content .input_group.special .currency {
+            position: absolute;
+            bottom: 0px;
+            right: 8px;
+        }
+
+        .iframe_content .input_group.special .right.one, .iframe_content .input_group.special .right.two {
+            width: 110px;
+            text-indent: 16px;
+        }
+
+        .iframe_content .input_group.special .currency.enough {
+            position: absolute;
+            bottom: 0px;
+            right: 203px;
+        }
+
+        .iframe_content .input_group.special .currency.reduce {
+            position: absolute;
+            bottom: 0px;
+            right: 92px;
+        }
+
+        .iframe_content .input_group label {
+            width: 84px;
+        }
+
+        .productselect {
+            width: 952px;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            box-sizing: border-box;
+        }
+
+        .productselect .productselect_header {
+            height: 30px;
+            line-height: 30px;
+            padding: 0 10px;
+            background-color: #efebe9;
+        }
+
+        .productselect .productselect_header .screened {
+            float: right;
+            height: 30px;
+            display: inline-block;
+            margin-left: 600px;
+        }
+
+        .productselect .productselect_header .screened input {
+            margin: 3px 35px 4px 0;
+            vertical-align: middle;
+            display: inline-block;
+            width: 100px;
+            height: 14px;
+        }
+
+        .productselect .productselect_content {
+            /*width: 278px;*/
+            width: 930px;
+            min-height: 176px;
+            padding: 0 10px;
+            border-bottom: 1px solid #e0e0e0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .productselect .productselect_content .titles {
+            border-bottom: 1px solid #e0e0e0;
+            height: 30px;
+            width: 100%;
+            font-size: 0;
+        }
+
+        .productselect .productselect_content .titles .unit_title {
+            font-size: 0;
+            display: inline-block;
+            width: 310px;
+            height: 30px;
+        }
+
+        .productselect .productselect_content .titles .unit_title span {
+            text-align: center;
+            line-height: 30px;
+            height: 30px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        .productselect .productselect_content .productlist {
+            width: 930px;
+            padding-right: 10px;
+            height: 240px;
+            font-size: 0;
+        }
+
+        .productselect .productselect_content .unit {
+            display: inline-block;
+            vertical-align: middle;
+            width: 310px;
+            text-align: center;
+            font-size: 0;
+            min-height: 30px;
+            line-height: 30px;
+        }
+
+        .productselect .productselect_content .unit:hover {
+        background-color: #45b97c;
+        }
+        .productselect .productselect_content .operation {
+            vertical-align: middle;
+            display: inline-block;
+            width: 25%;
+        }
+
+        .productselect .productselect_content .operation .mcheckbox {
+            display: inline-block;
+            vertical-align: middle;
+            padding-bottom: 3px;
+        }
+
+        .productselect .productselect_content .productname {
+            text-align: left;
+            vertical-align: middle;
+            display: inline-block;
+            width: 75%;
+        }
+
+        .productselect .productselect_content .productname.ellipsis {
+            height: 30px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .productselect .productselect_footer {
+            padding: 0 10px;
+            height: 30px;
+            background-color: #efebe9;
+        }
+
+        .productselect a {
+            display: inline-block;
+            /*padding: 8px 8px;*/
+            /*border: none;*/
+            /*height: 18px;*/
+            /*background-color: #d84527;*/
+            float: right;
+            margin-right: 10px;
+            line-height: 30px;
+            color: #d84527;
+            text-decoration: underline;
+        }
+
+        .modal-dialog {
+            width: 808px;
+        }
+
+        .dialog_header {
+            margin-bottom: 10px;
+            font-size: 0;
+        }
+
+        .dialog_header .search_group {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .dialog_header button.searchBtn {
+            float: right;
+            vertical-align: middle;
+            display: inline-block;
+            font-size: 12px;
+            border-radius: 4px;
+            height: 30px;
+        }
+
+        .dialog_header button.searchBtn[disabled=disabled] {
+            background-color: #a1a1a1;
+        }
+
+        .dialog_header .search_group .input_unit {
+            line-height: 30px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .dialog_header .search_group .input_unit input {
+            border: 1px solid #d8d8d8;
+            box-sizing: border-box;
+            float: none;
+        }
+
+        .modal-dialog {
+            max-width: 808px;
+        }
+
+        .modal-dialog .dialog_content {
+            max-width: 748px;
+        }
+
+        .modal-dialog .dialog_content .grid {
+            overflow-y: auto;
+            height: 307px;
+        }
+
+        .modal-dialog .dialog_content .grid td {
+            color: #4a4a4a;
+        }
+
+        .modal-dialog .dialog_content .grid td .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+
+        .modal-dialog .dialog_content .table_footer .selects .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+
+        .selects .mcheckbox {
+            vertical-align: middle;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        .productselect_footer .selects {
+            padding: 0;
+        }
+
+        .modal-dialog .dialog_content .table_footer .ops {
+            width: 130px;
+            height: 30px;
+            line-height: 30px;
+            padding: 15px 0;
+            float: right;
+        }
+
+        .modal-dialog .dialog_content .table_footer .ops a {
+            margin-left: 0;
+            padding: 0;
+            background-color: #eee;
+            float: none;
+            border-radius: 0;
+            color: #a1a1a1;
+            margin-right: 15px;
+        }
+
+        .modal-dialog .dialog_content .table_footer .ops button {
+            border: none;
+            background-color: #43a047;
+            color: white;
+            z-index: 2;
+            position: relative;
+            padding: 5px 5px;
+            border-radius: 4px;
+        }
+
+        .search_group .dropdown .selected:after {
+        content: '';
+        height: 30px;
+        background: url(/static/images/dropdownArrow.png) no-repeat center;
+        }
+        .selects {
+            width: 300px;
+            display: inline-block;
+            margin-left: 10px;
+            height: 30px;
+            line-height: 30px;
+            padding: 15px 0;
+        }
+
+        .container_main {
+            padding-bottom: 60px;
+        }
+
+        .input_unit .dropdown {
+            height: 30px;
+            color: #4a4a4a;
+            display: inline-block;
+            text-align: left;
+            border-color: #d8d8d8;
+        }
+
+        .input_unit .dropdown li.hover {
+            background-color: #45b97c;
+            color: white;
+        }
+
+        .input_unit .dropdown .selected {
+            height: 30px;
+        }
+
+        .erorrTip {
+            display: none;
+            z-index: 2;
+            color: #d84527;
+            position: absolute;
+            height: 30px;
+            padding: 15px 0;
+            line-height: 30px;
+        }
+
+        .dialog_content .table_footer .ops button[disabled=disabled] {
+            background-color: #a1a1a1;
+        }
+         select {
+             opacity: 0;
+         }
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+</head>
+<body ng-controller="productController">
+<div class="header" th:include="fragments :: iframe_header"/>
+<div class="iframe_content" style="position: relative">
+    <form action="/agreement/product/products" name="form" method="post">
+        <h2>产品范围信息</h2>
+
+        <div class="offset">
+            <div class="productselect">
+                <div class="productselect_header">
+                    已关联产品列表
+                    <sapn class="screened">
+                        筛选:&nbsp;&nbsp;<input type="text" ng-model="query"/>
+                        <a ng-click="open($event)">添&nbsp;&nbsp;加</a>
+                    </sapn>
+                </div>
+                <div class="productselect_content">
+                    <div class="titles">
+                        <div class="unit_title">
+                            <span class="operation">操作</span>
+                            <span class="productname">产品名称</span>
+                        </div>
+                        <div class="unit_title">
+                            <span class="operation">操作</span>
+                            <span class="productname">产品名称</span>
+                        </div>
+                        <div class="unit_title">
+                            <span class="operation">操作</span>
+                            <span class="productname">产品名称</span>
+                        </div>
+                    </div>
+                    <div class="productlist">
+                        <div class="unit" ng-repeat="product in ( queryproducts = (postData.products | filter: query)) track by $index" >
+                            <span class="operation"><input ng-model="product.isChecked" class="stCheckbox" type="checkbox"/>&nbsp;&nbsp;选择</span>
+                            <span class="productname ellipsis" ng-mouseenter="displayAll($event)" ng-mouseleave="hideAll($event)" ng-bind="product.name"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="productselect_footer">
+                    <span class="selects">
+                        <input type="checkbox" class="stCheckbox" ng-model="allChecked" ng-click="getAll($event)"/>&nbsp;&nbsp;全选&nbsp;&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <a ng-click="delete($event)">删&nbsp;除</a>
+                </div>
+            </div>
+        </div>
+        <!--end of form-->
+        <div>
+            <button type="button" ng-click="submit($event)" class="confirm" style='margin:20px 10px 20px 923px'>更&nbsp;&nbsp;&nbsp;&nbsp;新</button>
+        </div>
+    </form>
+</div>
+<script type="text/ng-template" id="activeProducts.html">
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+    <div class="dialog_header" >
+        <div class="search_group">
+            <div class="input_unit">
+                <select class="stDropdown" width="110" name="type" ng-model="productTypeOptionselected" th:attr="n=${#arrays.length(productTypeOptions)}"
+                        ng-cloak="">
+                    <option th:each="type : ${productTypeOptions}" th:value="${type.value}" th:text="${type.name}" th:attr="selected=${type.selected}"></option>
+                </select>
+            </div>
+            <div class="input_unit">
+                产品名称&nbsp;&nbsp;<input type="text" ng-model="postData.name" style="width:130px;"/>
+            </div>
+            <div class="input_unit">
+                目的地&nbsp;&nbsp;<input type="text" ng-model="postData.arrive" style="width:120px;"/>
+            </div>
+            <div class="input_unit">
+                <select class="stDropdown" width="110" name="online" ng-model="statusOptionselected" th:attr="n=${#arrays.length(statusOptions)}"
+                        ng-cloak="">
+                    <option th:each="online : ${statusOptions}" th:value="${online.value}" th:text="${online.name}" th:attr="selected=${online.selected}"></option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="searchBtn" ng-click="search($event)">搜&nbsp;&nbsp;&nbsp;索</button>
+    </div>
+    <div class="dialog_content" style="position:relative;">
+        <div class="container_main">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style='width:15%'>操作</th>
+                    <th style='width:25%'>类型</th>
+                    <th style='width:30%'>产品名称</th>
+                    <th style='width:15%'>目的地</th>
+                    <th style='width:15%'>状态</th>
+                </tr>
+                </thead>
+            </table>
+            <div class="grid">
+                <table class="table">
+                    <tbody style="overflow:hidden;height:307px;">
+                    <tr ng-repeat="product in products track by $index" ng-cloak="">
+                        <td style='width:15%'><input class="chooseCheckbox stCheckbox" ng-model="product.isSelected"
+                                                     type="checkbox"/>&nbsp;&nbsp;选择
+                        </td>
+                        <td style='width:25%' ng-bind="product.type"></td>
+                        <td style='width:30%' ng-bind="product.name"></td>
+                        <td style='width:15%' ng-bind="product.arrive"></td>
+                        <td style='width:15%' ng-bind="product.online"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="table_footer">
+            <div class="selects">
+                <input type="checkbox" class="stCheckbox"  ng-class="{selected:flag}" ng-model="allSelected"
+                       ng-click="checkAll($event)"/>&nbsp;&nbsp;全选&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" ng-model="inverseSelected" class="stCheckbox"  ng-click="inverse($event)"/>&nbsp;&nbsp;反选
+            </div>
+
+            <div class="ops">
+                <a href="#" ng-click="cancel()">取&nbsp;&nbsp;消</a>
+                <button ng-click="ok()">确认添加</button>
+            </div>
+        </div>
+    </div>
+    <div class="dialog_footer"></div>
+    </html>
+</script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/angular.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/jquery.nicescroll.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/alertMsg.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.config.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/ueditor/ueditor.all.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin/ngPlugin-unCompress.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    //    <![CDATA[
+    Array.prototype.del = function (idx) {
+        if (isNaN(idx) || idx > this.length) return false;
+        for (var i = 0, n = 0; i < this.length; i++) {
+            if (i != idx) {
+                this[n++] = this[i];
+            }
+        }
+        this.length -= 1;
+    }
+    var app = angular.module('app', ['ngPlugin']);
+    app.controller("productController", ['$scope', '$http', 'stModal', 'ngSubmit', '$window', function ($scope, $http, stModal, ngSubmit, $window) {
+        $scope.postData = {
+            agreementId: [[${productListForm.agreementId}]],
+            products: [[${productListForm.products}]] || []
+        };
+        $scope.productTypeOptions = [[${productTypeOptions}]] || [];
+        $scope.statusOptions = [[${statusOptions}]] || [];
+        $scope.isChecked = false;//是否选中的初始值
+        $scope.allChecked = false;
+        $scope.query = '';
+        $scope.queryproducts = [];
+
+
+        $scope.displayAll = function (event) {
+            angular.element(event.target).removeClass('ellipsis');
+        };
+        $scope.hideAll = function (event) {
+            angular.element(event.target).addClass('ellipsis');
+        };
+        $scope.getAll = function (event) {
+            var isAllChecked = $scope.allChecked ? false : true;
+            angular.forEach($scope.queryproducts, function (good, index) {
+                good.isChecked = isAllChecked;
+            });
+        };
+        $scope.delete = function (event) {
+            var length = $scope.postData.products.length;
+            for (var i = 0; i < length; i++) {
+                if ($scope.postData.products[i].isChecked) {
+                    $scope.postData.products.del(i);
+                    length -= 1;
+                    i -= 1;
+                }
+            }
+        };
+        $scope.removeRepeat = function (existObj, resultsObj) {
+            angular.forEach(existObj, function (exist, key) {
+                angular.forEach(resultsObj, function (result, index) {
+                    if (result.productId === exist.productId) {
+                        resultsObj.del(index);
+                        index -= 1;
+                    }
+                });
+            });
+            return Array.prototype.concat(existObj, resultsObj);
+        };
+        $scope.submit = function (event) {
+            angular.forEach($scope.postData.products, function (good, key) {
+                delete good.isSelected;
+                delete good.isChecked;
+            });
+            ngSubmit({
+                ele: event.target,
+                data: $scope.postData,
+                form: $scope.form,
+                success: function (data) {
+                    setTimeout(function () {
+                        location.href = data.jumpUrl;
+                    }, 3000);
+                },
+                error: function (data) {
+                }
+            });
+        };
+        $scope.bodyScroll = function (status) {
+            $(document.body).css({'overflow': status});
+        };
+        $scope.open = function ($event) {
+            $event.preventDefault();
+            $scope.bodyScroll('hidden');
+            stModal({
+                templateUrl : 'activeProducts.html',
+                controller: 'apController',
+                resolve: {
+                    items: function () {
+                        return {
+                            productTypeOptions: $scope.productTypeOptions,
+                            statusOptions: $scope.statusOptions
+                        }
+                    }
+                },
+                ok: function(results) {
+                    angular.element('.productlist').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+                    angular.forEach(results, function (obj, key) {
+                        obj.isChecked = $scope.isChecked;
+                    });
+                    if ($scope.postData.products != null) {
+                        var products = $scope.postData.products;
+                        $scope.postData.products = $scope.removeRepeat(products, results);
+                    } else {
+                        $scope.postData.products = results;
+                    }
+                    angular.element('.productlist').getNiceScroll().resize();
+                    $scope.bodyScroll('auto');
+                },
+                cancel: function() {
+                    $scope.bodyScroll('auto');
+                }
+            });
+        };
+    }]);
+    app.controller('apController', ['$scope', '$modalInstance', 'ngSubmit', '$http', 'items', function ($scope, $modalInstance, ngSubmit, $http, items) {
+        $scope.products = [];
+        $scope.productTypeOptionselected = '';
+        $scope.productTypeOptions = items.productTypeOptions;//产品类型
+        $scope.statusOptionselected = '';
+        $scope.statusOptions = items.statusOptions;//产品状态
+        $scope.postData = {
+            arrive: '',
+            name: '',
+            type: '',
+            online: ''
+        };
+        $scope.search = function (event) {
+            $('.search_group input[type=text]').each(function () {
+                if ($(this).val() != '') {
+                    $(this).val($(this).val().trim());
+                }
+            });
+            $scope.postData.type = $scope.productTypeOptionselected;
+            $scope.postData.online = $scope.statusOptionselected;
+            angular.element(event.target).attr('disabled', true);
+            $http.post('/agreement/product/products', $scope.postData).success(function (data) {
+                if (data.code == 0) {
+                    angular.forEach($scope.productTypeOptions, function (obj, key) {
+                        if (obj.selected) {
+                            $scope.selected = obj.value;
+                        }
+                    });
+                    angular.forEach($scope.statusOptions, function (obj, key) {
+                        if (obj.selected) {
+                            $scope.selected = obj.value;
+                        }
+                    });
+                    $scope.products = data.data.list;
+                    angular.element(event.target).attr('disabled', false);
+                    angular.element('.dialog_content .grid').niceScroll({cursorborder: '', cursorcolor: '#000', cursoropacitymax: '0.5'});
+//                        $scope.index = 'false';
+                } else {
+                    $.alertMsg.alert({
+                        title: data.msg,
+                        detailed: '此提示5秒后关闭',
+                        button: '关闭',
+                        delay: 500,
+                        type: 'fail'
+                    });
+                    angular.element(event.target).attr('disabled', false);
+                }
+            }).error(function (data) {
+                $.alertMsg.alert({
+                    title: data.msg,
+                    detailed: '网络异常，请重试！',
+                    button: '关闭',
+                    delay: 500,
+                    type: 'fail'
+                });
+                angular.element(event.target).attr('disabled', false);
+            });
+        };
+        $scope.index = 'false';
+        $scope.selects = null;
+        $scope.allSelected = null;
+        $scope.inverseSelected = null;
+        $scope.flag = false;
+        var isAllSelected;
+
+        $scope.focus = function (event) {
+            angular.element('span.erorrTip').css('display', 'none');
+        };
+
+        $scope.checkAll = function (event) {
+            isAllSelected = $scope.allSelected ? false : true;
+            angular.forEach($scope.products, function (product, index) {
+                product.isSelected = isAllSelected;
+            });
+            if ($scope.inverseSelected) {
+                $scope.inverseSelected = !$scope.inverseSelected;
+            }
+        };
+
+        $scope.inverse = function (event) {
+            console.log(!$scope.inverseSelected);
+            if (!$scope.inverseSelected) {
+                angular.forEach($scope.products, function (product, index) {
+                    product.isSelected = !product.isSelected;
+                });
+            }
+            if ($scope.allSelected) {
+                $scope.allSelected = !$scope.allSelected;
+            }
+        };
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+        $scope.ok = function () {
+            $scope.selectedProducts = [];
+            angular.forEach($scope.products, function (obj, key) {
+                if (obj.isSelected) {
+                    $scope.selectedProducts.push(obj);
+                }
+            });
+            $modalInstance.close($scope.selectedProducts);
+        }
+
+    }]);
+    //    ]]>
+</script>
+</body>
+</html>

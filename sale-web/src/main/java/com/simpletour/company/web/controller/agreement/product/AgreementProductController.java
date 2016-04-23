@@ -16,9 +16,6 @@ import com.simpletour.company.web.util.OptionsUtil;
 import com.simpletour.company.web.view.agreement.AgreementProductListView;
 import com.simpletour.company.web.view.agreement.ProductQueryListView;
 import com.simpletour.company.web.view.agreement.SaleAppView;
-import com.simpletour.dao.company.query.ModuleDaoQuery;
-import com.simpletour.domain.company.Company;
-import com.simpletour.domain.company.Module;
 import com.simpletour.domain.product.Product;
 import com.simpletour.domain.sale.Agreement;
 import com.simpletour.domain.sale.AgreementProduct;
@@ -78,7 +75,7 @@ public class AgreementProductController extends BaseController {
             model.addAttribute("productListForm", productListForm);
             model.addAttribute("productTypeOptions", productTypeOptions);
             model.addAttribute("statusOptions", statusOptions);
-            return "/agreement/product/products";
+            return "/agreement/product/add";
         }
         return this.error();
     }
