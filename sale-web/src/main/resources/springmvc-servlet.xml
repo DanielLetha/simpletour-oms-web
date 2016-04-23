@@ -37,6 +37,8 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+
+
     <!--配置Thymeleaf模板引擎和视图解析器-->
     <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/view/"/>
@@ -49,19 +51,18 @@
 
     <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
         <property name="templateResolver" ref="templateResolver"/>
-        <!--<property name="additionalDialects">-->
-        <!--<set>-->
-        <!--<bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>-->
-        <!--</set>-->
-        <!--</property>-->
+        <property name="additionalDialects">
+            <set>
+                <bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>
+            </set>
+        </property>
     </bean>
 
-    <bean class="com.simpletour.util.framework.init.ThymeleafInitializer">
-        <property name="contentType" value="text/html;charset=UTF-8"/>
+    <bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <!--<property name="contentType" value="text/html;charset=UTF-8"/>-->
         <property name="templateEngine" ref="templateEngine"/>
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
-
     <!-- 文件上传，配置MultipartResolver处理器 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="UTF-8"/>
