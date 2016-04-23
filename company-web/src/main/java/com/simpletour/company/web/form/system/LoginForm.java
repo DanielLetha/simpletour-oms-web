@@ -14,7 +14,6 @@ public class LoginForm {
     /**
      * 密码
      */
-    @NotBlank(message = "{oms.login.password.notNull}")
     private String password;
     /**
      * 记住我
