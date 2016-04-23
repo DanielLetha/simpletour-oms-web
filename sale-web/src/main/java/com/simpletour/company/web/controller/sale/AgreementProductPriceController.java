@@ -4,7 +4,9 @@ import com.simpletour.biz.sale.bo.AgreementPriceBo;
 import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
 import com.simpletour.commons.data.dao.query.condition.Condition;
+import com.simpletour.company.web.controller.support.BaseController;
 import com.simpletour.company.web.controller.support.BaseDataResponse;
+import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.enums.Option;
 import com.simpletour.company.web.form.sale.AgreementProductPriceBatchForm;
 import com.simpletour.company.web.form.sale.AgreementProductPriceForm;
@@ -36,16 +38,35 @@ import java.util.stream.Collectors;
  */
 @RequestMapping("/sale/productPrice")
 @Controller
-public class AgreementProductPriceController {
-
+public class AgreementProductPriceController extends BaseController {
 
     @Autowired
     private IAgreementProductPriceService priceService;
+
     @Autowired
     private IAgreementProductService productService;
 
 
-    @RequestMapping(value = {"", "list"}, method = RequestMethod.POST)
+    @RequestMapping(value = "list/{agreementProductId}", method = RequestMethod.GET)
+    public String list(@PathVariable Long agreementProductId, Model model) {
+        Optional<AgreementProduct> agreementProductOptional = productService.getAgreementProductById(agreementProductId);
+        this.setPageTitle(model, agreementProductOptional.get().getProduct().getName()+"产品价格日历");
+        this.enableGoBack(model);
+        ConditionOrderByQuery orderByQuery = new ConditionOrderByQuery();
+        AndConditionSet conditionSet = new AndConditionSet();
+        conditionSet.addCondition("agreementProduct",agreementProductOptional.get());
+        conditionSet.addCondition("date", getFistDateOfMonth(), Condition.MatchType.greaterOrEqual);
+        conditionSet.addCondition("date", getLastDateOfMonth(), Condition.MatchType.lessOrEqual);
+        orderByQuery.setCondition(conditionSet);
+
+        List<AgreementPriceBo> agreementProductPriceList = priceService.getAgreementProductPriceListByQuery(orderByQuery);
+        List<AgreementProductPriceForm> agreementProductPriceForms = agreementProductPriceList.stream().map(p -> new AgreementProductPriceForm(p)).collect(Collectors.toList());
+
+        model.addAttribute("agreementProductPrice",agreementProductPriceForms);
+        return "/sale/productPrice/list";
+    }
+
+    @RequestMapping(value = "list", method = RequestMethod.POST)
     public BaseDataResponse list(@Valid AgreementProductPriceQuery query, Model model) {
         Optional<AgreementProduct> agreementProductOptional = productService.getAgreementProductById(query.getAgreementProductId());
         ConditionOrderByQuery orderByQuery = new ConditionOrderByQuery();
@@ -54,8 +75,6 @@ public class AgreementProductPriceController {
         conditionSet.addCondition("date", query.getStartDate(), Condition.MatchType.greaterOrEqual);
         conditionSet.addCondition("date", query.getEndDate(), Condition.MatchType.lessOrEqual);
         orderByQuery.setCondition(conditionSet);
-
-
         List<AgreementPriceBo> agreementProductPriceList = priceService.getAgreementProductPriceListByQuery(orderByQuery);
         List<AgreementProductPriceForm> agreementProductPriceForms = agreementProductPriceList.stream().map(p -> new AgreementProductPriceForm(p)).collect(Collectors.toList());
 
@@ -67,7 +86,7 @@ public class AgreementProductPriceController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public BaseDataResponse add(@Valid AgreementProductPriceForm form, BindingResult result, Model model) {
-
+        form.setMode(FormModeType.ADD.getValue());
         AgreementPriceBo agreementProductPrice = form.as();
         Optional<AgreementProduct> optional = productService.getAgreementProductById(form.getAgreementProductId());
         if (optional.isPresent()) {
@@ -82,6 +101,7 @@ public class AgreementProductPriceController {
 
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     public BaseDataResponse edit(@Valid AgreementProductPriceForm form, BindingResult result, Model model) {
+        form.setMode(FormModeType.ADD.getValue());
         AgreementPriceBo agreementProductPrice = form.as();
         Optional<AgreementProduct> optional = productService.getAgreementProductById(form.getAgreementProductId());
         if (optional.isPresent()) {
@@ -156,8 +176,18 @@ public class AgreementProductPriceController {
         return dateList;
     }
 
-    private Date getDate(){
-        return null;
+    private Date getFistDateOfMonth(){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH,0);
+        c.set(Calendar.DAY_OF_MONTH,1);
+        return c.getTime();
+    }
+
+    private Date getLastDateOfMonth(){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH,0);
+        c.set(Calendar.DAY_OF_MONTH,c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return c.getTime();
     }
 
 
