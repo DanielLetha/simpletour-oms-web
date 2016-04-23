@@ -39,8 +39,8 @@ public class SaleAppController extends BaseController {
 
     @RequestMapping(value = {"", "list"})
     public String list(SaleAppQuery query, Model model) {
-        this.setPageTitle(model,"销售端列表");
-        DomainPage<SaleApp> pages =  saleAppService.querySaleAppsPagesByConditions(query.asMap(),"id", IBaseDao.SortBy.DESC,query.getIndex(),query.getSize(),true);
+        this.setPageTitle(model, "销售端列表");
+        DomainPage<SaleApp> pages = saleAppService.querySaleAppPagesByConditions(query.asMap(), "id", IBaseDao.SortBy.DESC, query.getIndex(), query.getSize(), true);
         model.addAttribute("page", pages);
         model.addAttribute("pageHelper", new PageHelper(pages));
         model.addAttribute("query", query);
@@ -63,7 +63,7 @@ public class SaleAppController extends BaseController {
         this.setPageTitle(model, "添加销售端");
         this.enableGoBack(model);
         if (bindingResult.hasErrors()) {
-            return BaseDataResponse.validationFail().action(BaseAction.ADD_FAIL(DOMAIN, form.getName()), false);
+            return BaseDataResponse.validationFail().msg(BaseAction.ADD_FAIL(DOMAIN).getTitle()).detail(bindingResult.getAllErrors().get(0).getDefaultMessage()) ;
         }
         try {
             saleAppService.addSaleApp(form.as());
@@ -77,8 +77,8 @@ public class SaleAppController extends BaseController {
     public String edit(@PathVariable Integer id, Model model) {
         this.setPageTitle(model, "修改销售端");
         this.enableGoBack(model);
-        Optional<SaleApp> saleAppOptional  = saleAppService.getSaleAppById(id);
-        if(saleAppOptional.isPresent()){
+        Optional<SaleApp> saleAppOptional = saleAppService.getSaleAppById(id);
+        if (saleAppOptional.isPresent()) {
             SaleAppForm viewForm = new SaleAppForm(saleAppOptional.get());
             model.addAttribute("viewForm", viewForm);
         }
@@ -92,7 +92,7 @@ public class SaleAppController extends BaseController {
         this.enableGoBack(model);
         form.setMode(FormModeType.UPDATE.getValue());
         if (bindingResult.hasErrors()) {
-            return BaseDataResponse.validationFail().action(BaseAction.EDIT_FAIL(DOMAIN, form.getName()), false);
+            return BaseDataResponse.validationFail().msg(BaseAction.ADD_FAIL(DOMAIN).getTitle()).detail(bindingResult.getAllErrors().get(0).getDefaultMessage()) ;
         }
         try {
             saleAppService.updateSaleApp(form.as());
@@ -110,9 +110,9 @@ public class SaleAppController extends BaseController {
         if (!saleAppOptional.isPresent()) {
             return BaseDataResponse.fail().action(BaseAction.OBJECT_NOTFOUND(), false);
         }
-        try{
+        try {
             saleAppService.deleteSaleApp(Long.valueOf(id));
-        }catch (BaseSystemException e) {
+        } catch (BaseSystemException e) {
             return BaseDataResponse.fail().msg(BaseAction.DEL_FAIL(DOMAIN).getTitle()).detail(e.getMessage());
         }
         return BaseDataResponse.ok().action(BaseAction.DEL_SUCCESS(DOMAIN, saleAppOptional.get().getName(), LIST_URL), true);

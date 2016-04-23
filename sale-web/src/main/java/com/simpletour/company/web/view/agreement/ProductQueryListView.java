@@ -20,4 +20,12 @@ public class ProductQueryListView {
             products.stream().forEach(product -> list.add(new ProductQuerElementView(product)));
         }
     }
+
+    public List<ProductQuerElementView> getList() {
+        return list;
+    }
+
+    public void setList(List<ProductQuerElementView> list) {
+        this.list = list;
+    }
 }

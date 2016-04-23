@@ -20,7 +20,7 @@ public class ProductForm {
 
     //产品名称
     @NotBlank(message = "oms.sale.agreement.product.name.notBlank")
-    private String productName;
+    private String name;
 
     //销售协议产品的版本号
     private Integer version;
@@ -30,7 +30,7 @@ public class ProductForm {
             this.productId = agreementProduct.getId();
             this.version = agreementProduct.getVersion();
             if (agreementProduct.getProduct() != null){
-                this.productName = agreementProduct.getProduct().getName();
+                this.name = agreementProduct.getProduct().getName();
             }
         }
     }
@@ -43,12 +43,12 @@ public class ProductForm {
         this.productId = productId;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getVersion() {
