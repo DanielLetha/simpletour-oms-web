@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -61,7 +62,7 @@ public class AgreementProductPriceController extends BaseController {
         model.addAttribute("productPriceList",agreementProductPriceForms);
         return "/sale/productPrice/list";
     }
-
+    @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.POST)
     public BaseDataResponse list(@Valid AgreementProductPriceQuery query, Model model) {
         Optional<AgreementProduct> agreementProductOptional = productService.getAgreementProductById(query.getAgreementProductId());
@@ -79,9 +80,9 @@ public class AgreementProductPriceController extends BaseController {
         }
         return BaseDataResponse.ok().data(agreementProductPriceForms);
     }
-
-    @RequestMapping(value = "add", method = RequestMethod.POST)
-    public BaseDataResponse add(@Valid AgreementProductPriceForm form, BindingResult result, Model model) {
+    @ResponseBody
+    @RequestMapping(value = "add")
+    public BaseDataResponse add(@Valid AgreementProductPriceForm form, BindingResult result) {
         form.setMode(FormModeType.ADD.getValue());
         AgreementPriceBo agreementProductPrice = form.as();
         Optional<AgreementProduct> optional = productService.getAgreementProductById(form.getAgreementProductId());
@@ -94,10 +95,11 @@ public class AgreementProductPriceController extends BaseController {
         }
         return BaseDataResponse.ok();
     }
+    @ResponseBody
 
     @RequestMapping(value = "edit", method = RequestMethod.POST)
-    public BaseDataResponse edit(@Valid AgreementProductPriceForm form, BindingResult result, Model model) {
-        form.setMode(FormModeType.ADD.getValue());
+    public BaseDataResponse edit(@Valid AgreementProductPriceForm form, BindingResult result) {
+        form.setMode(FormModeType.UPDATE.getValue());
         AgreementPriceBo agreementProductPrice = form.as();
         Optional<AgreementProduct> optional = productService.getAgreementProductById(form.getAgreementProductId());
         if (optional.isPresent()) {
@@ -109,9 +111,9 @@ public class AgreementProductPriceController extends BaseController {
         }
         return BaseDataResponse.ok();
     }
-
+    @ResponseBody
     @RequestMapping(value = "batchEdit", method = RequestMethod.POST)
-    public BaseDataResponse batchEdit(@Valid AgreementProductPriceBatchForm form, BindingResult result, Model model) {
+    public BaseDataResponse batchEdit(@Valid AgreementProductPriceBatchForm form, BindingResult result) {
         //获取选择的天数
         if (!form.getEndDate().after(form.getStartDate())) {
             return BaseDataResponse.fail().msg("日期不对");
