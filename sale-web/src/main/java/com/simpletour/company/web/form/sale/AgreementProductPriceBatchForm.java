@@ -2,7 +2,6 @@ package com.simpletour.company.web.form.sale;
 
 import com.simpletour.biz.sale.bo.AgreementPriceBo;
 import com.simpletour.biz.sale.bo.Price;
-import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
 import com.simpletour.domain.sale.AgreementProductPrice;
 import org.springframework.format.annotation.DateTimeFormat;

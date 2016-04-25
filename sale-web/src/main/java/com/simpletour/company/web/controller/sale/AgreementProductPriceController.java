@@ -89,6 +89,9 @@ public class AgreementProductPriceController extends BaseController {
         if (optional.isPresent()) {
             agreementProductPrice.setAgreementProduct(optional.get());
         }
+        if(result.hasErrors()){
+            return BaseDataResponse.validationFail().msg(result.getAllErrors().get(0).getDefaultMessage());
+        }
         Optional<AgreementPriceBo> priceOptional = priceService.addAgreementProductPrice(agreementProductPrice);
         if (!priceOptional.isPresent()) {
             return BaseDataResponse.fail();
@@ -104,6 +107,10 @@ public class AgreementProductPriceController extends BaseController {
         Optional<AgreementProduct> optional = productService.getAgreementProductById(form.getAgreementProductId());
         if (optional.isPresent()) {
             agreementProductPrice.setAgreementProduct(optional.get());
+        }
+        if(result.hasErrors()){
+            return BaseDataResponse.validationFail().msg(result.getAllErrors().get(0).getDefaultMessage());
+
         }
         Optional<AgreementPriceBo> priceOptional = priceService.updateAgreementProductPrice(agreementProductPrice);
         if (!priceOptional.isPresent()) {

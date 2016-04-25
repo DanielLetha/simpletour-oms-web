@@ -1,9 +1,6 @@
 package com.simpletour.company.web.query.sale;
 
 
-import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
-import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
-import com.simpletour.commons.data.dao.query.condition.Condition;
 import com.simpletour.company.web.query.support.Query;
 import org.springframework.format.annotation.DateTimeFormat;
 

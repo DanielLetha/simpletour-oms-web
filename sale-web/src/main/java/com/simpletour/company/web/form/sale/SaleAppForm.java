@@ -1,10 +1,12 @@
 package com.simpletour.company.web.form.sale;
 
+
 import com.simpletour.company.web.annotation.Fax;
 import com.simpletour.company.web.annotation.Mobile;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
 import com.simpletour.domain.sale.SaleApp;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -26,13 +28,13 @@ public class SaleAppForm extends BaseForm {
      * 销售端名称
      */
     @NotBlank(message = "{pms.saleApp.name.notnull}")
-    @Length(min = 1,max = 32,message = "{pms.saleApp.name.length}")
+    @Length(min = 2,max = 20,message = "{pms.saleApp.name.length}")
     private String name;
     /**
      * 对接人
      */
     @NotBlank(message = "{pms.saleApp.contact.notnull}")
-    @Length(min = 1,max = 20,message = "{pms.saleApp.contact.length}")
+    @Length(min = 2,max = 20,message = "{pms.saleApp.contact.length}")
     private String contact;
     /**
      * 电话
@@ -46,19 +48,22 @@ public class SaleAppForm extends BaseForm {
      */
     @NotNull(message = "{pms.saleApp.reserveTime.notnull}")
     private Integer reserveTime;
-
     /**
      * 传真
      */
     @Fax(message = "{pms.saleApp.fax.format}")
+    @Length(max = 16,message = "{pms.saleApp.fax.length}")
     private String fax;
     /**
      * 邮箱
      */
+    @Email(message = "{pms.saleApp.mail.format}")
+    @Length(max = 32,message = "{pms.saleApp.email.length}")
     private String email;
     /**
      * 其他方式
      */
+    @Length(max = 100,message = "{pms.saleApp.link.length}")
     private String link;
     /**
      * 备注
@@ -95,13 +100,13 @@ public class SaleAppForm extends BaseForm {
         if (this.mode.equals(FormModeType.UPDATE.getValue())) {
             saleApp.setId(this.id);
         }
+        saleApp.setReserveTime(this.reserveTime);
         saleApp.setKey(this.key);
         saleApp.setSecret(this.secret);
         saleApp.setName(this.name);
         saleApp.setContact(this.contact);
         saleApp.setMobile(this.mobile);
         saleApp.setFax(this.fax);
-        saleApp.setReserveTime(this.reserveTime);
         saleApp.setEmail(this.email);
         saleApp.setLink(this.link);
         saleApp.setRemark(this.remark);
@@ -109,6 +114,14 @@ public class SaleAppForm extends BaseForm {
         return saleApp;
     }
 
+
+    public Integer getReserveTime() {
+        return reserveTime;
+    }
+
+    public void setReserveTime(Integer reserveTime) {
+        this.reserveTime = reserveTime;
+    }
 
     public String getKey() {
         return key;
@@ -166,14 +179,6 @@ public class SaleAppForm extends BaseForm {
 
     public void setFax(String fax) {
         this.fax = fax;
-    }
-
-    public Integer getReserveTime() {
-        return reserveTime;
-    }
-
-    public void setReserveTime(Integer reserveTime) {
-        this.reserveTime = reserveTime;
     }
 
     public String getEmail() {

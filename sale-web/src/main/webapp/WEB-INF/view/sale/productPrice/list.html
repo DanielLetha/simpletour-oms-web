@@ -289,8 +289,8 @@
                 dateArray:newArray,
                 month : date.getMonth()+1,
                 year: date.getFullYear(),
-                start:date.getFullYear()+'-'+(date.getMonth()+1)+1,
-                end:date.getFullYear()+'-'+(date.getMonth()+1)+len
+                start:date.getFullYear()+'-'+(date.getMonth())+'-'+date.getDate(),
+                end:date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
             };
         }
         var calendarRenderResult = calendarRender();

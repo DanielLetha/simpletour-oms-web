@@ -20,42 +20,88 @@
             </a>
         </div>
         <ul class="menu">
-            <li class="active">
+            <li>
+                <div>
+                    <img th:src="@{/static/images/nav_product.png}"/>
+                </div>
+                <div class="describe">销售端</div>
+            </li>
+            <li>
                 <div>
                     <img th:src="@{/static/images/nav_resource.png}"/>
                 </div>
-                <div class="describe">公司</div>
+                <div class="describe">平台</div>
+            </li>
+            <li>
+                <div>
+                    <img th:src="@{/static/images/nav_app.png}"/>
+                </div>
+                <div class="describe">系统</div>
             </li>
         </ul>
     </div>
     <div class="close"></div>
 </div>
 <div class="wrap">
-    <div tabindex="5000" style="overflow: hidden; display: none;" class="secondNav">
+    <div tabindex="5001" style="overflow: hidden; display: none;" class="secondNav">
         <div class="category">
-            <a th:href="@{/company/role/}">
-                <span class="hotel">
-                    <div class="category_img">
-                        <img th:src="@{/static/images/icon_role.png}"/>
-                    </div>
-                    <div>角色</div>
-                </span>
+            <a  th:href="@{/sale/}">
+            <span class="hotel">
+                <div class="category_img">
+                    <img th:src="@{/static/images/icon_employee.png}"/>
+                </div>
+                <div>销售端</div>
+            </span>
             </a>
-            <a th:href="@{/company/employee/}">
-                <span class="hotel">
-                    <div class="category_img">
-                        <img th:src="@{/static/images/icon_employee.png}"/>
-                    </div>
-                    <div>人员</div>
-                </span>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div tabindex="5002" style="overflow: hidden; display: none;" class="secondNav">
+        <div class="category">
+            <a th:href="@{/company/manager/list}">
+            <span class="hotel">
+                <div class="category_img">
+                    <img th:src="@{/static/images/icon_employee.png}"/>
+                </div>
+                <div>公司管理员</div>
+            </span>
             </a>
-            <a  th:href="@{/password}">
-                <span class="hotel">
-                    <div class="category_img">
-                        <img th:src="@{/static/images/icon_application.png}"/>
-                    </div>
-                    <div>修改密码</div>
-                </span>
+            <a th:href="@{/company/}">
+            <span class="hotel">
+                <div class="category_img">
+                    <img th:src="@{/static/images/icon_osp.png}"/>
+                </div>
+                <div>公司</div>
+            </span>
+            </a>
+            <a th:href="@{/module/}">
+            <span class="hotel">
+                <div class="category_img">
+                    <img th:src="@{/static/images/icon_layout.png}"/>
+                </div>
+                <div>模块</div>
+            </span>
+            </a>
+            <a  th:href="@{/scope/}">
+            <span class="hotel">
+                <div class="category_img">
+                    <img th:src="@{/static/images/icon_permission.png}"/>
+                </div>
+                <div>权限范围</div>
+            </span>
+            </a>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div tabindex="5003" style="overflow: hidden; display: none;" class="secondNav">
+        <div class="category">
+            <a  th:href="@{/password/}">
+            <span class="hotel">
+                <div class="category_img">
+                    <img th:src="@{/static/images/icon_application.png}"/>
+                </div>
+                <div>修改密码</div>
+            </span>
             </a>
             <div class="clear"></div>
         </div>
