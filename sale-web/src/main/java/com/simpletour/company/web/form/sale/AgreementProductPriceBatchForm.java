@@ -5,7 +5,9 @@ import com.simpletour.biz.sale.bo.Price;
 import com.simpletour.company.web.enums.FormModeType;
 import com.simpletour.company.web.form.support.BaseForm;
 import com.simpletour.domain.sale.AgreementProductPrice;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +21,11 @@ import java.util.Map;
  */
 public class AgreementProductPriceBatchForm extends BaseForm {
 
+    @NotNull
     private Long agreementProductId;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
 

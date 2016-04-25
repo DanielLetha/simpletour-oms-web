@@ -5,7 +5,9 @@ import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
 import com.simpletour.commons.data.dao.query.condition.Condition;
 import com.simpletour.company.web.query.support.Query;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -17,13 +19,12 @@ import java.util.Date;
  */
 public class AgreementProductPriceQuery extends Query {
 
+    @NotNull
     private Long agreementProductId;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
-
-
 
 
     public AgreementProductPriceQuery() {

@@ -162,17 +162,17 @@
                         <div class="input_group">
                             <label>成本价</label>
                             <div class="cutline"></div>
-                            <span><input type="text" name="license" ng-model="stock.price"/></span>
+                            <span><input type="text" name="adultCost" ng-model="stock.price"/></span>
                         </div>
                         <div class="input_group">
                             <label>结算价</label>
                             <div class="cutline"></div>
-                            <span><input type="text" name="license" ng-model="stock.id"/></span>
+                            <span><input type="text" name="adultSettlement" ng-model="stock.id"/></span>
                         </div>
                         <div class="input_group">
                             <label>建议价</label>
                             <div class="cutline"></div>
-                            <span><input type="text" name="license" ng-model="stock.availableQuantity"/></span>
+                            <span><input type="text" name="adultRetail" ng-model="stock.availableQuantity"/></span>
                         </div>
                     </div>
 
@@ -187,17 +187,17 @@
                         <div class="input_group">
                             <label>成本价</label>
                             <div class="cutline"></div>
-                            <span><input type="text" name="license" ng-model="stock.price"/></span>
+                            <span><input type="text" name="childCost" ng-model="price.childCost"/></span>
                         </div>
                         <div class="input_group">
                             <label>结算价</label>
                             <div class="cutline"></div>
-                            <span><input type="text" name="license" ng-model="stock.id"/></span>
+                            <span><input type="text" name="childSettlement" ng-model="price.childSettlement"/></span>
                         </div>
                         <div class="input_group">
                             <label>建议价</label>
                             <div class="cutline"></div>
-                            <span><input type="text" name="license" ng-model="stock.availableQuantity"/></span>
+                            <span><input type="text" name="childRetail" ng-model="price.childRetail"/></span>
                         </div>
                     </div>
                 </div>
@@ -235,7 +235,7 @@
         });
         //请求库存
         function stock(){
-            $http.post('/url',{start:$scope.start,end:$scope.end}).success(function(data){
+            $http.post('/sale/productPrice/list',{agreementProductId:$scope.agreementProductId,start:$scope.start,end:$scope.end}).success(function(data){
                 if(data.code == 0){
 
                 }else{
@@ -330,6 +330,12 @@
                             }
                         },
                         ok: function (selectedItem) {
+                            $.ajax({
+                                url:'/sale/productPrice/edit',
+                                type:'POST',
+                                dataType:'json',
+                                data: $this.data(''),
+                            })
                         },
                         cancel: function () {
                         }
