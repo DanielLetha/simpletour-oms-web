@@ -4,6 +4,7 @@ import com.simpletour.biz.sale.bo.AgreementPriceBo;
 import com.simpletour.commons.data.dao.query.ConditionOrderByQuery;
 import com.simpletour.commons.data.dao.query.condition.AndConditionSet;
 import com.simpletour.commons.data.dao.query.condition.Condition;
+import com.simpletour.company.web.controller.support.BaseAction;
 import com.simpletour.company.web.controller.support.BaseController;
 import com.simpletour.company.web.controller.support.BaseDataResponse;
 import com.simpletour.company.web.enums.FormModeType;
@@ -17,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -37,6 +35,8 @@ import java.util.stream.Collectors;
 @Controller
 public class AgreementProductPriceController extends BaseController {
 
+    private static final  String PRICE_DOMAIN ="价格";
+
     @Autowired
     private IAgreementProductPriceService priceService;
 
@@ -45,7 +45,7 @@ public class AgreementProductPriceController extends BaseController {
 
 
     @RequestMapping(value = "list/{agreementProductId}", method = RequestMethod.GET)
-    public String list(@PathVariable Long agreementProductId, Model model) {
+    public String list(@PathVariable Long agreementProductId,AgreementProductPriceQuery query, Model model) {
         Optional<AgreementProduct> agreementProductOptional = productService.getAgreementProductById(agreementProductId);
         this.setPageTitle(model, agreementProductOptional.get().getProduct().getName()+"产品价格日历");
         this.enableGoBack(model);
@@ -60,11 +60,12 @@ public class AgreementProductPriceController extends BaseController {
         List<AgreementProductPriceForm> agreementProductPriceForms = agreementProductPriceList.stream().map(p -> new AgreementProductPriceForm(p)).collect(Collectors.toList());
 
         model.addAttribute("productPriceList",agreementProductPriceForms);
+        model.addAttribute("query",query);
         return "/sale/productPrice/list";
     }
     @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.POST)
-    public BaseDataResponse list(@Valid AgreementProductPriceQuery query, Model model) {
+    public BaseDataResponse list(@RequestBody @Valid AgreementProductPriceQuery query) {
         Optional<AgreementProduct> agreementProductOptional = productService.getAgreementProductById(query.getAgreementProductId());
         ConditionOrderByQuery orderByQuery = new ConditionOrderByQuery();
         AndConditionSet conditionSet = new AndConditionSet();
@@ -82,7 +83,7 @@ public class AgreementProductPriceController extends BaseController {
     }
     @ResponseBody
     @RequestMapping(value = "add")
-    public BaseDataResponse add(@Valid AgreementProductPriceForm form, BindingResult result) {
+    public BaseDataResponse add(@RequestBody @Valid AgreementProductPriceForm form, BindingResult result) {
         form.setMode(FormModeType.ADD.getValue());
         AgreementPriceBo agreementProductPrice = form.as();
         Optional<AgreementProduct> optional = productService.getAgreementProductById(form.getAgreementProductId());
@@ -96,12 +97,13 @@ public class AgreementProductPriceController extends BaseController {
         if (!priceOptional.isPresent()) {
             return BaseDataResponse.fail();
         }
-        return BaseDataResponse.ok();
+        form = new AgreementProductPriceForm(priceOptional.get());
+        return BaseDataResponse.ok().data(form);
     }
     @ResponseBody
 
     @RequestMapping(value = "edit", method = RequestMethod.POST)
-    public BaseDataResponse edit(@Valid AgreementProductPriceForm form, BindingResult result) {
+    public BaseDataResponse edit(@RequestBody @Valid AgreementProductPriceForm form, BindingResult result) {
         form.setMode(FormModeType.UPDATE.getValue());
         AgreementPriceBo agreementProductPrice = form.as();
         Optional<AgreementProduct> optional = productService.getAgreementProductById(form.getAgreementProductId());
@@ -116,7 +118,8 @@ public class AgreementProductPriceController extends BaseController {
         if (!priceOptional.isPresent()) {
             return BaseDataResponse.fail();
         }
-        return BaseDataResponse.ok();
+        form = new AgreementProductPriceForm(priceOptional.get());
+        return BaseDataResponse.ok().data(form);
     }
     @ResponseBody
     @RequestMapping(value = "batchEdit", method = RequestMethod.POST)
@@ -160,6 +163,7 @@ public class AgreementProductPriceController extends BaseController {
             agreementPriceBoList.add(agreementPriceBo);
         }
         priceService.batchInsert(agreementPriceBoList);
+        //再批量查询
         return BaseDataResponse.ok();
     }
 

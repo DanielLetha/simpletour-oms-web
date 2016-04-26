@@ -9,6 +9,7 @@ import com.simpletour.domain.sale.AgreementProductPrice;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class AgreementProductPriceForm extends BaseForm {
      * 日期
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private String date;
 
     /**
      * 成本(成人)
@@ -97,13 +98,14 @@ public class AgreementProductPriceForm extends BaseForm {
         map.put(AgreementProductPrice.Type.ADULT, adultPrice);
         map.put(AgreementProductPrice.Type.CHILD, childPrice);
         agreementPriceBo.setPriceMap(map);
-        agreementPriceBo.setDate(this.date);
+        agreementPriceBo.setDate(parseFormatDate(this.date));
         return agreementPriceBo;
     }
 
 
     public AgreementProductPriceForm(AgreementPriceBo agreementPriceBo) {
-        this.date = agreementPriceBo.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        this.date = sdf.format(agreementPriceBo.getDate());
         this.agreementProductId = agreementPriceBo.getAgreementProduct().getId();
         this.adultId = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getId();
         this.adultCost = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.ADULT).getCost();
@@ -115,6 +117,17 @@ public class AgreementProductPriceForm extends BaseForm {
         this.childSettlement = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getSettlement();
         this.childRetail = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getRetail();
         this.childVersion = agreementPriceBo.getPriceMap().get(AgreementProductPrice.Type.CHILD).getVersion();
+    }
+
+    private Date parseFormatDate(String date) {
+        Date date1 = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date1 = sdf.parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return date1;
     }
 
     public Long getAdultId() {
@@ -141,11 +154,11 @@ public class AgreementProductPriceForm extends BaseForm {
         this.agreementProductId = agreementProductId;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

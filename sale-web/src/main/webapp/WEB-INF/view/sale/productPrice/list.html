@@ -179,7 +179,7 @@
 
                     <div class="child">
                         <div class="toAdult">
-                            <input type="checkbox" class="stCheckbox" ng-model="isAdult"/>
+                            <input type="checkbox" class="stCheckbox" ng-click="toAdult($event)" ng-model="isAdult"/>
                             与成人价一致
                         </div>
                         <div class="model-name">
@@ -311,7 +311,7 @@
             $scope.end = renderObj.end;
             stock();
         };
-        $scope.edit = function(e){
+        $scope.edit = function(e,day){
             if(!angular.element(e.target).hasClass('past')){
                 var index = angular.element(e.target).next('div').attr('data-index');
                 if(index){
@@ -323,12 +323,13 @@
                             items: function () {
                                 return {
                                     index: index,
-                                    stock: $scope.stockArray[index]
+                                    stock: $scope.stockArray[index],
+
                                 };
                             }
                         },
-                        ok: function (selectedItem) {
-
+                        ok: function (data) {
+                            $scope.stockArray[index] = data;
                         },
                         cancel: function () {
                         }
@@ -342,11 +343,14 @@
                             items: function () {
                                 return {
                                     index: index,
-                                    stock: {}
+                                    stock: false,
+                                    date: $scope.year + '-' + $scope.month + '-' + day,
+                                    agreementProductId: $scope.query.agreementProductId
                                 };
                             }
                         },
-                        ok: function (selectedItem) {
+                        ok: function (data) {
+                            $scope.stockArray.push(data);
                         },
                         cancel: function () {
                         }
@@ -370,7 +374,7 @@
         }
     }]).controller('myModalCtrl', function ($scope, $modalInstance, $http, alert, items) {
 
-        $scope.postData = items.stock.adultId ? items.stock : {
+        $scope.postData = items.stock ? items.stock : {
             adultCost : '',
             adultSettlement : '',
             adultRetail: '',
@@ -378,14 +382,62 @@
             childSettlement: '',
             childRetail: '',
             adultVersion: 0,
-            childVersion: 0
-        };
+            childVersion: 0,
+            date: items.date,
+            agreementProductId: items.agreementProductId
 
-        $scope.delete = function() {
-
         };
+        $scope.isAdult = false;
+        $scope.$watch('isAdult',function() {
+            if($scope.isAdult) {
+                $scope.postData.childCost = $scope.postData.adultCost;
+                $scope.postData.childSettlement = $scope.postData.adultSettlement;
+                $scope.postData.childRetail = $scope.postData.adultRetail;
+            }
+        });
+
         $scope.ok = function() {
-
+            if(items.stock) {
+                $http.post('/sale/productPrice/edit',$scope.postData).success(function(data) {
+                    if(data.code == 0) {
+                        $modalInstance.close(data.data);
+                    } else {
+                        alert.alert({
+                            reason: '此提示3秒后关闭',
+                            message: data.msg,
+                            type: 'fail',
+                            delay: '3'
+                        });
+                    }
+                }).error(function() {
+                    alert.alert({
+                        reason: '此提示3秒后关闭',
+                        message: '网络异常!',
+                        type: 'fail',
+                        delay: '3'
+                    });
+                });
+            } else {
+                $http.post('/sale/productPrice/add',$scope.postData).success(function(data) {
+                    if(data.code == 0) {
+                        $modalInstance.close(data.data);
+                    } else {
+                        alert.alert({
+                            reason: '此提示3秒后关闭',
+                            message:  data.msg,
+                            type: 'fail',
+                            delay: '3'
+                        });
+                    }
+                }).error(function() {
+                    alert.alert({
+                        reason: '此提示3秒后关闭',
+                        message: '网络异常!',
+                        type: 'fail',
+                        delay: '3'
+                    });
+                });
+            }
         };
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');

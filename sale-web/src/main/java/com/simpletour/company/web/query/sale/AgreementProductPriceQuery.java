@@ -27,6 +27,7 @@ public class AgreementProductPriceQuery extends Query {
     public AgreementProductPriceQuery() {
     }
 
+
     public AgreementProductPriceQuery(Long agreementProductId, Date startDate, Date endDate) {
         this.agreementProductId = agreementProductId;
         this.startDate = startDate;
